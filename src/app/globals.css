@@ -1,0 +1,459 @@
+@import "tailwindcss";
+
+/* ============================================================
+   YAY by netals — Global Design System
+   ============================================================ */
+
+:root {
+  /* Core Palette */
+  --neon-green: #39ff14;
+  --neon-green-dim: #22c55e;
+  --neon-green-glow: 0 0 20px rgba(57, 255, 20, 0.4);
+  --neon-red: #ff3b5c;
+  --neon-blue: #3b82f6;
+  --neon-purple: #a855f7;
+  --neon-amber: #f59e0b;
+  --neon-cyan: #06b6d4;
+
+  /* Surfaces */
+  --surface-dark: #0a0a0f;
+  --surface-panel: rgba(15, 15, 25, 0.85);
+  --surface-card: rgba(20, 20, 35, 0.75);
+  --surface-glass: rgba(255, 255, 255, 0.04);
+  --surface-glass-hover: rgba(255, 255, 255, 0.08);
+  --surface-glass-border: rgba(255, 255, 255, 0.08);
+  --surface-input: rgba(0, 0, 0, 0.4);
+
+  /* Text */
+  --text-primary: #f0f0f5;
+  --text-secondary: #8b8ba0;
+  --text-tertiary: #555570;
+  --text-accent: var(--neon-green);
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(57, 255, 20, 0.2);
+
+  /* Shadows */
+  --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.5);
+  --shadow-glow-green: 0 0 30px rgba(57, 255, 20, 0.15);
+  --shadow-window: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 1px rgba(255, 255, 255, 0.1);
+
+  /* Animation */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-Index Layers */
+  --z-desktop: 1;
+  --z-window-base: 100;
+  --z-taskbar: 9000;
+  --z-statusbar: 9001;
+  --z-lockscreen: 9999;
+  --z-boot: 10000;
+}
+
+@theme inline {
+  --color-background: var(--surface-dark);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ---- Global Reset ---- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.12) transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 3px;
+}
+
+body {
+  background: var(--surface-dark);
+  color: var(--text-primary);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---- Glassmorphism Utility ---- */
+.glass {
+  background: var(--surface-glass);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--surface-glass-border);
+}
+
+.glass-heavy {
+  background: rgba(10, 10, 20, 0.7);
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
+  border: 1px solid var(--border-subtle);
+}
+
+@keyframes island-in {
+  0% { transform: scale(0.9) translateY(-10px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.animate-island-in {
+  animation: island-in 0.4s var(--ease-spring) forwards;
+}
+
+/* ============================================================
+   Theme Overrides
+   ============================================================ */
+
+/* ---- Liquid Glass Theme ---- */
+.theme-liquid-glass {
+  --surface-dark: #050510;
+  --surface-panel: rgba(20, 20, 40, 0.55);
+  --surface-card: rgba(30, 30, 60, 0.45);
+  --surface-glass: rgba(255, 255, 255, 0.06);
+  --surface-glass-hover: rgba(255, 255, 255, 0.12);
+  --surface-glass-border: rgba(255, 255, 255, 0.12);
+  --surface-input: rgba(0, 0, 20, 0.5);
+  --shadow-window: 0 8px 50px rgba(0, 0, 0, 0.5),
+                   0 0 1px rgba(255, 255, 255, 0.15),
+                   inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.theme-liquid-glass .glass {
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.theme-liquid-glass .glass-heavy {
+  backdrop-filter: blur(60px) saturate(2.0);
+  -webkit-backdrop-filter: blur(60px) saturate(2.0);
+  background: rgba(10, 10, 30, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.theme-liquid-glass .window-titlebar {
+  background: rgba(15, 15, 35, 0.7);
+}
+.theme-liquid-glass .window-body {
+  background: rgba(15, 15, 35, 0.55);
+}
+.theme-liquid-glass .window-frame {
+  box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5),
+              0 0 1px rgba(255, 255, 255, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ---- Mono Theme ---- */
+.theme-mono {
+  --neon-green: #ffffff;
+  --neon-green-dim: #cccccc;
+  --neon-green-glow: 0 0 20px rgba(255, 255, 255, 0.15);
+  --neon-red: #888888;
+  --neon-blue: #aaaaaa;
+  --neon-purple: #999999;
+  --neon-amber: #bbbbbb;
+  --neon-cyan: #cccccc;
+  --surface-dark: #0a0a0a;
+  --surface-panel: rgba(18, 18, 18, 0.95);
+  --surface-card: rgba(25, 25, 25, 0.9);
+  --surface-glass: rgba(255, 255, 255, 0.03);
+  --surface-glass-hover: rgba(255, 255, 255, 0.06);
+  --surface-glass-border: rgba(255, 255, 255, 0.06);
+  --surface-input: rgba(0, 0, 0, 0.6);
+  --text-primary: #e0e0e0;
+  --text-secondary: #808080;
+  --text-tertiary: #505050;
+  --text-accent: #ffffff;
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-medium: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(255, 255, 255, 0.08);
+  --shadow-glow-green: none;
+}
+.theme-mono .glass,
+.theme-mono .glass-heavy {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(15, 15, 15, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.theme-mono .window-titlebar {
+  background: rgba(15, 15, 15, 0.98);
+}
+.theme-mono .window-body {
+  background: rgba(12, 12, 12, 0.95);
+}
+.theme-mono .toggle-track.active {
+  background: #ffffff;
+  box-shadow: none;
+}
+.theme-mono .toggle-track.active .toggle-thumb {
+  background: #000000;
+}
+
+/* ---- OLED Theme ---- */
+.theme-oled {
+  --surface-dark: #000000;
+  --surface-panel: rgba(5, 5, 5, 0.95);
+  --surface-card: rgba(10, 10, 10, 0.9);
+  --surface-glass: rgba(255, 255, 255, 0.02);
+  --surface-glass-hover: rgba(255, 255, 255, 0.05);
+  --surface-glass-border: rgba(255, 255, 255, 0.04);
+  --surface-input: rgba(0, 0, 0, 0.8);
+  --neon-green: #00ff88;
+  --neon-green-dim: #00cc66;
+  --neon-green-glow: 0 0 20px rgba(0, 255, 136, 0.4);
+  --neon-red: #ff0055;
+  --neon-blue: #0088ff;
+  --neon-purple: #cc00ff;
+  --neon-amber: #ffaa00;
+  --neon-cyan: #00ffff;
+  --text-primary: #ffffff;
+  --text-secondary: #777777;
+  --text-tertiary: #3a3a3a;
+  --shadow-window: 0 0 60px rgba(0, 0, 0, 0.9),
+                   0 0 1px rgba(255, 255, 255, 0.05);
+  --border-subtle: rgba(255, 255, 255, 0.03);
+  --border-medium: rgba(255, 255, 255, 0.06);
+}
+.theme-oled .glass,
+.theme-oled .glass-heavy {
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+.theme-oled .window-titlebar {
+  background: rgba(0, 0, 0, 0.98);
+}
+.theme-oled .window-body {
+  background: rgba(3, 3, 3, 0.95);
+}
+
+/* ---- Boot Screen Animations ---- */
+@keyframes foxSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes bootFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bootPulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+@keyframes bootProgress {
+  0%   { width: 0; }
+  100% { width: 100%; }
+}
+@keyframes bootGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(57, 255, 20, 0.3); }
+  50%      { box-shadow: 0 0 20px rgba(57, 255, 20, 0.6); }
+}
+@keyframes kernelFlicker {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* ---- Desktop Animations ---- */
+@keyframes desktopFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes windowOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+@keyframes windowClose {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+}
+@keyframes dockSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes statusBarSlideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+@keyframes activeIndicatorPulse {
+  0%, 100% { box-shadow: 0 0 4px var(--neon-green); }
+  50%      { box-shadow: 0 0 12px var(--neon-green); }
+}
+@keyframes lockScreenBlur {
+  from { backdrop-filter: blur(0px); }
+  to   { backdrop-filter: blur(30px); }
+}
+@keyframes startMenuOpen {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes chartFill {
+  from { stroke-dashoffset: var(--circumference); }
+  to   { stroke-dashoffset: var(--dash-offset); }
+}
+
+/* ---- Toggle Switch ---- */
+.toggle-track {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background 0.3s var(--ease-smooth);
+  flex-shrink: 0;
+}
+.toggle-track.active {
+  background: var(--neon-green);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
+}
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.3s var(--ease-spring);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.toggle-track.active .toggle-thumb {
+  transform: translateX(20px);
+}
+
+/* ---- Window Styles ---- */
+.window-frame {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-window);
+  border: 1px solid var(--border-subtle);
+  animation: windowOpen 0.35s var(--ease-spring) forwards;
+}
+.window-frame.closing {
+  animation: windowClose 0.25s var(--ease-smooth) forwards;
+}
+.window-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 0 12px;
+  background: rgba(20, 20, 35, 0.95);
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: grab;
+  flex-shrink: 0;
+}
+.window-titlebar:active {
+  cursor: grabbing;
+}
+.window-titlebar-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.window-controls {
+  display: flex;
+  gap: 6px;
+}
+.window-control-btn {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.window-control-btn:hover {
+  transform: scale(1.2);
+}
+.window-control-close     { background: #ff5f57; }
+.window-control-minimize  { background: #ffbd2e; }
+.window-control-maximize  { background: #28c840; }
+
+.window-body {
+  flex: 1;
+  overflow: auto;
+  background: var(--surface-panel);
+}
+
+/* ---- Dock Tooltip ---- */
+.dock-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 4px 10px;
+  font-size: 11px;
+  white-space: nowrap;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s var(--ease-smooth);
+  background: rgba(20, 20, 30, 0.95);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+.dock-icon-wrap:hover .dock-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
