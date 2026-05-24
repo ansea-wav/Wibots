@@ -83,7 +83,7 @@ async function proxy(req: NextRequest, params: { path: string[] }, method: strin
     };
 
     if (bodyData) {
-      options.headers!['Content-Length'] = Buffer.byteLength(bodyData);
+      (options.headers as Record<string, string | number>)['Content-Length'] = Buffer.byteLength(bodyData);
     }
 
     const proxyReq = https.request(options, (res) => {
