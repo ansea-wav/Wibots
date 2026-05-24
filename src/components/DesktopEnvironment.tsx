@@ -12,7 +12,6 @@ import AccountApp from './apps/AccountApp';
 import ControlCenterApp from './apps/ControlCenterApp';
 import ResponderStudioApp from './apps/ResponderStudioApp';
 import FileExplorerApp from './apps/FileExplorerApp';
-import FileManagerApp from './apps/FileManagerApp';
 import UserManagerApp from './apps/UserManagerApp';
 import AppStoreApp from './apps/AppStoreApp';
 import TaskManagerApp from './apps/TaskManagerApp';
