@@ -191,23 +191,23 @@ export default function VirtualKeyboard() {
       }}
     >
       {/* HEADER: Native Keyboard Fallback & Close */}
-      <div className="flex justify-between items-center mb-4 px-1" onTouchStart={(e) => e.preventDefault()}>
+      <div className="flex justify-between items-center mb-3 px-1" onTouchStart={(e) => e.preventDefault()}>
         <button
           onClick={handleUseNativeKeyboard}
           onTouchEnd={handleUseNativeKeyboard}
-          className="text-[10px] uppercase tracking-widest text-[var(--neon-cyan)] bg-[var(--neon-cyan)]/5 px-4 py-2 rounded-full border border-[var(--neon-cyan)]/20 active:bg-[var(--neon-cyan)]/20 transition-colors font-medium"
+          className="text-[9px] uppercase tracking-widest text-[var(--neon-cyan)] bg-[var(--neon-cyan)]/5 px-3 py-1.5 rounded-full border border-[var(--neon-cyan)]/20 active:bg-[var(--neon-cyan)]/20 transition-colors font-medium whitespace-nowrap"
         >
-          ⌨️ Gunakan Keyboard Bawaan
+          ⌨️ K. BAWAAN
         </button>
         
-        {/* Navigation Indicator Bars */}
-        <div className="flex gap-2 items-center absolute left-1/2 -translate-x-1/2">
+        {/* Navigation Indicator Bars (Moved to center nicely without absolute) */}
+        <div className="flex gap-1.5 items-center justify-center flex-1 mx-2">
           {[0, 1, 2].map((idx) => (
             <div
               key={idx}
               className="h-1 rounded-full transition-all duration-300"
               style={{
-                width: page === idx ? '24px' : '12px',
+                width: page === idx ? '20px' : '8px',
                 backgroundColor: page === idx ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)',
                 boxShadow: page === idx ? '0 0 8px rgba(255,255,255,0.4)' : 'none'
               }}
@@ -218,7 +218,7 @@ export default function VirtualKeyboard() {
         <button
           onClick={closeKeyboard}
           onTouchEnd={(e) => { e.preventDefault(); closeKeyboard(); }}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-[var(--text-tertiary)] active:text-white active:bg-white/20 transition-colors"
+          className="w-7 h-7 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-[var(--text-tertiary)] active:text-white active:bg-white/20 transition-colors flex-shrink-0"
         >
           ▼
         </button>
