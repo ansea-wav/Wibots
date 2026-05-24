@@ -128,6 +128,7 @@ export default function VirtualKeyboard() {
           handleKeyPress(key);
         }}
         onMouseDown={handleMouseDown}
+        onTouchStart={(e) => e.preventDefault()}
       >
         {display}
       </motion.button>
@@ -157,6 +158,7 @@ export default function VirtualKeyboard() {
     <AnimatePresence>
       {isActive && !useNativeKeyboard && (
         <motion.div
+          key="virtual-keyboard"
           initial={{ y: '100%', opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: '100%', opacity: 0 }}
@@ -166,15 +168,20 @@ export default function VirtualKeyboard() {
             background: 'linear-gradient(180deg, rgba(15,15,25,0.85) 0%, rgba(10,10,15,0.95) 100%)',
             backdropFilter: 'blur(24px)',
             borderTop: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: '0 -10px 40px rgba(0,0,0,0.3)'
+            boxShadow: '0 -10px 40px rgba(0,0,0,0.3)',
+            touchAction: 'none' // Prevent scrolling while touching keyboard
           }}
           onMouseDown={handleMouseDown}
+          onTouchStart={(e) => {
+            // e.preventDefault(); // Might block button clicks in some browsers, so we handle it on the buttons if needed
+          }}
         >
           {/* Header Action */}
           <div className="flex justify-between items-center mb-3 px-1">
             <button
               onClick={handleUseNativeKeyboard}
               onMouseDown={handleMouseDown}
+              onTouchStart={(e) => e.preventDefault()}
               className="text-[10px] uppercase tracking-widest text-[var(--neon-cyan)] bg-[var(--neon-cyan)]/10 px-3 py-1.5 rounded-full border border-[var(--neon-cyan)]/20 hover:bg-[var(--neon-cyan)]/20 transition-colors"
             >
               ⌨️ Gunakan Keyboard Bawaan
@@ -182,6 +189,7 @@ export default function VirtualKeyboard() {
             <button
               onClick={closeKeyboard}
               onMouseDown={handleMouseDown}
+              onTouchStart={(e) => e.preventDefault()}
               className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-[var(--text-tertiary)] hover:text-white transition-colors"
             >
               ▼
