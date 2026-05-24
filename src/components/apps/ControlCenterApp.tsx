@@ -138,7 +138,7 @@ export default function ControlCenterApp({
           Feature Switches
         </div>
         {toggleItems.map((item) => {
-          const isActive = Boolean(safeConfig[item.key]);
+          const isActive = Boolean(safeConfig[item.key as keyof BotConfig]);
           return (
             <div
               key={item.key}
@@ -154,7 +154,7 @@ export default function ControlCenterApp({
               </div>
               <div
                 className={`toggle-track ${isActive ? 'active' : ''}`}
-                onClick={() => onToggle(item.key, !isActive)}
+                onClick={() => onToggle(item.key as keyof BotConfig, !isActive)}
               >
                 <div className="toggle-thumb" />
               </div>

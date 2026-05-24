@@ -1,6 +1,6 @@
 'use client';
 import { useState, useCallback, useRef, useEffect } from 'react';
-import type { UserMasterData, AutoResponder, BotConfig, FileEntry } from '@/lib/api';
+import type { UserMasterData, AutoResponder, BotConfig, FileEntry, ClientRegistry } from '@/lib/api';
 import { API_BASE } from '@/lib/api';
 import { useTheme, type ThemeId } from '@/lib/ThemeContext';
 import WindowFrame, { type WindowState } from './WindowFrame';
@@ -346,7 +346,7 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
           <GroupManagerApp 
             client={clientRegistry} 
             onUpdate={async (data) => {
-              setClientRegistry(prev => ({ ...prev, ...data }));
+              setClientRegistry((prev: ClientRegistry) => ({ ...prev, ...data }));
               const { apiUpdateAccount } = await import('@/lib/api');
               await apiUpdateAccount(userId, data);
             }}

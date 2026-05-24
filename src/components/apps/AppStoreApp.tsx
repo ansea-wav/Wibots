@@ -76,7 +76,7 @@ export default function AppStoreApp({ client }: AppStoreProps) {
       ) : (
         <div className="space-y-4">
           {apps.map((app, i) => {
-            const appName = app['Nama App'] || app['Nama  App'] || 'Unknown App';
+            const appName = app['Nama App'] || (app as any)['Nama  App'] || 'Unknown App';
             return (
             <div key={i} className="p-4 rounded-xl border border-[var(--border-subtle)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" style={{ background: 'var(--surface-glass)' }}>
               <div>

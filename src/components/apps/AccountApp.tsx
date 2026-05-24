@@ -7,7 +7,7 @@ interface AccountAppProps {
 }
 
 export default function AccountApp({ client }: AccountAppProps) {
-  const isUnlimited = client.Days_Left === 'Unlimited' || client.Package_Tier === 'God';
+  const isUnlimited = String(client.Days_Left) === 'Unlimited' || client.Package_Tier === 'God';
   const totalDays = useMemo(() => {
     if (isUnlimited) return 365; // Arbitrary for math
     const reg = new Date(client.Registration_Date);

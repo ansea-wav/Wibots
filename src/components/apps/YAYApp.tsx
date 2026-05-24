@@ -4,7 +4,7 @@ import type { BotConfig } from '@/lib/api';
 
 interface YAYAppProps {
   config: BotConfig;
-  onToggle: (field: string, value: boolean) => void;
+  onToggle: (field: keyof BotConfig, value: boolean) => void;
 }
 
 export default function YAYApp({ config, onToggle }: YAYAppProps) {
@@ -54,7 +54,7 @@ export default function YAYApp({ config, onToggle }: YAYAppProps) {
         {modules.map((mod) => {
           // Hanya Moderation & Utility yang bisa di toggle untuk sekarang
           const isComingSoon = mod.id.includes('Gamification') || mod.id.includes('Minigames');
-          const isActive = safeConfig[mod.id] === true || safeConfig[mod.id] === 'TRUE';
+          const isActive = safeConfig[mod.id as keyof BotConfig] === true || safeConfig[mod.id as keyof BotConfig] === 'TRUE';
           
           return (
             <div key={mod.id} className="flex items-center justify-between p-4 rounded-xl border border-[var(--border-subtle)] transition-all hover:border-[var(--border-medium)]"
@@ -80,7 +80,7 @@ export default function YAYApp({ config, onToggle }: YAYAppProps) {
               {!isComingSoon && (
                 <div
                   className={`toggle-track ${isActive ? 'active' : ''}`}
-                  onClick={() => onToggle(mod.id, !isActive)}
+                  onClick={() => onToggle(mod.id as keyof BotConfig, !isActive)}
                   style={{ '--toggle-color': mod.color } as any}
                 >
                   <div className="toggle-thumb" />

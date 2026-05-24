@@ -13,7 +13,7 @@ interface TaskManagerProps {
   tasks: TaskInfo[];
   onFocusTask: (taskId: string) => void;
   onCloseTask: (taskId: string) => void;
-  botStatus: 'ONLINE' | 'OFFLINE' | 'CONNECTING';
+  botStatus: 'ONLINE' | 'OFFLINE' | 'CONNECTING' | 'SCAN_QR';
   uptime: number;
 }
 

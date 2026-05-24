@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 interface StatusBarProps {
-  botStatus: 'ONLINE' | 'OFFLINE' | 'CONNECTING';
+  botStatus: 'ONLINE' | 'OFFLINE' | 'CONNECTING' | 'SCAN_QR';
   packageTier: string;
   userId: string;
 }

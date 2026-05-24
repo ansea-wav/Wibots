@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, Sparkles, X, Trophy, PlayCircle } from 'lucide-react';
-import KanbanBoard from '../KanbanBoard';
+import KanbanBoard from './KanbanBoard';
 
 export default function EduverseApp() {
   const [activeClass, setActiveClass] = useState<string | null>(null);
