@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { LanguageProvider } from "@/lib/LanguageContext";
+import { KeyboardProvider } from "@/lib/KeyboardContext";
 import DynamicIsland from "@/components/DynamicIsland";
+import VirtualKeyboard from "@/components/VirtualKeyboard";
 import "./globals.css";
 
 const inter = Inter({
@@ -34,10 +36,13 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <DynamicIsland />
-        <LanguageProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </LanguageProvider>
+        <KeyboardProvider>
+          <DynamicIsland />
+          <LanguageProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </LanguageProvider>
+          <VirtualKeyboard />
+        </KeyboardProvider>
       </body>
     </html>
   );
