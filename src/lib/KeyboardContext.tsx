@@ -35,34 +35,39 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Global focus listener
+  // Global focus listener and proactive inputmode injection
   useEffect(() => {
     if (!isMobile) return;
 
-    const handleFocusIn = (e: FocusEvent) => {
-      const target = e.target as HTMLElement;
-      
-      // We only care about inputs and textareas that are editable
-      if (
-        (target.tagName === 'INPUT' && !['checkbox', 'radio', 'submit', 'button', 'color', 'file', 'image', 'reset'].includes((target as HTMLInputElement).type)) ||
-        target.tagName === 'TEXTAREA'
-      ) {
-        const el = target as HTMLInputElement | HTMLTextAreaElement;
-        
-        // If we shouldn't use native keyboard, prevent it from popping up
+    const updateInputModes = () => {
+      const inputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="file"]), textarea');
+      inputs.forEach(el => {
         if (!useNativeKeyboard) {
           el.setAttribute('inputmode', 'none');
         } else {
           el.removeAttribute('inputmode');
         }
-        
-        setActiveInput(el);
+      });
+    };
+
+    updateInputModes();
+
+    const observer = new MutationObserver(() => {
+      updateInputModes();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    const handleFocus = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === 'INPUT' && !['checkbox', 'radio', 'submit', 'button', 'color', 'file', 'image', 'reset'].includes((target as HTMLInputElement).type)) ||
+        target.tagName === 'TEXTAREA'
+      ) {
+        setActiveInput(target as HTMLInputElement | HTMLTextAreaElement);
       }
     };
 
-    const handleFocusOut = (e: FocusEvent) => {
-      // Don't close immediately if clicking inside the virtual keyboard
-      // The Virtual Keyboard component handles preventing blur via onMouseDown.
+    const handleBlur = (e: Event) => {
       setTimeout(() => {
         if (!document.activeElement || (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA')) {
           setActiveInput(null);
@@ -70,12 +75,14 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
       }, 50);
     };
 
-    document.addEventListener('focusin', handleFocusIn);
-    document.addEventListener('focusout', handleFocusOut);
+    // Use capture phase for focus/blur to ensure we catch it early
+    document.addEventListener('focus', handleFocus, true);
+    document.addEventListener('blur', handleBlur, true);
 
     return () => {
-      document.removeEventListener('focusin', handleFocusIn);
-      document.removeEventListener('focusout', handleFocusOut);
+      observer.disconnect();
+      document.removeEventListener('focus', handleFocus, true);
+      document.removeEventListener('blur', handleBlur, true);
     };
   }, [isMobile, useNativeKeyboard]);
 

@@ -36,6 +36,14 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if (typeof window !== 'undefined' && !sessionStorage.getItem('first_reload_yay')) {
+              sessionStorage.setItem('first_reload_yay', 'true');
+              window.location.reload();
+            }
+          `
+        }} />
         <KeyboardProvider>
           <DynamicIsland />
           <LanguageProvider>
