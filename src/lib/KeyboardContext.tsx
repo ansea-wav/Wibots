@@ -23,12 +23,31 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
   // Detect mobile
   useEffect(() => {
     const checkMobile = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
-      const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-      if (/android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent) || window.innerWidth < 768 || isTouch) {
-        setIsMobile(true);
+      const userAgent = (navigator.userAgent || navigator.vendor || (window as any).opera).toLowerCase();
+      
+      let isPhoneOrTablet = false;
+      let forceNative = false;
+
+      if (/iphone|ipod|ipad|android/.test(userAgent)) {
+        isPhoneOrTablet = true;
+      } else if (/macintosh|mac os x/.test(userAgent) && navigator.maxTouchPoints > 1) {
+        // iPad OS 13+ requests desktop site by default and masquerades as Mac
+        isPhoneOrTablet = true;
+      } else if (/windows|macintosh|linux/.test(userAgent)) {
+        isPhoneOrTablet = false; // PC
       } else {
-        setIsMobile(false);
+        // Unknown device
+        if (window.innerWidth < 768) {
+          isPhoneOrTablet = true;
+          forceNative = true; // "ga kedetek tapi dia layarnya kecil, berarti munculin aja keyboard dari bawaannya mereka"
+        } else {
+          isPhoneOrTablet = false;
+        }
+      }
+
+      setIsMobile(isPhoneOrTablet);
+      if (forceNative) {
+        setUseNativeKeyboard(true);
       }
     };
     checkMobile();
