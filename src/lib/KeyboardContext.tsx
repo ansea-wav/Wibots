@@ -213,6 +213,31 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
   return (
     <KeyboardContext.Provider value={value}>
       {children}
+      {/* DEBUG OVERLAY - Remove later */}
+      <div className="fixed top-2 right-2 z-[99999] flex flex-col gap-2">
+        <div className="bg-black/80 text-[var(--neon-cyan)] text-[10px] p-2 rounded pointer-events-none border border-[var(--neon-cyan)]/30 font-mono">
+          <div>Device: {isMobile ? 'MOBILE/TABLET' : 'PC/UNKNOWN'}</div>
+          <div>Active: {isActive ? 'YES' : 'NO'}</div>
+          <div>Fallback: {useNativeKeyboard ? 'YES' : 'NO'}</div>
+        </div>
+        <button 
+          className="bg-[var(--accent-primary)] text-white text-[10px] px-3 py-2 rounded shadow-lg border border-white/20 active:scale-95 transition-transform"
+          onClick={() => {
+            if (activeInput) {
+              closeKeyboard();
+            } else {
+              // Force fake input focus
+              const inputs = document.querySelectorAll('input');
+              if (inputs.length > 0) {
+                inputs[0].focus();
+              }
+            }
+          }}
+          onTouchStart={(e) => { e.stopPropagation(); }}
+        >
+          {activeInput ? 'Tutup Keyboard' : 'Paksa Buka Keyboard'}
+        </button>
+      </div>
     </KeyboardContext.Provider>
   );
 }
