@@ -31,11 +31,20 @@ export default function AssistantBubble({
   const [isThinking, setIsThinking] = useState(false);
 
   // Position coordinates for the bubble during the tutorial
-  const [bubbleCoords, setBubbleCoords] = useState<{ x: number; y: number; isCenter: boolean; isPositioned: boolean }>({
+  const [bubbleCoords, setBubbleCoords] = useState<{
+    x: number;
+    y: number;
+    isCenter: boolean;
+    isPositioned: boolean;
+    placement?: 'top' | 'bottom';
+    caretOffset?: number;
+  }>({
     x: 0,
     y: 0,
     isCenter: true,
     isPositioned: false,
+    placement: 'top',
+    caretOffset: 0,
   });
 
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -48,27 +57,78 @@ export default function AssistantBubble({
   // Recalculate coordinates during tutorial steps
   useEffect(() => {
     if (!tutorialActive) {
-      setBubbleCoords({ x: 0, y: 0, isCenter: false, isPositioned: false });
+      setBubbleCoords({ x: 0, y: 0, isCenter: false, isPositioned: false, placement: 'top', caretOffset: 0 });
       return;
     }
 
     // Step 1: Intro, Step 5: Grand Finale -> center of the screen
     if (tutorialStep === 1 || tutorialStep === 5) {
-      setBubbleCoords({ x: 0, y: 0, isCenter: true, isPositioned: false });
+      setBubbleCoords({ x: 0, y: 0, isCenter: true, isPositioned: false, placement: 'top', caretOffset: 0 });
       return;
     }
 
     if (targetSelector) {
+      // Proactively scroll the target element into view when the step starts
+      const targetEl = document.querySelector(targetSelector);
+      if (targetEl) {
+        targetEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+
       const calculatePos = () => {
-        const targetEl = document.querySelector(targetSelector);
-        if (targetEl) {
-          const rect = targetEl.getBoundingClientRect();
+        const el = document.querySelector(targetSelector);
+        if (el) {
+          const rect = el.getBoundingClientRect();
           // Don't position if the element is hidden or has 0 dimensions yet
           if (rect.width === 0 || rect.height === 0) return false;
           
-          const x = rect.left + rect.width / 2;
-          const y = rect.top - 16; // 16px above target
-          setBubbleCoords({ x, y, isCenter: false, isPositioned: true });
+          const cardWidth = window.innerWidth < 640 ? 340 : 385;
+          const cardHeight = 250; // Estimated height of the card
+          
+          // Target center coordinates
+          const targetCenterX = rect.left + rect.width / 2;
+          
+          // Constrain X to viewport
+          const minX = cardWidth / 2 + 16;
+          const maxX = window.innerWidth - cardWidth / 2 - 16;
+          const x = Math.max(minX, Math.min(maxX, targetCenterX));
+          
+          // Caret offset relative to card center
+          const caretOffset = targetCenterX - x;
+          const maxCaretOffset = cardWidth / 2 - 24;
+          const constrainedCaretOffset = Math.max(-maxCaretOffset, Math.min(maxCaretOffset, caretOffset));
+          
+          // Determine placement: above or below
+          // Status bar is 28px. Let's say we need at least cardHeight + 44px above the target
+          const spaceAbove = rect.top - 28;
+          let y = 0;
+          let placement: 'top' | 'bottom' = 'top';
+          
+          if (spaceAbove >= cardHeight + 16) {
+            // Position above target
+            y = rect.top - 16;
+            placement = 'top';
+          } else {
+            // Position below target
+            y = rect.bottom + 16;
+            placement = 'bottom';
+          }
+          
+          // Ensure Y doesn't go below the viewport
+          if (placement === 'bottom') {
+            const maxY = window.innerHeight - cardHeight - 16;
+            if (y > maxY) {
+              y = maxY;
+            }
+          }
+          
+          setBubbleCoords({
+            x,
+            y,
+            isCenter: false,
+            isPositioned: true,
+            placement,
+            caretOffset: constrainedCaretOffset,
+          });
           return true;
         }
         return false;
@@ -181,7 +241,7 @@ export default function AssistantBubble({
           position: 'fixed',
           left: `${bubbleCoords.x}px`,
           top: `${bubbleCoords.y}px`,
-          transform: 'translate(-50%, -100%)',
+          transform: bubbleCoords.placement === 'bottom' ? 'translate(-50%, 0)' : 'translate(-50%, -100%)',
           zIndex: 9500,
         };
 
@@ -239,16 +299,29 @@ export default function AssistantBubble({
             )}
           </div>
 
-          {/* Tooltip Down Caret (Only when pointed to a target element) */}
+          {/* Tooltip Caret (Only when pointed to a target element) */}
           {!isCenter && (
             <div
-              className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0"
-              style={{
-                borderLeft: '10px solid transparent',
-                borderRight: '10px solid transparent',
-                borderTop: '10px solid rgba(10, 10, 15, 0.95)',
-                filter: 'drop-shadow(0 2px 0 rgba(255,255,255,0.05))',
-              }}
+              className="absolute -translate-x-1/2 w-0 h-0"
+              style={
+                bubbleCoords.placement === 'top'
+                  ? {
+                      left: `calc(50% + ${bubbleCoords.caretOffset || 0}px)`,
+                      top: '100%',
+                      borderLeft: '10px solid transparent',
+                      borderRight: '10px solid transparent',
+                      borderTop: '10px solid rgba(10, 10, 15, 0.95)',
+                      filter: 'drop-shadow(0 2px 0 rgba(255,255,255,0.05))',
+                    }
+                  : {
+                      left: `calc(50% + ${bubbleCoords.caretOffset || 0}px)`,
+                      bottom: '100%',
+                      borderLeft: '10px solid transparent',
+                      borderRight: '10px solid transparent',
+                      borderBottom: '10px solid rgba(10, 10, 15, 0.95)',
+                      filter: 'drop-shadow(0 -2px 0 rgba(255,255,255,0.05))',
+                    }
+              }
             />
           )}
         </div>

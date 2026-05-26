@@ -97,7 +97,7 @@ export default function AppStoreApp({ client }: AppStoreProps) {
                   </button>
                 ) : (
                   <button 
-                    id={`appstore-install-${appName}`}
+                    id={`appstore-install-${appName.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
                     onClick={() => handleInstall(appName)}
                     disabled={installing === appName}
                     className="px-4 py-2 rounded-lg text-xs font-bold bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white transition-all active:scale-95 disabled:opacity-50"
