@@ -56,15 +56,15 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
         <span className="font-black text-white tracking-tight text-[11px]">
           YAY
         </span>
-        <span className="text-[8px] text-[var(--text-tertiary)] uppercase tracking-wider font-medium">
+        <span className="hidden sm:inline text-[8px] text-[var(--text-tertiary)] uppercase tracking-wider font-medium">
           by netals
         </span>
-        <span className="text-[var(--text-tertiary)]">|</span>
-        <span className="text-[var(--text-secondary)] text-[10px]">
+        <span className="hidden sm:inline text-[var(--text-tertiary)]">|</span>
+        <span className="hidden md:inline text-[var(--text-secondary)] text-[10px]">
           {userId}
         </span>
-        <span className="text-[var(--text-tertiary)]">•</span>
-        <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded text-white font-semibold"
+        <span className="hidden md:inline text-[var(--text-tertiary)]">•</span>
+        <span className="hidden sm:inline-block text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded text-white font-semibold"
           style={{
             background: packageTier === 'Premium' ? 'linear-gradient(135deg, #a855f7, #6366f1)' :
                          packageTier === 'Standard' ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' :
@@ -76,7 +76,7 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
       </div>
 
       {/* Center: Server Stats */}
-      <div className="flex items-center gap-4 text-[var(--text-tertiary)]">
+      <div className="hidden md:flex items-center gap-4 text-[var(--text-tertiary)]">
         <div className="flex items-center gap-1.5">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" className="text-[var(--neon-cyan)]">
             <rect x="1" y="11" width="3" height="5" rx="0.5"/>
@@ -96,22 +96,22 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
       </div>
 
       {/* Right: Status + Clock */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
         <div className="flex items-center gap-1.5">
           <div className="w-[6px] h-[6px] rounded-full" style={{
             background: statusColor,
             boxShadow: `0 0 8px ${statusColor}`,
             animation: botStatus === 'ONLINE' ? 'glowPulse 2s infinite' : 'none'
           }} />
-          <span className="text-[10px] font-semibold" style={{ color: statusColor }}>
+          <span className="hidden sm:inline text-[10px] font-semibold" style={{ color: statusColor }}>
             {botStatus}
           </span>
         </div>
-        <span className="text-[var(--text-tertiary)]">|</span>
+        <span className="hidden sm:inline text-[var(--text-tertiary)]">|</span>
         <div className="text-right">
           <div className="text-[var(--text-secondary)] text-[10px]">{time}</div>
         </div>
-        <span className="text-[var(--text-tertiary)] text-[10px]">{date}</span>
+        <span className="hidden sm:inline text-[var(--text-tertiary)] text-[10px]">{date}</span>
       </div>
     </div>
   );
