@@ -61,7 +61,7 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
   const tutorialActive = !clientRegistry.Tutorial && !isNewMember;
   
   const [tutorialStep, setTutorialStep] = useState(() => {
-    if (isResponderStudioInstalled) return 6; // Skip to step 6 (Grand Welcome Splash)
+    if (isResponderStudioInstalled) return 5; // Skip to step 5 (Grand Welcome Splash)
     return 1; // Start at step 1
   });
 
@@ -72,9 +72,7 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
       case 3:
         return '#start-menu-app-appstore';
       case 4:
-        return '#window-control-close-appstore';
-      case 5:
-        return '#start-menu-button';
+        return '#appstore-install-responderstudio';
       default:
         return null;
     }
@@ -91,9 +89,6 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
     }
     if (tutorialStep === 3 && windows.has('appstore')) {
       setTutorialStep(4);
-    }
-    if (tutorialStep === 4 && !windows.has('appstore')) {
-      setTutorialStep(5);
     }
   }, [tutorialActive, tutorialStep, startMenuOpen, windows]);
 
@@ -127,7 +122,7 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
       
       if (res.status === 'success') {
         setClientRegistry(prev => ({ ...prev, Tutorial: 'Completed' }));
-        toast('Selamat datang di YAY! 🎉', 'success');
+        toast('Selamat datang di YAY!', 'success');
         setTimeout(() => {
           window.location.reload();
         }, 1500);
@@ -608,8 +603,8 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
         targetSelector={tutorialTargetSelector}
       />
 
-      {/* Masterpiece Welcome Splash (Step 6) */}
-      {tutorialActive && tutorialStep === 6 && (
+      {/* Masterpiece Welcome Splash (Step 5) */}
+      {tutorialActive && tutorialStep === 5 && (
         <div className="fixed inset-0 z-[9990] flex flex-col items-center justify-center bg-black overflow-hidden select-text">
           {/* Ambient background glow */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -621,8 +616,8 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
 
           <div className="relative text-center max-w-lg px-6 z-10 space-y-6"
             style={{ animation: 'bootFadeIn 1s var(--ease-spring) both' }}>
-            <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-[var(--neon-green)] to-[var(--neon-green-dim)] rounded-[2rem] flex items-center justify-center text-4xl shadow-[0_0_50px_rgba(57,255,20,0.3)] mb-6 animate-pulse">
-              🚀
+            <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-[var(--neon-green)] to-[var(--neon-green-dim)] rounded-[2rem] flex items-center justify-center shadow-[0_0_50px_rgba(57,255,20,0.3)] mb-6 animate-pulse">
+              <i className="fi fi-rr-rocket text-[32px] text-black flex items-center justify-center" />
             </div>
             
             <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-none">

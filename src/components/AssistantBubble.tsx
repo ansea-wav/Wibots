@@ -26,7 +26,7 @@ export default function AssistantBubble({
   const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: 'Halo! Saya YAY Assistant. Ada yang bisa saya bantu hari ini? 😊' }
+    { role: 'model', text: 'Halo! Saya YAY Assistant. Ada yang bisa saya bantu hari ini?' }
   ]);
   const [isThinking, setIsThinking] = useState(false);
 
@@ -51,7 +51,8 @@ export default function AssistantBubble({
       return;
     }
 
-    if (tutorialStep === 1 || tutorialStep === 6) {
+    // Step 1: Intro, Step 5: Grand Finale -> center of the screen
+    if (tutorialStep === 1 || tutorialStep === 5) {
       setBubbleCoords({ x: 0, y: 0, isCenter: true });
       return;
     }
@@ -108,7 +109,7 @@ export default function AssistantBubble({
       if (data.status === 'success' && data.reply) {
         setMessages(prev => [...prev, { role: 'model', text: data.reply }]);
       } else {
-        setMessages(prev => [...prev, { role: 'model', text: 'Maaf, saya sedang mengalami kendala jaringan. Coba tanyakan lagi ya! 🙏' }]);
+        setMessages(prev => [...prev, { role: 'model', text: 'Maaf, saya sedang mengalami kendala jaringan. Coba tanyakan lagi ya!' }]);
       }
     } catch (e) {
       setMessages(prev => [...prev, { role: 'model', text: 'Koneksi gagal. Silakan coba beberapa saat lagi.' }]);
@@ -122,39 +123,33 @@ export default function AssistantBubble({
     switch (tutorialStep) {
       case 1:
         return {
-          title: 'Halo! Selamat datang di YAY 👋',
-          body: 'Saya adalah YAY Assistant yang siap menemani Anda mengelola panel virtual ini. Mari ikuti tur singkat untuk mengenal fitur dasarnya agar Anda langsung mahir!',
-          buttonText: 'Lanjut Tur 🚀',
+          title: 'Halo! Selamat datang di YAY',
+          body: 'Saya adalah YAY Assistant yang siap menemani Anda mengelola panel virtual ini. Mari ikuti pengenalan singkat untuk memulai.',
+          buttonText: 'Lanjut Tur',
         };
       case 2:
         return {
-          title: 'Membuka Menu Utama (Start Menu) 🟢',
-          body: 'Pertama-tama, mari buka Start Menu! Klik tombol logo YAY di pojok kiri bawah Dock untuk melihat daftar aplikasi.',
+          title: 'Membuka Menu Utama (Start Menu)',
+          body: 'Pertama-tama, mari buka Start Menu. Klik tombol logo YAY di pojok kiri bawah Dock untuk melihat daftar aplikasi.',
           buttonText: null, // waits for click
         };
       case 3:
         return {
-          title: 'Pusat Aplikasi (App Store) 🛒',
-          body: 'Hebat! Di dalam Start Menu, Anda dapat melihat AppStore.exe. Ini adalah tempat Anda memasang aplikasi tambahan. Silakan klik ikon App Store untuk membukanya.',
+          title: 'Pusat Aplikasi (App Store)',
+          body: 'Bagus. Di dalam Start Menu, Anda dapat melihat AppStore.exe. Silakan klik ikon App Store untuk membukanya.',
           buttonText: null, // waits for click
         };
       case 4:
         return {
-          title: 'Menutup Jendela 🔴',
-          body: 'Ini adalah tampilan App Store. Sebelum kita menggunakannya, mari pelajari cara menutup jendela. Silakan klik tombol Close (merah 🔴) di pojok kiri atas jendela App Store.',
-          buttonText: null, // waits for click
+          title: 'Instalasi Responder Studio',
+          body: 'Sekarang, mari kita pasang aplikasi Responder Studio agar bot Anda bisa merespons otomatis. Silakan klik tombol Get / Install pada aplikasi Responder Studio.\n\nSaya akan menunggu di sini sampai aplikasi selesai terpasang!',
+          buttonText: null, // waits for installation
         };
       case 5:
         return {
-          title: 'Instalasi Responder Studio 🤖',
-          body: 'Sekarang, mari kita pasang aplikasi Responder Studio! Silakan klik kembali Start Menu, buka App Store.exe, lalu klik "Get / Install" pada Responder Studio.\n\nSaya akan menunggu di sini sampai aplikasi terpasang!',
-          buttonText: null, // waits for installation
-        };
-      case 6:
-        return {
-          title: '🎉 Selamat Datang di YAY!',
-          body: 'Selamat! Aplikasi Responder Studio telah berhasil terpasang di desktop Anda. Kini, seluruh modul dasar Anda telah aktif dan siap digunakan.\n\nSelamat mengelola grup WhatsApp Anda dengan cara baru yang super canggih! 🚀',
-          buttonText: 'Mulai Jelajah 🌟',
+          title: 'Selamat Datang di YAY!',
+          body: 'Selamat! Aplikasi Responder Studio telah berhasil terpasang di desktop Anda. Kini, seluruh modul dasar Anda telah aktif dan siap digunakan.',
+          buttonText: 'Mulai Jelajah',
         };
       default:
         return { title: '', body: '', buttonText: null };
@@ -199,10 +194,10 @@ export default function AssistantBubble({
           {/* Glowing Aura Effect */}
           <div className="absolute inset-0 rounded-[1.5rem] bg-gradient-to-tr from-[var(--neon-green)]/5 to-transparent -z-10 pointer-events-none" />
 
-          {/* Assistant Face Header */}
+          {/* Assistant Face Header (OLED solid circle) */}
           <div className="flex items-center gap-3.5 mb-4">
             <div className="w-10 h-10 rounded-xl bg-black border border-white/10 flex items-center justify-center relative">
-              <span className="text-xl">✨</span>
+              <div className="w-5 h-5 rounded-full bg-black border border-white/20 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.2)]" />
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[var(--neon-green)] border-2 border-black" />
             </div>
             <div>
@@ -221,14 +216,14 @@ export default function AssistantBubble({
             {/* Buttons */}
             {currentTutorial.buttonText && (
               <button
-                onClick={tutorialStep === 6 ? onCompleteTutorial : onNextTutorialStep}
+                onClick={tutorialStep === 5 ? onCompleteTutorial : onNextTutorialStep}
                 className="w-full mt-2 py-3 bg-[var(--neon-green)] hover:bg-[#4fff33] text-black font-extrabold text-xs tracking-wider rounded-xl transition-all cursor-pointer shadow-[0_0_20px_rgba(57,255,20,0.25)] hover:shadow-[0_0_30px_rgba(57,255,20,0.4)] active:scale-[0.98]"
               >
                 {currentTutorial.buttonText}
               </button>
             )}
 
-            {tutorialStep === 5 && (
+            {tutorialStep === 4 && (
               <div className="flex items-center justify-center gap-2 mt-4 text-[10px] text-[var(--text-tertiary)] bg-white/[0.02] py-2 px-4 rounded-lg border border-white/5">
                 <span className="w-2.5 h-2.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 Menunggu instalasi Responder Studio...
@@ -262,17 +257,17 @@ export default function AssistantBubble({
         bottom: '84px',
       }}
     >
-      {/* 1. Floating Circle Trigger */}
+      {/* 1. Floating Circle Trigger (Black OLED Circle) */}
       {!isOpen && (
         <div className="relative group">
           <button
             onClick={() => setIsOpen(true)}
-            className="w-14 h-14 rounded-full border border-white/5 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
+            className="w-14 h-14 rounded-full border border-white/5 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 shadow-[0_8px_30px_rgba(0,0,0,0.6)] bg-black"
             style={{
               animation: isThinking ? 'assistantPulseActive 0.7s ease-in-out infinite' : 'assistantPulseIdle 4s ease-in-out infinite',
             }}
           >
-            <span className="text-2xl select-none">✨</span>
+            <div className="w-6 h-6 rounded-full bg-black border border-white/20 shadow-[inset_0_1px_2.5px_rgba(255,255,255,0.25)]" />
             <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[var(--neon-green)] border-2 border-black" />
           </button>
           <div className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-3.5 py-2 bg-black/90 border border-white/10 rounded-xl text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg backdrop-blur-md">
@@ -295,7 +290,7 @@ export default function AssistantBubble({
           <div className="p-5 border-b border-white/[0.06] flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-black border border-white/10 flex items-center justify-center relative">
-                <span className="text-lg">✨</span>
+                <div className="w-4 h-4 rounded-full bg-black border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" />
                 <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[var(--neon-green)] border border-black" />
               </div>
               <div>

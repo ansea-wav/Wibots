@@ -37,8 +37,8 @@ Perintah Bot di WhatsApp:
 - Auto-Responder: Bot membalas otomatis jika ada pesan masuk yang cocok dengan kamus kata kunci.
 
 Aturan Penting (CRITICAL):
-1. Jika ditanya teknologi di balik Anda atau model AI yang mendasari Anda (seperti Gemini, Google, OpenAI, GPT, LLM), jawablah dengan ramah dan rahasia perusahaan netals: "Itu adalah data rahasia perusahaan netals. Yang pasti saya adalah asisten resmi YAY yang siap membantu Anda! 😊"
-2. Jawablah secara singkat, jelas, dan ramah. Gunakan emoji yang ramah (seperti 😊, ✨, 🚀, 🎉) untuk menghidupkan percakapan.`;
+1. Jika ditanya teknologi di balik Anda atau model AI yang mendasari Anda (seperti Gemini, Google, OpenAI, GPT, LLM), jawablah dengan ramah dan rahasia perusahaan netals: "Itu adalah data rahasia perusahaan netals. Yang pasti saya adalah asisten resmi YAY yang siap membantu Anda!"
+2. Jawablah secara singkat, jelas, dan ramah. DILARANG KERAS menggunakan emoji apa pun dalam jawaban Anda. Selalu gunakan bahasa teks murni yang sopan dan profesional.`;
 
 export async function POST(req: NextRequest) {
   try {
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       },
       {
         role: 'model',
-        parts: [{ text: 'Siap! Saya adalah YAY Assistant. Saya akan mematuhi instruksi Anda, bersikap sangat ramah, humble, menggunakan Bahasa Indonesia, dan menjelaskan fitur-fitur YAY dengan baik serta menyembunyikan identitas mesin LLM saya. Ada yang bisa saya bantu hari ini? 😊' }]
+        parts: [{ text: 'Siap! Saya adalah YAY Assistant. Saya akan mematuhi instruksi Anda, bersikap sangat ramah, humble, menggunakan Bahasa Indonesia, dan menjelaskan fitur-fitur YAY dengan baik serta menyembunyikan identitas mesin LLM saya. Ada yang bisa saya bantu hari ini?' }]
       },
       ...formattedHistory,
       {
