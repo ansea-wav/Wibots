@@ -82,10 +82,7 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
           <div className="text-center mb-8 flex flex-col items-center justify-center">
             <img src="/logo-white.png" alt="Logo" className="h-16 w-auto mb-4 opacity-95" />
             <p className="text-[var(--text-tertiary)] text-xs uppercase tracking-[0.2em] font-medium mt-1">
-              Virtual Desktop OS
-            </p>
-            <p className="text-[var(--text-tertiary)] text-xs mt-3">
-              Authenticate to access your Virtual Machine
+              YAY by Netals
             </p>
           </div>
 
