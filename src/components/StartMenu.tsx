@@ -101,9 +101,15 @@ export default function StartMenu({
             <button
               key={app.id}
               onClick={() => { onOpenApp(app.id); onClose(); }}
-              className="flex flex-col items-center gap-1 p-2.5 rounded-xl hover:bg-white/[0.06] transition-all cursor-pointer active:scale-95"
+              className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-all cursor-pointer active:scale-95"
             >
-              <span className="text-xl">{app.icon}</span>
+              <span className="text-xl h-6 flex items-center justify-center text-white">
+                {app.icon.startsWith('fi ') ? (
+                  <i className={`${app.icon} text-[16px]`}></i>
+                ) : (
+                  app.icon
+                )}
+              </span>
               <span className="text-[9px] text-[var(--text-secondary)] truncate w-full text-center">{app.name.split('.')[0]}</span>
             </button>
           ))}

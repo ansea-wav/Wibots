@@ -46,9 +46,13 @@ export default function DockMenu({ apps, onAppClick, onStartMenuToggle, isStartM
               transform: app.isOpen ? 'translateY(-2px)' : undefined,
             }}
           >
-            <span className="text-2xl select-none" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
-              {app.icon}
-            </span>
+            {app.icon.startsWith('fi ') ? (
+              <i className={`${app.icon} text-[20px] text-white flex items-center justify-center`} style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}></i>
+            ) : (
+              <span className="text-2xl select-none" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
+                {app.icon}
+              </span>
+            )}
           </button>
 
           {/* Active Indicator Dot */}

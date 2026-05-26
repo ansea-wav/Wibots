@@ -175,7 +175,13 @@ export default function WindowFrame({
         onDoubleClick={handleTitleDoubleClick}
       >
         <div className="window-titlebar-title">
-          <span className="text-sm">{windowState.icon}</span>
+          <span className="text-sm flex items-center justify-center text-white">
+            {windowState.icon.startsWith('fi ') ? (
+              <i className={`${windowState.icon} text-[12px]`}></i>
+            ) : (
+              windowState.icon
+            )}
+          </span>
           <span>{windowState.title}</span>
         </div>
         <div className="window-controls">

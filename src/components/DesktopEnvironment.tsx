@@ -28,16 +28,16 @@ interface DesktopProps {
 type AppId = 'account' | 'controlcenter' | 'responderstudio' | 'fileexplorer' | 'taskmanager' | 'subscription' | 'groupmanager' | 'user-manager' | 'appstore' | 'yayapp';
 
 const APP_DEFINITIONS: Record<AppId, { title: string; icon: string; defaultWidth: number; defaultHeight: number; minWidth: number; minHeight: number }> = {
-  account:         { title: 'Account.exe',            icon: '💳', defaultWidth: 440, defaultHeight: 620, minWidth: 380, minHeight: 500 },
-  controlcenter:   { title: 'ControlCenter.app',      icon: '⚙️', defaultWidth: 480, defaultHeight: 600, minWidth: 400, minHeight: 460 },
-  responderstudio: { title: 'ResponderStudio.lnk',    icon: '🤖', defaultWidth: 700, defaultHeight: 520, minWidth: 550, minHeight: 380 },
-  fileexplorer:    { title: 'FileExplorer.sys',        icon: '📁', defaultWidth: 620, defaultHeight: 480, minWidth: 480, minHeight: 360 },
-  taskmanager:     { title: 'TaskManager.exe',         icon: '📊', defaultWidth: 500, defaultHeight: 550, minWidth: 420, minHeight: 400 },
-  subscription:    { title: 'Subscription.app',        icon: '💎', defaultWidth: 520, defaultHeight: 620, minWidth: 440, minHeight: 500 },
-  groupmanager:    { title: 'GroupManager.app',        icon: '👥', defaultWidth: 480, defaultHeight: 580, minWidth: 400, minHeight: 450 },
-  'user-manager':  { title: 'UserManager.exe',         icon: '👥', defaultWidth: 600, defaultHeight: 500, minWidth: 400, minHeight: 300 },
-  'appstore':      { title: 'AppStore.exe',          icon: '⚙️', defaultWidth: 500, defaultHeight: 400, minWidth: 300, minHeight: 200 },
-  'yayapp':        { title: 'YAY.app',                 icon: '✨', defaultWidth: 520, defaultHeight: 640, minWidth: 440, minHeight: 500 },
+  account:         { title: 'Account.exe',            icon: 'fi fi-rr-credit-card', defaultWidth: 440, defaultHeight: 620, minWidth: 380, minHeight: 500 },
+  controlcenter:   { title: 'ControlCenter.app',      icon: 'fi fi-rr-settings', defaultWidth: 480, defaultHeight: 600, minWidth: 400, minHeight: 460 },
+  responderstudio: { title: 'ResponderStudio.lnk',    icon: 'fi fi-rr-robot', defaultWidth: 700, defaultHeight: 520, minWidth: 550, minHeight: 380 },
+  fileexplorer:    { title: 'FileExplorer.sys',        icon: 'fi fi-rr-folder', defaultWidth: 620, defaultHeight: 480, minWidth: 480, minHeight: 360 },
+  taskmanager:     { title: 'TaskManager.exe',         icon: 'fi fi-rr-chart-histogram', defaultWidth: 500, defaultHeight: 550, minWidth: 420, minHeight: 400 },
+  subscription:    { title: 'Subscription.app',        icon: 'fi fi-rr-gem', defaultWidth: 520, defaultHeight: 620, minWidth: 440, minHeight: 500 },
+  groupmanager:    { title: 'GroupManager.app',        icon: 'fi fi-rr-users', defaultWidth: 480, defaultHeight: 580, minWidth: 400, minHeight: 450 },
+  'user-manager':  { title: 'UserManager.exe',         icon: 'fi fi-rr-users', defaultWidth: 600, defaultHeight: 500, minWidth: 400, minHeight: 300 },
+  'appstore':      { title: 'AppStore.exe',          icon: 'fi fi-rr-apps', defaultWidth: 500, defaultHeight: 400, minWidth: 300, minHeight: 200 },
+  'yayapp':        { title: 'YAY.app',                 icon: 'fi fi-rr-sparkles', defaultWidth: 520, defaultHeight: 640, minWidth: 440, minHeight: 500 },
 };
 
 export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
@@ -299,16 +299,16 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
   });
 
   const ALL_APPS = [
-    { id: 'appstore', name: 'AppStore.exe', icon: '⚙️' },
-    { id: 'fileexplorer', name: 'FileExplorer.sys', icon: '📁' },
-    { id: 'account', name: 'Account.exe', icon: '💳' },
-    { id: 'controlcenter', name: 'ControlCenter.app', icon: '⚙️' },
-    { id: 'yayapp', name: 'YAY.app', icon: '✨' },
-    { id: 'responderstudio', name: 'ResponderStudio.lnk', icon: '🤖' },
-    { id: 'groupmanager', name: 'GroupManager.app', icon: '👥' },
-    { id: 'taskmanager', name: 'TaskManager.exe', icon: '📊' },
-    { id: 'subscription', name: 'Subscription.app', icon: '💎' },
-    { id: 'user-manager', name: 'UserManager.exe', icon: '👥' },
+    { id: 'appstore', name: 'AppStore.exe', icon: 'fi fi-rr-apps' },
+    { id: 'fileexplorer', name: 'FileExplorer.sys', icon: 'fi fi-rr-folder' },
+    { id: 'account', name: 'Account.exe', icon: 'fi fi-rr-credit-card' },
+    { id: 'controlcenter', name: 'ControlCenter.app', icon: 'fi fi-rr-settings' },
+    { id: 'yayapp', name: 'YAY.app', icon: 'fi fi-rr-sparkles' },
+    { id: 'responderstudio', name: 'ResponderStudio.lnk', icon: 'fi fi-rr-robot' },
+    { id: 'groupmanager', name: 'GroupManager.app', icon: 'fi fi-rr-users' },
+    { id: 'taskmanager', name: 'TaskManager.exe', icon: 'fi fi-rr-chart-histogram' },
+    { id: 'subscription', name: 'Subscription.app', icon: 'fi fi-rr-gem' },
+    { id: 'user-manager', name: 'UserManager.exe', icon: 'fi fi-rr-users' },
   ];
 
   const availableApps = ALL_APPS.filter(app => {
