@@ -66,7 +66,8 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
         <span className="hidden md:inline text-[var(--text-tertiary)]">•</span>
         <span className="hidden sm:inline-block text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded text-white font-semibold"
           style={{
-            background: packageTier === 'Premium' ? 'linear-gradient(135deg, #a855f7, #6366f1)' :
+            background: packageTier === 'God' ? 'linear-gradient(135deg, #f59e0b, #ef4444)' :
+                         packageTier === 'Premium' ? 'linear-gradient(135deg, #a855f7, #6366f1)' :
                          packageTier === 'Standard' ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' :
                          'linear-gradient(135deg, #6b7280, #4b5563)',
             fontSize: '9px'
@@ -75,24 +76,39 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
         </span>
       </div>
 
-      {/* Center: Server Stats */}
-      <div className="hidden md:flex items-center gap-4 text-[var(--text-tertiary)]">
-        <div className="flex items-center gap-1.5">
-          <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" className="text-[var(--neon-cyan)]">
-            <rect x="1" y="11" width="3" height="5" rx="0.5"/>
-            <rect x="5" y="8" width="3" height="8" rx="0.5"/>
-            <rect x="9" y="4" width="3" height="12" rx="0.5"/>
-            <rect x="13" y="1" width="3" height="15" rx="0.5" opacity="0.3"/>
-          </svg>
-          <span className="text-[10px]">CPU {cpuUsage}%</span>
+      {/* Center Section: absolute centered on mobile, relative on desktop */}
+      <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center sm:relative sm:left-auto sm:translate-x-0">
+        {/* Center: Server Stats (visible on desktop/tablet) */}
+        <div className="hidden md:flex items-center gap-4 text-[var(--text-tertiary)]">
+          <div className="flex items-center gap-1.5">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" className="text-[var(--neon-cyan)]">
+              <rect x="1" y="11" width="3" height="5" rx="0.5"/>
+              <rect x="5" y="8" width="3" height="8" rx="0.5"/>
+              <rect x="9" y="4" width="3" height="12" rx="0.5"/>
+              <rect x="13" y="1" width="3" height="15" rx="0.5" opacity="0.3"/>
+            </svg>
+            <span className="text-[10px]">CPU {cpuUsage}%</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" className="text-[var(--neon-purple)]">
+              <rect x="2" y="3" width="12" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+              <rect x="4" y="5" width={(isNaN(parseFloat(ramUsage)) ? 0 : parseFloat(ramUsage) / 100 * 8).toString()} height="6" rx="1"/>
+            </svg>
+            <span className="text-[10px]">RAM {ramUsage}%</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5">
-          <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" className="text-[var(--neon-purple)]">
-            <rect x="2" y="3" width="12" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5"/>
-            <rect x="4" y="5" width={(isNaN(parseFloat(ramUsage)) ? 0 : parseFloat(ramUsage) / 100 * 8).toString()} height="6" rx="1"/>
-          </svg>
-          <span className="text-[10px]">RAM {ramUsage}%</span>
-        </div>
+
+        {/* Center: Mobile Package Tier Badge (visible only on mobile) */}
+        <span className="inline-block md:hidden text-[9px] uppercase tracking-wider px-2 py-0.5 rounded text-white font-semibold shadow-[0_0_10px_rgba(255,255,255,0.05)]"
+          style={{
+            background: packageTier === 'God' ? 'linear-gradient(135deg, #f59e0b, #ef4444)' :
+                         packageTier === 'Premium' ? 'linear-gradient(135deg, #a855f7, #6366f1)' :
+                         packageTier === 'Standard' ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' :
+                         'linear-gradient(135deg, #6b7280, #4b5563)',
+            fontSize: '9px'
+          }}>
+          {packageTier}
+        </span>
       </div>
 
       {/* Right: Status + Clock */}
