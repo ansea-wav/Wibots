@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useKeyboard } from '@/lib/KeyboardContext';
 
 // --- KEYBOARD LAYOUTS ---
@@ -34,7 +34,7 @@ const NUMBERS_UPPERSCAPE = [
 ];
 
 export default function VirtualKeyboard() {
-  const { isActive, activeInput, closeKeyboard, insertText, handleBackspace, setUseNativeKeyboard, useNativeKeyboard } = useKeyboard();
+  const { isActive, activeInput, closeKeyboard, insertText, handleBackspace, setUseNativeKeyboard, useNativeKeyboard, clearAll } = useKeyboard();
   
   // States
   const [mode, setMode] = useState<'abc' | '123'>('abc');
@@ -42,6 +42,124 @@ export default function VirtualKeyboard() {
   const [isCaps, setIsCaps] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [translating, setTranslating] = useState(false);
+
+  // Refs for Spacebar Swipe
+  const spaceTouchStartRef = useRef<{ x: number; selectionStart: number } | null>(null);
+  const isSpaceDraggingRef = useRef<boolean>(false);
+
+  // Refs for Backspace Long Press
+  const backspaceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isBackspaceLongPressRef = useRef<boolean>(false);
+
+  // Handlers for Spacebar Drag
+  const handleSpaceTouchStart = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!activeInput) return;
+    const touch = e.touches[0];
+    spaceTouchStartRef.current = {
+      x: touch.clientX,
+      selectionStart: activeInput.selectionStart ?? activeInput.value.length
+    };
+    isSpaceDraggingRef.current = false;
+    e.currentTarget.classList.add('scale-[0.96]', 'bg-white/25');
+  };
+
+  const handleSpaceTouchMove = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!activeInput || !spaceTouchStartRef.current) return;
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - spaceTouchStartRef.current.x;
+    
+    if (!isSpaceDraggingRef.current && Math.abs(deltaX) > 8) {
+      isSpaceDraggingRef.current = true;
+      if (navigator.vibrate) navigator.vibrate(10);
+    }
+
+    if (isSpaceDraggingRef.current) {
+      const charOffset = Math.round(deltaX / 12);
+      const newPos = Math.max(0, Math.min(activeInput.value.length, spaceTouchStartRef.current.selectionStart + charOffset));
+      activeInput.setSelectionRange(newPos, newPos);
+    }
+  };
+
+  const handleSpaceTouchEnd = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('scale-[0.96]', 'bg-white/25');
+    
+    if (!isSpaceDraggingRef.current) {
+      insertText(' ');
+    }
+    
+    spaceTouchStartRef.current = null;
+    isSpaceDraggingRef.current = false;
+  };
+
+  const handleSpaceMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    insertText(' ');
+  };
+
+  // Handlers for Backspace Long Press
+  const handleBackspaceTouchStart = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.currentTarget.classList.add('scale-[0.92]', 'bg-white/25');
+    isBackspaceLongPressRef.current = false;
+
+    handleBackspace();
+    if (navigator.vibrate) navigator.vibrate(15);
+
+    backspaceTimerRef.current = setTimeout(() => {
+      isBackspaceLongPressRef.current = true;
+      if (clearAll) clearAll();
+      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    }, 500);
+  };
+
+  const handleBackspaceTouchEnd = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('scale-[0.92]', 'bg-white/25');
+    if (backspaceTimerRef.current) {
+      clearTimeout(backspaceTimerRef.current);
+      backspaceTimerRef.current = null;
+    }
+  };
+
+  const handleBackspaceTouchCancel = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('scale-[0.92]', 'bg-white/25');
+    if (backspaceTimerRef.current) {
+      clearTimeout(backspaceTimerRef.current);
+      backspaceTimerRef.current = null;
+    }
+  };
+
+  const handleBackspaceMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    isBackspaceLongPressRef.current = false;
+    handleBackspace();
+    if (navigator.vibrate) navigator.vibrate(15);
+
+    backspaceTimerRef.current = setTimeout(() => {
+      isBackspaceLongPressRef.current = true;
+      if (clearAll) clearAll();
+      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    }, 500);
+  };
+
+  const handleBackspaceMouseUp = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (backspaceTimerRef.current) {
+      clearTimeout(backspaceTimerRef.current);
+      backspaceTimerRef.current = null;
+    }
+  };
+
+  const handleBackspaceMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (backspaceTimerRef.current) {
+      clearTimeout(backspaceTimerRef.current);
+      backspaceTimerRef.current = null;
+    }
+  };
 
   // Entrance animation logic
   useEffect(() => {
@@ -101,15 +219,107 @@ export default function VirtualKeyboard() {
     }
   };
 
+  const renderKey = (key: string, uniqueId: string) => {
+    let display = key;
+    let isSpecial = false;
+    let flexBasis = 'flex-1';
+    
+    if (key === '{shift}') {
+      display = isCaps ? '⇪' : isShift ? '⇧' : '⇧';
+      flexBasis = 'flex-[1.5] max-w-[15%]';
+      isSpecial = true;
+    } else if (key === '{backspace}') {
+      display = '⌫';
+      flexBasis = 'flex-[1.5] max-w-[15%]';
+      isSpecial = true;
+    } else if (key === '{enter}') {
+      display = '↵';
+      flexBasis = 'flex-[1.5] max-w-[15%]';
+      isSpecial = true;
+    } else if (key === '{space}') {
+      display = 'Space';
+      flexBasis = 'flex-[4] max-w-[50%]';
+    }
+
+    // Set custom event handlers based on the key
+    let onTouchStartHandler: React.TouchEventHandler<HTMLButtonElement>;
+    let onTouchMoveHandler: React.TouchEventHandler<HTMLButtonElement> | undefined = undefined;
+    let onTouchEndHandler: React.TouchEventHandler<HTMLButtonElement>;
+    let onTouchCancelHandler: React.TouchEventHandler<HTMLButtonElement> | undefined = undefined;
+
+    let onMouseDownHandler: React.MouseEventHandler<HTMLButtonElement>;
+    let onMouseUpHandler: React.MouseEventHandler<HTMLButtonElement> | undefined = undefined;
+    let onMouseLeaveHandler: React.MouseEventHandler<HTMLButtonElement> | undefined = undefined;
+
+    if (key === '{space}') {
+      onTouchStartHandler = handleSpaceTouchStart;
+      onTouchMoveHandler = handleSpaceTouchMove;
+      onTouchEndHandler = handleSpaceTouchEnd;
+      onTouchCancelHandler = handleSpaceTouchEnd;
+
+      onMouseDownHandler = handleSpaceMouseDown;
+    } else if (key === '{backspace}') {
+      onTouchStartHandler = handleBackspaceTouchStart;
+      onTouchEndHandler = handleBackspaceTouchEnd;
+      onTouchCancelHandler = handleBackspaceTouchCancel;
+
+      onMouseDownHandler = handleBackspaceMouseDown;
+      onMouseUpHandler = handleBackspaceMouseUp;
+      onMouseLeaveHandler = handleBackspaceMouseLeave;
+    } else {
+      // Default key behavior
+      onTouchStartHandler = (e) => {
+        e.preventDefault();
+        handleKeyPress(key);
+        e.currentTarget.classList.add('scale-[0.92]', 'bg-white/25');
+      };
+      onTouchEndHandler = (e) => {
+        e.preventDefault();
+        e.currentTarget.classList.remove('scale-[0.92]', 'bg-white/25');
+      };
+      onTouchCancelHandler = (e) => {
+        e.preventDefault();
+        e.currentTarget.classList.remove('scale-[0.92]', 'bg-white/25');
+      };
+      onMouseDownHandler = (e) => {
+        e.preventDefault();
+        handleKeyPress(key);
+      };
+    }
+
+    return (
+      <button
+        key={uniqueId}
+        onTouchStart={onTouchStartHandler}
+        onTouchMove={onTouchMoveHandler}
+        onTouchEnd={onTouchEndHandler}
+        onTouchCancel={onTouchCancelHandler}
+        onMouseDown={onMouseDownHandler}
+        onMouseUp={onMouseUpHandler}
+        onMouseLeave={onMouseLeaveHandler}
+        className={`
+          h-12 rounded-full flex items-center justify-center text-[20px] font-medium 
+          transition-all duration-100 select-none touch-none
+          ${flexBasis}
+          ${isSpecial 
+            ? key === '{enter}' 
+              ? 'bg-[var(--accent-primary)]/80 text-white border-[var(--accent-primary)] shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_8px_rgba(var(--accent-primary-rgb),0.4)]' 
+              : (isShift || isCaps) && key === '{shift}' 
+                ? 'bg-white/30 text-white'
+                : 'bg-white/10 text-[var(--text-secondary)] border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_2px_5px_rgba(0,0,0,0.2)]' 
+            : 'bg-gradient-to-b from-white/15 to-white/5 text-white border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.2),0_2px_5px_rgba(0,0,0,0.3)]'
+          }
+        `}
+      >
+        {display}
+      </button>
+    );
+  };
+
   if (!isActive || useNativeKeyboard) return null;
 
-  // Determine current layout based on mode and shift state
-  let currentRows: string[][] = [];
-  if (mode === 'abc') {
-    currentRows = isShift || isCaps ? ALPHABET_UPPER : ALPHABET_LOWER;
-  } else {
-    currentRows = isShift || isCaps ? NUMBERS_UPPERSCAPE : NUMBERS_NORMAL;
-  }
+  const abcRows = isShift || isCaps ? ALPHABET_UPPER : ALPHABET_LOWER;
+  const numberRows = isShift || isCaps ? NUMBERS_UPPERSCAPE : NUMBERS_NORMAL;
 
   return (
     <div
@@ -166,98 +376,55 @@ export default function VirtualKeyboard() {
         </div>
       )}
 
-      {/* KEYBOARD AREA (Single Slide) */}
-      <div className="flex flex-col gap-2 max-w-[600px] mx-auto w-full relative">
-        <div className="flex flex-col gap-2.5 px-1">
-          {currentRows.map((row, rowIndex) => (
+      {/* KEYBOARD AREA (Transition Slide) */}
+      <div className="max-w-[600px] mx-auto w-full relative h-[224px] overflow-hidden">
+        {/* ABC Layout */}
+        <div 
+          className="absolute inset-0 flex flex-col gap-2.5 px-1 transition-all duration-500 ease-in-out"
+          style={{
+            opacity: mode === 'abc' ? 1 : 0,
+            transform: mode === 'abc' ? 'translateX(0) scale(1)' : 'translateX(-30px) scale(0.95)',
+            pointerEvents: mode === 'abc' ? 'auto' : 'none',
+          }}
+        >
+          {abcRows.map((row, rowIndex) => (
             <div 
-              key={rowIndex} 
+              key={`abc-${rowIndex}`} 
               className={`flex gap-1.5 w-full justify-center ${rowIndex === 1 ? 'px-[5%]' : ''}`}
             >
-              {row.map((key, keyIndex) => {
-                let display = key;
-                let isSpecial = false;
-                let flexBasis = 'flex-1';
-                
-                if (key === '{shift}') {
-                  display = isCaps ? '⇪' : isShift ? '⇧' : '⇧';
-                  flexBasis = 'flex-[1.5] max-w-[15%]';
-                  isSpecial = true;
-                } else if (key === '{backspace}') {
-                  display = '⌫';
-                  flexBasis = 'flex-[1.5] max-w-[15%]';
-                  isSpecial = true;
-                } else if (key === '{enter}') {
-                  display = '↵';
-                  flexBasis = 'flex-[1.5] max-w-[15%]';
-                  isSpecial = true;
-                } else if (key === '{space}') {
-                  display = 'Space';
-                  flexBasis = 'flex-[4] max-w-[50%]';
-                }
+              {row.map((key, keyIndex) => renderKey(key, `abc-${rowIndex}-${keyIndex}`))}
+            </div>
+          ))}
+        </div>
 
-                return (
-                  <button
-                    key={`${key}-${keyIndex}`}
-                    onTouchStart={(e) => {
-                      e.preventDefault();
-                      handleKeyPress(key);
-                      e.currentTarget.classList.add('scale-[0.92]', 'bg-white/25');
-                    }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      e.currentTarget.classList.remove('scale-[0.92]', 'bg-white/25');
-                    }}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      handleKeyPress(key);
-                    }}
-                    className={`
-                      h-12 rounded-full flex items-center justify-center text-[20px] font-medium 
-                      transition-all duration-100 select-none touch-none
-                      ${flexBasis}
-                      ${isSpecial 
-                        ? key === '{enter}' 
-                          ? 'bg-[var(--accent-primary)]/80 text-white border-[var(--accent-primary)] shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_8px_rgba(var(--accent-primary-rgb),0.4)]' 
-                          : isShift && key === '{shift}' 
-                            ? 'bg-white/30 text-white'
-                            : 'bg-white/10 text-[var(--text-secondary)] border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_2px_5px_rgba(0,0,0,0.2)]' 
-                        : 'bg-gradient-to-b from-white/15 to-white/5 text-white border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.2),0_2px_5px_rgba(0,0,0,0.3)]'
-                      }
-                    `}
-                  >
-                    {display}
-                  </button>
-                );
-              })}
+        {/* 123 Layout */}
+        <div 
+          className="absolute inset-0 flex flex-col gap-2.5 px-1 transition-all duration-500 ease-in-out"
+          style={{
+            opacity: mode === '123' ? 1 : 0,
+            transform: mode === '123' ? 'translateX(0) scale(1)' : 'translateX(30px) scale(0.95)',
+            pointerEvents: mode === '123' ? 'auto' : 'none',
+          }}
+        >
+          {numberRows.map((row, rowIndex) => (
+            <div 
+              key={`num-${rowIndex}`} 
+              className={`flex gap-1.5 w-full justify-center ${rowIndex === 1 ? 'px-[5%]' : ''}`}
+            >
+              {row.map((key, keyIndex) => renderKey(key, `num-${rowIndex}-${keyIndex}`))}
             </div>
           ))}
         </div>
       </div>
 
-      {/* FOOTER: Static Toggle Bar */}
-      <div className="mt-4 flex justify-center gap-3 px-4 max-w-[400px] mx-auto w-full" onTouchStart={(e) => e.preventDefault()}>
+      {/* FOOTER: Static Combined Toggle Button */}
+      <div className="mt-4 flex justify-center px-4 max-w-[200px] mx-auto w-full" onTouchStart={(e) => e.preventDefault()}>
         <button
-          onTouchStart={(e) => { e.preventDefault(); setMode('abc'); setIsShift(false); }}
-          onMouseDown={(e) => { e.preventDefault(); setMode('abc'); setIsShift(false); }}
-          className={`flex-1 h-10 rounded-full flex items-center justify-center text-[11px] font-bold tracking-widest uppercase transition-all duration-300 ${
-            mode === 'abc'
-            ? 'bg-white/20 text-white shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),0_0_15px_rgba(255,255,255,0.1)] border border-white/20'
-            : 'bg-black/20 text-[var(--text-tertiary)] border border-white/5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)]'
-          }`}
+          onTouchStart={(e) => { e.preventDefault(); setMode(mode === 'abc' ? '123' : 'abc'); setIsShift(false); }}
+          onMouseDown={(e) => { e.preventDefault(); setMode(mode === 'abc' ? '123' : 'abc'); setIsShift(false); }}
+          className="w-full h-10 rounded-full flex items-center justify-center text-[12px] font-bold tracking-widest uppercase transition-all duration-300 bg-white/10 text-white shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),0_0_15px_rgba(255,255,255,0.1)] border border-white/20 active:bg-white/25 hover:bg-white/15"
         >
-          ABC
-        </button>
-        <button
-          onTouchStart={(e) => { e.preventDefault(); setMode('123'); setIsShift(false); }}
-          onMouseDown={(e) => { e.preventDefault(); setMode('123'); setIsShift(false); }}
-          className={`flex-1 h-10 rounded-full flex items-center justify-center text-[11px] font-bold tracking-widest uppercase transition-all duration-300 ${
-            mode === '123'
-            ? 'bg-white/20 text-white shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),0_0_15px_rgba(255,255,255,0.1)] border border-white/20'
-            : 'bg-black/20 text-[var(--text-tertiary)] border border-white/5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)]'
-          }`}
-        >
-          123
+          {mode === 'abc' ? '?123' : 'ABC'}
         </button>
       </div>
 

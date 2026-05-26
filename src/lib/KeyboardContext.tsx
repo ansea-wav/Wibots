@@ -11,6 +11,8 @@ interface KeyboardContextType {
   closeKeyboard: () => void;
   insertText: (text: string) => void;
   handleBackspace: () => void;
+  moveCursor: (direction: 'left' | 'right', amount?: number) => void;
+  clearAll: () => void;
 }
 
 const KeyboardContext = createContext<KeyboardContextType | null>(null);
@@ -199,6 +201,46 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
     setActiveInput(null);
   }, [activeInput]);
 
+  const moveCursor = useCallback((direction: 'left' | 'right', amount: number = 1) => {
+    if (!activeInput) return;
+    const start = activeInput.selectionStart ?? 0;
+    const end = activeInput.selectionEnd ?? 0;
+    let newPos = start;
+    if (direction === 'left') {
+      newPos = Math.max(0, start - amount);
+    } else {
+      newPos = Math.min(activeInput.value.length, end + amount);
+    }
+    activeInput.setSelectionRange(newPos, newPos);
+  }, [activeInput]);
+
+  const clearAll = useCallback(() => {
+    if (!activeInput) return;
+    
+    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value'
+    )?.set;
+    
+    const nativeTextAreaValueSetter = Object.getOwnPropertyDescriptor(
+      window.HTMLTextAreaElement.prototype,
+      'value'
+    )?.set;
+
+    const setter = activeInput.tagName === 'INPUT' ? nativeInputValueSetter : nativeTextAreaValueSetter;
+    
+    if (setter) {
+      setter.call(activeInput, '');
+    } else {
+      activeInput.value = '';
+    }
+    
+    const event = new Event('input', { bubbles: true });
+    activeInput.dispatchEvent(event);
+    
+    activeInput.setSelectionRange(0, 0);
+  }, [activeInput]);
+
   const value = {
     isActive: activeInput !== null && !useNativeKeyboard,
     activeInput,
@@ -207,7 +249,9 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
     setUseNativeKeyboard,
     closeKeyboard,
     insertText,
-    handleBackspace
+    handleBackspace,
+    moveCursor,
+    clearAll
   };
 
   return (
