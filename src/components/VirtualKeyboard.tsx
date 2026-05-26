@@ -220,20 +220,26 @@ export default function VirtualKeyboard() {
   };
 
   const renderKey = (key: string, uniqueId: string) => {
-    let display = key;
+    let display: React.ReactNode = key;
     let isSpecial = false;
     let flexBasis = 'flex-1';
     
     if (key === '{shift}') {
-      display = isCaps ? '⇪' : isShift ? '⇧' : '⇧';
+      display = isCaps ? (
+        <i className="fi fi-sr-arrow-up-to-line text-[16px] flex items-center justify-center"></i>
+      ) : isShift ? (
+        <i className="fi fi-sr-arrow-up text-[16px] flex items-center justify-center"></i>
+      ) : (
+        <i className="fi fi-rr-arrow-up text-[16px] flex items-center justify-center"></i>
+      );
       flexBasis = 'flex-[1.5] max-w-[15%]';
       isSpecial = true;
     } else if (key === '{backspace}') {
-      display = '⌫';
+      display = <i className="fi fi-rr-backspace text-[16px] flex items-center justify-center"></i>;
       flexBasis = 'flex-[1.5] max-w-[15%]';
       isSpecial = true;
     } else if (key === '{enter}') {
-      display = '↵';
+      display = <i className="fi fi-rr-arrow-turn-down-left text-[16px] flex items-center justify-center"></i>;
       flexBasis = 'flex-[1.5] max-w-[15%]';
       isSpecial = true;
     } else if (key === '{space}') {
@@ -341,20 +347,20 @@ export default function VirtualKeyboard() {
           <button
             onClick={handleUseNativeKeyboard}
             onTouchEnd={handleUseNativeKeyboard}
-            className="text-[9px] uppercase tracking-widest text-[var(--text-secondary)] bg-white/5 px-3 py-1.5 rounded-full border border-white/10 active:bg-white/20 transition-all font-medium whitespace-nowrap shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
+            className="text-[9px] uppercase tracking-widest text-[var(--text-secondary)] bg-white/5 px-3 py-1.5 rounded-full border border-white/10 active:bg-white/20 transition-all font-medium whitespace-nowrap shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] flex items-center gap-1.5"
           >
-            ⌨️ Bawaan
+            <i className="fi fi-rr-keyboard text-[10px]"></i> Bawaan
           </button>
           <button
             onClick={() => setTranslating(!translating)}
             onTouchEnd={(e) => { e.preventDefault(); setTranslating(!translating); }}
-            className={`text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-full border transition-all font-medium whitespace-nowrap flex items-center gap-1 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] ${
+            className={`text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-full border transition-all font-medium whitespace-nowrap flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] ${
               translating 
               ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] border-[var(--accent-primary)]/30' 
               : 'bg-white/5 text-[var(--text-secondary)] border-white/10 active:bg-white/20'
             }`}
           >
-            🌐 {translating ? 'ID -> EN' : 'Translate'}
+            <i className="fi fi-rr-globe text-[10px]"></i> {translating ? 'ID -> EN' : 'Translate'}
           </button>
         </div>
 
@@ -363,7 +369,7 @@ export default function VirtualKeyboard() {
           onTouchEnd={(e) => { e.preventDefault(); closeKeyboard(); }}
           className="w-7 h-7 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-[var(--text-tertiary)] active:text-white active:bg-white/20 transition-colors flex-shrink-0 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
         >
-          ▼
+          <i className="fi fi-rr-angle-small-down text-[14px]"></i>
         </button>
       </div>
 

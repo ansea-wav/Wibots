@@ -35,6 +35,9 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
+      <head>
+        <link href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/all/all.min.css" rel="stylesheet" />
+      </head>
       <body className="min-h-full flex flex-col">
         <script dangerouslySetInnerHTML={{
           __html: `
