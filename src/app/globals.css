@@ -84,6 +84,7 @@ body {
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
+  overscroll-behavior-y: contain;
 }
 
 /* ---- Glassmorphism Utility ---- */
