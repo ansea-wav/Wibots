@@ -126,7 +126,7 @@ export default function StartMenu({
           onClick={() => { setShowThemes(!showThemes); setShowLanguages(false); }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all cursor-pointer text-left"
         >
-          <span className="text-base">🎨</span>
+          <span className="text-base flex items-center justify-center text-[var(--neon-green)] w-5 h-5"><i className="fi fi-rr-palette text-sm"></i></span>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-medium text-white">{t('appearance')}</div>
             <div className="text-[10px] text-[var(--text-tertiary)]">
@@ -153,7 +153,13 @@ export default function StartMenu({
                     : 'hover:bg-white/[0.04] border border-transparent'
                 }`}
               >
-                <span className="text-sm">{t.icon}</span>
+                <span className="text-sm h-5 w-5 flex items-center justify-center text-white">
+                  {t.icon.startsWith('fi ') ? (
+                    <i className={`${t.icon} text-xs`}></i>
+                  ) : (
+                    t.icon
+                  )}
+                </span>
                 <div className="flex-1 min-w-0">
                   <div className={`text-[11px] font-medium ${currentTheme === t.id ? 'text-[var(--neon-green)]' : 'text-white'}`}>
                     {t.name}
@@ -173,7 +179,7 @@ export default function StartMenu({
           onClick={() => { setShowLanguages(!showLanguages); setShowThemes(false); }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all cursor-pointer text-left"
         >
-          <span className="text-base">🌐</span>
+          <span className="text-base flex items-center justify-center text-[var(--neon-blue)] w-5 h-5"><i className="fi fi-rr-globe text-sm"></i></span>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-medium text-white">Language</div>
             <div className="text-[10px] text-[var(--text-tertiary)]">
@@ -218,7 +224,7 @@ export default function StartMenu({
           onClick={() => { onOpenTaskManager(); onClose(); }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all cursor-pointer text-left"
         >
-          <span className="text-base">📊</span>
+          <span className="text-base flex items-center justify-center text-[var(--neon-cyan)] w-5 h-5"><i className="fi fi-rr-chart-histogram text-sm"></i></span>
           <div className="flex-1">
             <div className="text-xs font-medium text-white">{t('task_manager')}</div>
             <div className="text-[10px] text-[var(--text-tertiary)]">{t('monitor_processes')}</div>
@@ -230,7 +236,7 @@ export default function StartMenu({
           onClick={() => { onOpenSubscription(); onClose(); }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all cursor-pointer text-left"
         >
-          <span className="text-base">💎</span>
+          <span className="text-base flex items-center justify-center text-[var(--neon-purple)] w-5 h-5"><i className="fi fi-rr-gem text-sm"></i></span>
           <div className="flex-1">
             <div className="text-xs font-medium text-white">{t('subscription')}</div>
             <div className="text-[10px] text-[var(--text-tertiary)]">{t('extend_plan')}</div>
@@ -246,7 +252,7 @@ export default function StartMenu({
           }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--neon-red)]/10 transition-all cursor-pointer text-left group mt-2 border border-transparent hover:border-[var(--neon-red)]/30"
         >
-          <span className="text-base transition-colors">🚪</span>
+          <span className="text-base flex items-center justify-center text-[var(--neon-red)] w-5 h-5"><i className="fi fi-rr-exit text-sm"></i></span>
           <div className="flex-1">
             <div className="text-xs font-medium text-[var(--neon-red)]">{t('log_out')}</div>
             <div className="text-[10px] text-[var(--neon-red)]/50">{t('sign_out')}</div>

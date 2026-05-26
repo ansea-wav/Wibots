@@ -20,25 +20,25 @@ export const themes: ThemeDefinition[] = [
     id: 'glass',
     name: 'Glassmorphism',
     description: 'Classic frosted glass panels',
-    icon: '🪟',
+    icon: 'fi fi-rr-browser',
   },
   {
     id: 'liquid-glass',
     name: 'Liquid Glass',
     description: 'Apple-style vivid transparency',
-    icon: '💧',
+    icon: 'fi fi-rr-drop',
   },
   {
     id: 'mono',
     name: 'Monochrome',
     description: 'Clean black & white minimal',
-    icon: '◻️',
+    icon: 'fi fi-rr-eclipse',
   },
   {
     id: 'oled',
     name: 'OLED Dark',
     description: 'True black, vivid neon accents',
-    icon: '🖤',
+    icon: 'fi fi-rr-moon',
   },
 ] as const;
 
