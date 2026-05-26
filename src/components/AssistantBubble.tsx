@@ -31,10 +31,11 @@ export default function AssistantBubble({
   const [isThinking, setIsThinking] = useState(false);
 
   // Position coordinates for the bubble during the tutorial
-  const [bubbleCoords, setBubbleCoords] = useState<{ x: number; y: number; isCenter: boolean }>({
+  const [bubbleCoords, setBubbleCoords] = useState<{ x: number; y: number; isCenter: boolean; isPositioned: boolean }>({
     x: 0,
     y: 0,
     isCenter: true,
+    isPositioned: false,
   });
 
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -47,13 +48,13 @@ export default function AssistantBubble({
   // Recalculate coordinates during tutorial steps
   useEffect(() => {
     if (!tutorialActive) {
-      setBubbleCoords({ x: 0, y: 0, isCenter: false });
+      setBubbleCoords({ x: 0, y: 0, isCenter: false, isPositioned: false });
       return;
     }
 
     // Step 1: Intro, Step 5: Grand Finale -> center of the screen
     if (tutorialStep === 1 || tutorialStep === 5) {
-      setBubbleCoords({ x: 0, y: 0, isCenter: true });
+      setBubbleCoords({ x: 0, y: 0, isCenter: true, isPositioned: false });
       return;
     }
 
@@ -62,20 +63,27 @@ export default function AssistantBubble({
         const targetEl = document.querySelector(targetSelector);
         if (targetEl) {
           const rect = targetEl.getBoundingClientRect();
-          // Position bubble above the target element
+          // Don't position if the element is hidden or has 0 dimensions yet
+          if (rect.width === 0 || rect.height === 0) return false;
+          
           const x = rect.left + rect.width / 2;
           const y = rect.top - 16; // 16px above target
-          setBubbleCoords({ x, y, isCenter: false });
+          setBubbleCoords({ x, y, isCenter: false, isPositioned: true });
+          return true;
         }
+        return false;
       };
 
+      // Try immediately
       calculatePos();
-      // Add a slight delay to allow layout animations to complete before calculation
-      const timer = setTimeout(calculatePos, 300);
+
+      // Poll every 150ms to support dynamic rendering (like catalog loading)
+      // and follow element if user drags the window
+      const interval = setInterval(calculatePos, 150);
 
       window.addEventListener('resize', calculatePos);
       return () => {
-        clearTimeout(timer);
+        clearInterval(interval);
         window.removeEventListener('resize', calculatePos);
       };
     }
@@ -160,7 +168,7 @@ export default function AssistantBubble({
 
   // If in tutorial mode
   if (tutorialActive) {
-    const isCenter = bubbleCoords.isCenter;
+    const isCenter = bubbleCoords.isCenter || !bubbleCoords.isPositioned;
     const style: React.CSSProperties = isCenter
       ? {
           position: 'fixed',
