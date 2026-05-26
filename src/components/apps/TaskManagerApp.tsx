@@ -75,7 +75,13 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
               <div key={task.id}
                 className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/[0.03] transition-colors group">
                 <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                  <span className="text-sm">{task.icon}</span>
+                  <span className="text-sm flex items-center justify-center w-5 h-5 text-white">
+                    {task.icon.startsWith('fi ') ? (
+                      <i className={`${task.icon} text-sm`}></i>
+                    ) : (
+                      task.icon
+                    )}
+                  </span>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-medium text-white truncate">{task.title}</div>
                     <div className="text-[9px] text-[var(--text-tertiary)]">
