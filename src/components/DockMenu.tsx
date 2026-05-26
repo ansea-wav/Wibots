@@ -70,6 +70,7 @@ export default function DockMenu({ apps, onAppClick, onStartMenuToggle, isStartM
       <div className="dock-icon-wrap relative group">
         <div className="dock-tooltip">Menu</div>
         <button
+          id="start-menu-button"
           onPointerDown={(e) => {
             e.stopPropagation();
             e.preventDefault();

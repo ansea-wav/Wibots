@@ -100,6 +100,7 @@ export default function StartMenu({
           {pinnedApps.map((app) => (
             <button
               key={app.id}
+              id={`start-menu-app-${app.id}`}
               onClick={() => { onOpenApp(app.id); onClose(); }}
               className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-all cursor-pointer active:scale-95"
             >
@@ -245,6 +246,7 @@ export default function StartMenu({
 
         {/* Log out */}
         <button
+          id="start-menu-logout"
           onClick={() => {
             localStorage.removeItem('yay_user_phone');
             localStorage.removeItem('yay_license_key');

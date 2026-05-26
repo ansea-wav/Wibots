@@ -19,6 +19,7 @@ import SubscriptionApp from './apps/SubscriptionApp';
 import GroupManagerApp from './apps/GroupManagerApp';
 import YAYApp from './apps/YAYApp';
 import OnboardingScreen from './OnboardingScreen';
+import AssistantBubble from './AssistantBubble';
 
 interface DesktopProps {
   userData: UserMasterData;
@@ -54,6 +55,89 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
   const zIndexCounter = useRef(100);
   const isExpired = clientRegistry.Account_Status === 'Expired';
   const isNewMember = !clientRegistry.Group_1 && !clientRegistry.Group_2 && !clientRegistry.Group_3 && !clientRegistry.Group_4 && !clientRegistry.Group_5;
+
+  // --- Onboarding Tutorial States & Handlers ---
+  const isResponderStudioInstalled = clientRegistry.Aplikasi_terpasang?.split(',').includes('responderstudio') || false;
+  const tutorialActive = !clientRegistry.Tutorial && !isNewMember;
+  
+  const [tutorialStep, setTutorialStep] = useState(() => {
+    if (isResponderStudioInstalled) return 6; // Skip to step 6 (Grand Welcome Splash)
+    return 1; // Start at step 1
+  });
+
+  const getTutorialTargetSelector = () => {
+    switch (tutorialStep) {
+      case 2:
+        return '#start-menu-button';
+      case 3:
+        return '#start-menu-app-appstore';
+      case 4:
+        return '#window-control-close-appstore';
+      case 5:
+        return '#start-menu-button';
+      default:
+        return null;
+    }
+  };
+
+  const tutorialTargetSelector = getTutorialTargetSelector();
+
+  // Auto-advance tutorial steps based on DOM events
+  useEffect(() => {
+    if (!tutorialActive) return;
+
+    if (tutorialStep === 2 && startMenuOpen) {
+      setTutorialStep(3);
+    }
+    if (tutorialStep === 3 && windows.has('appstore')) {
+      setTutorialStep(4);
+    }
+    if (tutorialStep === 4 && !windows.has('appstore')) {
+      setTutorialStep(5);
+    }
+  }, [tutorialActive, tutorialStep, startMenuOpen, windows]);
+
+  // Spotlight effect
+  useEffect(() => {
+    const clearSpotlights = () => {
+      document.querySelectorAll('.tutorial-spotlight').forEach(el => {
+        el.classList.remove('tutorial-spotlight');
+      });
+    };
+
+    clearSpotlights();
+
+    if (!tutorialActive || !tutorialTargetSelector) return;
+
+    const target = document.querySelector(tutorialTargetSelector);
+    if (target) {
+      target.classList.add('tutorial-spotlight');
+    }
+
+    return () => clearSpotlights();
+  }, [tutorialActive, tutorialStep, tutorialTargetSelector, windows, startMenuOpen]);
+
+  const handleCompleteTutorial = async () => {
+    try {
+      const { apiUpdateAccount } = await import('@/lib/api');
+      const { toast } = await import('@/components/DynamicIsland');
+      
+      toast('Menyimpan sesi tutorial...', 'success');
+      const res = await apiUpdateAccount(userId, { Tutorial: 'Completed' });
+      
+      if (res.status === 'success') {
+        setClientRegistry(prev => ({ ...prev, Tutorial: 'Completed' }));
+        toast('Selamat datang di YAY! 🎉', 'success');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        toast('Gagal menyimpan tutorial: ' + res.message, 'error');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => setUptime(prev => prev + 1), 1000);
@@ -500,6 +584,12 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
       {isNewMember && (
         <OnboardingScreen userId={userId} onComplete={() => window.location.reload()} />
       )}
+
+      {/* Onboarding Dim Backdrop (Centered Steps) */}
+      {tutorialActive && !tutorialTargetSelector && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-[2px] z-[9400] transition-opacity duration-500" />
+      )}
+
       {/* Dock */}
       <DockMenu
         apps={dockApps}
@@ -507,6 +597,53 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
         onStartMenuToggle={() => setStartMenuOpen(prev => !prev)}
         isStartMenuOpen={startMenuOpen}
       />
+
+      {/* AI Assistant Bubble */}
+      <AssistantBubble
+        userId={userId}
+        tutorialActive={tutorialActive}
+        tutorialStep={tutorialStep}
+        onNextTutorialStep={() => setTutorialStep(prev => prev + 1)}
+        onCompleteTutorial={handleCompleteTutorial}
+        targetSelector={tutorialTargetSelector}
+      />
+
+      {/* Masterpiece Welcome Splash (Step 6) */}
+      {tutorialActive && tutorialStep === 6 && (
+        <div className="fixed inset-0 z-[9990] flex flex-col items-center justify-center bg-black overflow-hidden select-text">
+          {/* Ambient background glow */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full blur-[140px] opacity-20"
+              style={{ background: 'radial-gradient(circle, var(--neon-green) 0%, transparent 80%)' }} />
+            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px] opacity-10"
+              style={{ background: 'radial-gradient(circle, var(--neon-blue) 0%, transparent 80%)' }} />
+          </div>
+
+          <div className="relative text-center max-w-lg px-6 z-10 space-y-6"
+            style={{ animation: 'bootFadeIn 1s var(--ease-spring) both' }}>
+            <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-[var(--neon-green)] to-[var(--neon-green-dim)] rounded-[2rem] flex items-center justify-center text-4xl shadow-[0_0_50px_rgba(57,255,20,0.3)] mb-6 animate-pulse">
+              🚀
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-none">
+              Selamat datang di <span className="text-[var(--neon-green)] filter drop-shadow-[0_0_15px_rgba(57,255,20,0.5)]">YAY</span>
+            </h1>
+            
+            <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+              Sistem operasi virtual Anda telah siap. Semua modul telah terpasang dan asisten AI Anda telah diaktifkan di grup WhatsApp Anda.
+            </p>
+
+            <div className="pt-6">
+              <button
+                onClick={handleCompleteTutorial}
+                className="px-8 py-4 bg-white text-black font-extrabold text-xs uppercase tracking-widest rounded-xl hover:scale-105 active:scale-98 transition-all cursor-pointer shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_50px_rgba(255,255,255,0.4)]"
+              >
+                Mulai Operasional
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Lock Screen Overlay */}
       {isExpired && <LockScreen onUnlock={() => {}} />}

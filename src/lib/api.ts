@@ -49,6 +49,7 @@ export interface ClientRegistry {
   Group_4?: string;
   Group_5?: string;
   Aplikasi_terpasang?: string;
+  Tutorial?: string;
 }
 
 export interface BotConfig {

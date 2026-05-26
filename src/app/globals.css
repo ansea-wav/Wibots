@@ -457,3 +457,41 @@ body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ---- Onboarding Spotlight & Assistant Custom Animations ---- */
+.tutorial-spotlight {
+  position: relative !important;
+  z-index: 9100 !important;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75) !important;
+  outline: 3px solid var(--neon-green) !important;
+  outline-offset: 4px;
+  transition: all 0.5s ease-out !important;
+  pointer-events: auto !important;
+}
+
+@keyframes assistantPulseIdle {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.05);
+    background: #000000;
+    border-color: rgba(255,255,255,0.05);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(5,5,8,0.9), inset 0 1px 1px rgba(255,255,255,0.1), 0 0 4px rgba(255,255,255,0.1);
+    background: #050508; /* OLED Black */
+    border-color: rgba(255,255,255,0.12);
+  }
+}
+
+@keyframes assistantPulseActive {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4), inset 0 1px 1px rgba(255,255,255,0.1);
+    border-color: var(--neon-green);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 35px rgba(57, 255, 20, 0.8), 0 0 8px var(--neon-green), inset 0 1px 1px rgba(255,255,255,0.2);
+    border-color: #55ff55;
+  }
+}
+

@@ -196,6 +196,7 @@ export default function WindowFrame({
             title="Maximize"
           />
           <button
+            id={`window-control-close-${windowState.id}`}
             className="window-control-btn window-control-close"
             onClick={(e) => { e.stopPropagation(); onClose(windowState.id); }}
             title="Close"
