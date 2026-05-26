@@ -11,6 +11,17 @@ interface ResponderStudioProps {
   onUpdate: (responseId: string, data: Partial<AutoResponder>) => void;
 }
 
+const parseTargetGroups = (tg: any): string[] | 'All' => {
+  if (!tg || tg === 'All' || tg === 'Semua') return 'All';
+  if (Array.isArray(tg)) return tg;
+  if (typeof tg === 'string') {
+    const parts = tg.split(',').map(s => s.trim()).filter(Boolean);
+    if (parts.length === 0 || parts.includes('All') || parts.includes('Semua')) return 'All';
+    return parts;
+  }
+  return 'All';
+};
+
 export default function ResponderStudioApp({ client, responders, onAdd, onDelete, onUpdate }: ResponderStudioProps) {
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -52,7 +63,7 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
       Match_Type: r.Match_Type,
       Response_Type: r.Response_Type,
       Payload_Data: r.Payload_Data,
-      Target_Groups: r.Target_Groups || 'All',
+      Target_Groups: parseTargetGroups(r.Target_Groups),
     });
     setEditId(r.Response_ID);
     setShowForm(true);
@@ -85,7 +96,8 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
       return;
     }
     
-    let currentTargets = Array.isArray(form.Target_Groups) ? [...form.Target_Groups] : [];
+    const normalized = parseTargetGroups(form.Target_Groups);
+    let currentTargets = Array.isArray(normalized) ? [...normalized] : [];
     
     if (tier === 'Standard') {
       // Standard: Pilih 1 grup spesifik atau Semua
@@ -103,6 +115,8 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
       setForm({ ...form, Target_Groups: currentTargets });
     }
   };
+
+  const currentFormTargetGroups = parseTargetGroups(form.Target_Groups);
 
   return (
     <div className="flex flex-col h-full" style={{ background: 'var(--surface-panel)' }}>
@@ -202,15 +216,15 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
                   onClick={() => handleTargetToggle('All')}
                   className="px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer"
                   style={{
-                    background: form.Target_Groups === 'All' ? 'rgba(57,255,20,0.15)' : 'var(--surface-input)',
-                    color: form.Target_Groups === 'All' ? 'var(--neon-green)' : 'var(--text-secondary)',
-                    border: `1px solid ${form.Target_Groups === 'All' ? 'rgba(57,255,20,0.3)' : 'var(--border-medium)'}`,
+                    background: currentFormTargetGroups === 'All' ? 'rgba(57,255,20,0.15)' : 'var(--surface-input)',
+                    color: currentFormTargetGroups === 'All' ? 'var(--neon-green)' : 'var(--text-secondary)',
+                    border: `1px solid ${currentFormTargetGroups === 'All' ? 'rgba(57,255,20,0.3)' : 'var(--border-medium)'}`,
                   }}
                 >
                   Semua
                 </button>
                 {availableGroups.map(g => {
-                  const isSelected = form.Target_Groups !== 'All' && form.Target_Groups?.includes(g);
+                  const isSelected = currentFormTargetGroups !== 'All' && currentFormTargetGroups?.includes(g);
                   return (
                     <button
                       key={g}
@@ -279,7 +293,10 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
                     <span>{typeIcon(r.Response_Type)} {r.Response_Type}</span>
                   </td>
                   <td className="px-4 py-3 text-[10px] text-[var(--text-secondary)]">
-                    {r.Target_Groups === 'All' || !r.Target_Groups ? 'Semua' : `Grup ${r.Target_Groups.join(', ')}`}
+                    {(() => {
+                      const tg = parseTargetGroups(r.Target_Groups);
+                      return tg === 'All' ? 'Semua' : `Grup ${tg.join(', ')}`;
+                    })()}
                   </td>
                   <td className="px-4 py-3 max-w-[200px]">
                     <div className="text-[var(--text-secondary)] truncate">{r.Payload_Data}</div>
