@@ -86,7 +86,7 @@ export default function StartMenu({
       {/* Header */}
       <div className="px-5 pt-5 pb-3">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-lg font-black tracking-tight text-white">YAY</span>
+          <img src="/logo-color.png" alt="Logo" style={{ height: '22px', width: 'auto' }} />
           <span className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-[0.15em] font-medium mt-1">{t('menu')}</span>
         </div>
       </div>
@@ -266,8 +266,7 @@ export default function StartMenu({
       <div className="h-px bg-[var(--border-subtle)]" />
       <div className="px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-black text-white tracking-tight">YAY</span>
-          <span className="text-[8px] text-[var(--text-tertiary)] uppercase tracking-wider">by netals</span>
+          <img src="/logo-color.png" alt="Logo" style={{ height: '18px', width: 'auto' }} />
         </div>
         <span className="text-[9px] text-[var(--text-tertiary)] font-mono">v2.0</span>
       </div>

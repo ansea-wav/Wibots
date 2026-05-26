@@ -79,14 +79,12 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
           <div className="absolute inset-0 rounded-[2.5rem] shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)] -z-10 pointer-events-none"></div>
           <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/[0.04] to-transparent -z-10 pointer-events-none"></div>
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-black text-white tracking-tight">
-              YAY
-            </h1>
-            <div className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-[0.2em] font-medium mt-0.5">
-              by netals
-            </div>
-            <p className="text-[var(--text-tertiary)] text-sm mt-2">
+          <div className="text-center mb-8 flex flex-col items-center justify-center">
+            <img src="/logo-white.png" alt="Logo" className="h-16 w-auto mb-4 opacity-95" />
+            <p className="text-[var(--text-tertiary)] text-xs uppercase tracking-[0.2em] font-medium mt-1">
+              Virtual Desktop OS
+            </p>
+            <p className="text-[var(--text-tertiary)] text-xs mt-3">
               Authenticate to access your Virtual Machine
             </p>
           </div>
@@ -149,8 +147,9 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-6 text-[10px] text-[var(--text-tertiary)]">
-          YAY by netals © 2026 — All rights reserved.
+        <div className="text-center mt-6 text-[10px] text-[var(--text-tertiary)] flex items-center justify-center gap-1.5 opacity-60">
+          <img src="/logo-white.png" alt="Logo" className="h-3.5 w-auto" />
+          <span>© 2026 — All rights reserved.</span>
         </div>
       </div>
     </div>

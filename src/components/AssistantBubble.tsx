@@ -269,7 +269,10 @@ export default function AssistantBubble({
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[var(--neon-green)] border-2 border-black" />
             </div>
             <div>
-              <div className="text-xs text-[var(--neon-green)] uppercase tracking-[0.15em] font-black">YAY Assistant</div>
+              <div className="flex items-center gap-1.5">
+                <img src="/logo-color.png" alt="Logo" style={{ height: '14px', width: 'auto' }} />
+                <span className="text-xs text-[var(--neon-green)] uppercase tracking-[0.15em] font-black">Assistant</span>
+              </div>
               <div className="text-[10px] text-[var(--text-tertiary)]">Interactive Onboarding</div>
             </div>
           </div>
@@ -375,7 +378,10 @@ export default function AssistantBubble({
                 <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[var(--neon-green)] border border-black" />
               </div>
               <div>
-                <div className="text-[11px] text-[var(--neon-green)] uppercase tracking-[0.15em] font-black">YAY Assistant</div>
+                <div className="flex items-center gap-1.5">
+                  <img src="/logo-color.png" alt="Logo" style={{ height: '13px', width: 'auto' }} />
+                  <span className="text-[11px] text-[var(--neon-green)] uppercase tracking-[0.15em] font-black">Assistant</span>
+                </div>
                 <div className="text-[9px] text-[var(--text-tertiary)]">Pencarian & Informasi Fitur</div>
               </div>
             </div>

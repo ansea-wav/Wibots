@@ -616,12 +616,10 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
 
           <div className="relative text-center max-w-lg px-6 z-10 space-y-6"
             style={{ animation: 'bootFadeIn 1s var(--ease-spring) both' }}>
-            <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-[var(--neon-green)] to-[var(--neon-green-dim)] rounded-[2rem] flex items-center justify-center shadow-[0_0_50px_rgba(57,255,20,0.3)] mb-6 animate-pulse">
-              <i className="fi fi-rr-rocket text-[32px] text-black flex items-center justify-center" />
-            </div>
+            <img src="/logo-white.png" alt="Logo" className="h-24 w-auto mx-auto mb-6 drop-shadow-[0_0_20px_rgba(255,255,255,0.25)] animate-pulse" />
             
             <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-none">
-              Selamat datang di <span className="text-[var(--neon-green)] filter drop-shadow-[0_0_15px_rgba(57,255,20,0.5)]">YAY</span>
+              Selamat datang
             </h1>
             
             <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-md mx-auto leading-relaxed">

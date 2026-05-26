@@ -53,12 +53,9 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
     >
       {/* Left: System Info */}
       <div className="flex items-center gap-4">
-        <span className="font-black text-white tracking-tight text-[11px]">
-          YAY
-        </span>
-        <span className="hidden sm:inline text-[8px] text-[var(--text-tertiary)] uppercase tracking-wider font-medium">
-          by netals
-        </span>
+        <div className="flex items-center py-0.5">
+          <img src="/logo-color.png" alt="Logo" style={{ height: '16px', width: 'auto' }} />
+        </div>
         <span className="hidden sm:inline text-[var(--text-tertiary)]">|</span>
         <span className="hidden md:inline text-[var(--text-secondary)] text-[10px]">
           {userId}

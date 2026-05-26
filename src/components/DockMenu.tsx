@@ -81,16 +81,7 @@ export default function DockMenu({ apps, onAppClick, onStartMenuToggle, isStartM
           }`}
         >
           {/* YAY Logo as grid icon */}
-          <div className="flex flex-col items-center justify-center gap-[3px]">
-            <div className="flex gap-[3px]">
-              <div className="w-[5px] h-[5px] rounded-[2px] bg-[var(--neon-green)] transition-colors" />
-              <div className="w-[5px] h-[5px] rounded-[2px] bg-[var(--neon-green)] transition-colors" style={{ opacity: 0.7 }} />
-            </div>
-            <div className="flex gap-[3px]">
-              <div className="w-[5px] h-[5px] rounded-[2px] bg-[var(--neon-green)] transition-colors" style={{ opacity: 0.7 }} />
-              <div className="w-[5px] h-[5px] rounded-[2px] bg-[var(--neon-green)] transition-colors" />
-            </div>
-          </div>
+          <img src="/logo-color.png" alt="Menu" style={{ height: '24px', width: 'auto', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.25))' }} />
         </button>
       </div>
     </div>
