@@ -30,6 +30,22 @@ export default function StartMenu({
   const [showThemes, setShowThemes] = useState(false);
   const [showLanguages, setShowLanguages] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const [showDownloadApp, setShowDownloadApp] = useState(false);
+
+  useEffect(() => {
+    // Show download button on Android and Desktop (hide on iOS and inside Antarac App)
+    const ua = navigator.userAgent.toLowerCase();
+    const isAndroid = ua.includes('android');
+    const isIOS = /iphone|ipad|ipod/.test(ua);
+    const isDesktop = !isAndroid && !isIOS;
+    
+    // Heuristic for Antarac app (webview)
+    const isAntarac = ua.includes('wv') || ua.includes('antarac');
+
+    if ((isAndroid && !isAntarac) || isDesktop) {
+      setShowDownloadApp(true);
+    }
+  }, []);
 
   const LANGUAGES = [
     { code: 'en', name: 'English' },
@@ -243,6 +259,20 @@ export default function StartMenu({
             <div className="text-[10px] text-[var(--text-tertiary)]">{t('extend_plan')}</div>
           </div>
         </button>
+
+        {/* Download App (Conditional) */}
+        {showDownloadApp && (
+          <a
+            href="https://github.com/ansea-wav/Antarac/releases/download/Antarac/Antrac-beta-v0.1.apk"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--neon-blue)]/10 transition-all cursor-pointer text-left border border-transparent hover:border-[var(--neon-blue)]/30 no-underline"
+          >
+            <span className="text-base flex items-center justify-center text-[var(--neon-blue)] w-5 h-5"><i className="fi fi-rr-download text-sm"></i></span>
+            <div className="flex-1">
+              <div className="text-xs font-medium text-white">Download App</div>
+              <div className="text-[10px] text-[var(--neon-blue)]">Antarac for Android</div>
+            </div>
+          </a>
+        )}
 
         {/* Log out */}
         <button

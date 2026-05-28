@@ -20,6 +20,7 @@ import GroupManagerApp from './apps/GroupManagerApp';
 import YAYApp from './apps/YAYApp';
 import OnboardingScreen from './OnboardingScreen';
 import AssistantBubble from './AssistantBubble';
+import AppPromotionPopup from './AppPromotionPopup';
 
 interface DesktopProps {
   userData: UserMasterData;
@@ -637,6 +638,8 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
           </div>
         </div>
       )}
+      {/* App Promotion Popup */}
+      {!isExpired && <AppPromotionPopup />}
 
       {/* Lock Screen Overlay */}
       {isExpired && <LockScreen onUnlock={() => {}} />}
