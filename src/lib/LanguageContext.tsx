@@ -121,7 +121,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'clear_link': 'Clear Link',
     'contact_staff_lock': 'Contact Wazle staff to change this link.',
     'locked': 'Locked',
-    'save_links': 'Save Links'
+    'save_links': 'Save Links',
+    'server_reset': 'Server reset',
+    'subscription_warning': 'Warning: Your subscription has only {days} days left!',
+    'focus_music': 'Focus Music',
+    'play': 'Play',
+    'pause': 'Pause'
   },
   id: {
     'dashboard': 'Dasbor',
@@ -232,7 +237,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'clear_link': 'Hapus Tautan',
     'contact_staff_lock': 'Hubungi staf Wazle untuk mengubah tautan ini.',
     'locked': 'Terkunci',
-    'save_links': 'Simpan Tautan'
+    'save_links': 'Simpan Tautan',
+    'server_reset': 'Server di-reset',
+    'subscription_warning': 'Peringatan: Langganan Anda tersisa {days} hari lagi!',
+    'focus_music': 'Musik Fokus',
+    'play': 'Putar',
+    'pause': 'Jeda'
   },
   jv: {
     'dashboard': 'Dasbor',
@@ -343,7 +353,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'clear_link': 'Mbusak Tautan',
     'contact_staff_lock': 'Hubungi staf Wazle kanggo ngganti tautan iki.',
     'locked': 'Kunci',
-    'save_links': 'Simpen Tautan'
+    'save_links': 'Simpen Tautan',
+    'server_reset': 'Server direset',
+    'subscription_warning': 'Pènget: Langganan panjenengan gari {days} dina maneh!',
+    'focus_music': 'Musik Fokus',
+    'play': 'Muter',
+    'pause': 'Mandheg'
   },
   su: {
     'dashboard': 'Dasbor',
@@ -454,7 +469,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'clear_link': 'Hapus Tautan',
     'contact_staff_lock': 'Hubungi staf Wazle kanggo ngarobih tautan ieu.',
     'locked': 'Terkonci',
-    'save_links': 'Simpen Tautan'
+    'save_links': 'Simpen Tautan',
+    'server_reset': 'Server direset',
+    'subscription_warning': 'Pépéling: Langganan anjeun sésa {days} dinten deui!',
+    'focus_music': 'Musik Fokus',
+    'play': 'Puter',
+    'pause': 'Reureuh'
   },
   es: { }, ru: { }, zh: { }, ms: { }, fil: { }, ko: { }, ar: { }
 };

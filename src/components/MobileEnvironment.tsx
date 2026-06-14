@@ -12,6 +12,8 @@ import MobileDashboard from './apps/MobileDashboard';
 import MobileSettings from './apps/MobileSettings';
 import MobileProtocols, { type ProtocolAppId } from './apps/MobileProtocols';
 import DynamicIsland from './DynamicIsland';
+import NotificationEngine from './NotificationEngine';
+import AudioEngine from './AudioEngine';
 
 // Mobile-specific Apps
 import MobileControlCenter from './apps/mobile/MobileControlCenter';
@@ -202,6 +204,8 @@ export default function MobileEnvironment({ userData, userId }: MobileProps) {
 
   return (
     <div className="fixed inset-0 bg-[#111113] overflow-hidden text-white flex flex-col">
+      <NotificationEngine client={clientRegistry} />
+      <AudioEngine />
       <DynamicIsland />
       {/* Content Area */}
       <div className="flex-1 relative w-full h-full">

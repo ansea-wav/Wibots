@@ -11,6 +11,24 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
   const maxDays = 30; // Standard month for the circle gauge
   const daysLeft = registry.Days_Left || 0;
   const percentage = Math.min(Math.max((daysLeft / maxDays) * 100, 0), 100);
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  useEffect(() => {
+    const handleMusicState = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setIsPlaying(!!detail?.playing);
+    };
+    window.addEventListener('wibots-music', handleMusicState);
+    return () => window.removeEventListener('wibots-music', handleMusicState);
+  }, []);
+
+  const toggleMusic = () => {
+    if (isPlaying) {
+      window.dispatchEvent(new CustomEvent('wibots-pause-music'));
+    } else {
+      window.dispatchEvent(new CustomEvent('wibots-play-music'));
+    }
+  };
   
   // Format dates
   const now = new Date();
@@ -158,6 +176,30 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
             </div>
           </div>
         </div>
+      </motion.div>
+
+      {/* Focus Music Widget */}
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="w-full max-w-[320px] mt-6 bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-500/20 rounded-3xl p-5 flex items-center justify-between shadow-lg"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-400">
+            <span className="material-symbols-outlined">{isPlaying ? 'graphic_eq' : 'music_note'}</span>
+          </div>
+          <div>
+            <div className="text-white text-sm font-bold">{t('focus_music')}</div>
+            <div className="text-white/50 text-[10px]">{isPlaying ? 'Playing chill vibes...' : 'Ready to focus?'}</div>
+          </div>
+        </div>
+        <button 
+          onClick={toggleMusic}
+          className="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.3)] active:scale-90 transition-transform"
+        >
+          <span className="material-symbols-outlined text-xl">{isPlaying ? 'pause' : 'play_arrow'}</span>
+        </button>
       </motion.div>
 
     </div>
