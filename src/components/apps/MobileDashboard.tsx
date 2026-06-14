@@ -35,7 +35,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
       </motion.div>
 
       {/* Main Circular Gauge */}
-      <div className="relative w-[280px] h-[280px] flex items-center justify-center mb-16">
+      <div className="relative shrink-0 w-[280px] h-[280px] flex items-center justify-center mb-10">
         {/* Glow Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-red-600/5 rounded-full blur-2xl"></div>
 
@@ -91,9 +91,9 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="text-center mb-10"
+        className="text-center shrink-0 mb-10 mt-2 z-10 relative"
       >
-        <span className="text-white text-lg font-bold tracking-wide">HI ... {registry.WhatsApp_Owner || 'User'}</span>
+        <span className="text-white text-xl font-bold tracking-wide">HI ... {registry.WhatsApp_Owner || 'User'}</span>
       </motion.div>
 
       {/* Date & Sub Info */}
