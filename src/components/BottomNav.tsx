@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
 
 export type MobileTab = 'dashboard' | 'protocols' | 'responder' | 'earn' | 'settings';
 
@@ -18,45 +19,143 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
     { id: 'settings', icon: 'settings', label: 'Settings' },
   ];
 
-  const mapSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="100"><defs><linearGradient id="r" x1="1" y1="0" x2="0" y2="0"><stop offset="0%" stop-color="#000"/><stop offset="100%" stop-color="red"/></linearGradient><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#000"/><stop offset="100%" stop-color="blue"/></linearGradient></defs><rect width="100%" height="100%" fill="#000"/><rect width="100%" height="100%" fill="url(#r)"/><rect width="100%" height="100%" fill="url(#b)" style="mix-blend-mode:screen"/></svg>`;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dims, setDims] = useState({ width: 360, height: 72 });
+  const [isSvgFilterSupported, setIsSvgFilterSupported] = useState(false);
+
+  useEffect(() => {
+    // Feature detection for SVG backdrop-filter support (Chrome/Android supports it, iOS Safari does not)
+    const supportsSvgFilter = typeof CSS !== 'undefined' && CSS.supports && (
+      CSS.supports('backdrop-filter', 'url(#test)') || 
+      CSS.supports('-webkit-backdrop-filter', 'url(#test)')
+    );
+    setIsSvgFilterSupported(!!supportsSvgFilter);
+
+    if (!containerRef.current) return;
+
+    const updateDims = () => {
+      if (containerRef.current) {
+        setDims({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight,
+        });
+      }
+    };
+
+    // Initial measurement
+    updateDims();
+
+    // ResizeObserver to update width/height in real-time
+    const observer = new ResizeObserver(() => {
+      updateDims();
+    });
+    observer.observe(containerRef.current);
+
+    window.addEventListener('resize', updateDims);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updateDims);
+    };
+  }, []);
+
+  // Construct Jhey's exact SVG displacement map data URI based on container dimensions
+  const border = Math.min(dims.width, dims.height) * (0.07 * 0.5);
+  const radius = 32; // Matches rounded-[2rem] (32px)
+
+  const mapSvg = `
+    <svg width="${dims.width}" height="${dims.height}" viewBox="0 0 ${dims.width} ${dims.height}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="red" x1="100%" y1="0%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#000"/>
+          <stop offset="100%" stop-color="red"/>
+        </linearGradient>
+        <linearGradient id="blue" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#000"/>
+          <stop offset="100%" stop-color="blue"/>
+        </linearGradient>
+        <filter id="inner-blur">
+          <feGaussianBlur stdDeviation="11" />
+        </filter>
+      </defs>
+      <rect x="0" y="0" width="${dims.width}" height="${dims.height}" fill="black"></rect>
+      <rect x="0" y="0" width="${dims.width}" height="${dims.height}" rx="${radius}" fill="url(#red)" />
+      <rect x="0" y="0" width="${dims.width}" height="${dims.height}" rx="${radius}" fill="url(#blue)" style="mix-blend-mode: difference" />
+      <rect x="${border}" y="${border}" width="${dims.width - border * 2}" height="${dims.height - border * 2}" rx="${radius}" fill="hsl(0 0% 50% / 0.93)" filter="url(#inner-blur)" />
+    </svg>
+  `.trim();
+
+  // Convert SVG string to data URI
   const mapUri = `data:image/svg+xml;utf8,${encodeURIComponent(mapSvg)}`;
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[400px] z-[9999]">
-      <svg className="hidden absolute pointer-events-none" aria-hidden="true" width="0" height="0">
-        <defs>
-          <filter id="liquid-glass-filter" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
-            <feImage href={mapUri} x="0" y="0" width="100%" height="100%" result="map" preserveAspectRatio="none" />
-            
-            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="15" result="dispRed" />
-            <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red" />
-            
-            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="22" result="dispGreen" />
-            <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green" />
-            
-            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="30" result="dispBlue" />
-            <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue" />
-            
-            <feBlend in="red" in2="green" mode="screen" result="rg" />
-            <feBlend in="rg" in2="blue" mode="screen" result="rgbOut" />
-            
-            <feGaussianBlur in="rgbOut" stdDeviation="6" result="blur" />
-            <feComponentTransfer in="blur">
-              <feFuncA type="linear" slope="1.2" />
-            </feComponentTransfer>
-          </filter>
-        </defs>
-      </svg>
+      {/* SVG Liquid Glass Filter definition */}
+      {isSvgFilterSupported && (
+        <svg className="hidden absolute pointer-events-none" aria-hidden="true" width="0" height="0">
+          <defs>
+            <filter id="liquid-glass-filter" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+              <feImage href={mapUri} x="0" y="0" width="100%" height="100%" result="map" preserveAspectRatio="none" />
+              
+              {/* Chromatic aberration with Red, Green, and Blue displacement offset maps */}
+              <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-180" result="dispRed" />
+              <feColorMatrix in="dispRed" type="matrix"
+                values="1 0 0 0 0
+                        0 0 0 0 0
+                        0 0 0 0 0
+                        0 0 0 1 0"
+                result="red" />
+              
+              <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-170" result="dispGreen" />
+              <feColorMatrix in="dispGreen" type="matrix"
+                values="0 0 0 0 0
+                        0 1 0 0 0
+                        0 0 0 0 0
+                        0 0 0 1 0"
+                result="green" />
+              
+              <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-160" result="dispBlue" />
+              <feColorMatrix in="dispBlue" type="matrix"
+                values="0 0 0 0 0
+                        0 0 0 0 0
+                        0 0 1 0 0
+                        0 0 0 1 0"
+                result="blue" />
+              
+              <feBlend in="red" in2="green" mode="screen" result="rg" />
+              <feBlend in="rg" in2="blue" mode="screen" result="rgbOut" />
+              
+              <feGaussianBlur in="rgbOut" stdDeviation="0.3" />
+            </filter>
+          </defs>
+        </svg>
+      )}
 
       <div 
-        className="bg-white/5 border border-white/20 rounded-[2rem] p-2 px-4 flex justify-between items-center relative overflow-hidden"
+        ref={containerRef}
+        className="border border-white/10 rounded-[2rem] p-2 px-4 flex justify-between items-center relative overflow-hidden transition-all duration-300"
         style={{ 
-          backdropFilter: 'url(#liquid-glass-filter) saturate(150%) brightness(1.1)',
-          WebkitBackdropFilter: 'url(#liquid-glass-filter) saturate(150%) brightness(1.1)',
-          boxShadow: '0 0 2px 1px rgba(255,255,255,0.1) inset, 0 0 10px 4px rgba(255,255,255,0.05) inset, 0px 16px 56px rgba(0,0,0,0.5)'
+          backdropFilter: isSvgFilterSupported 
+            ? 'url(#liquid-glass-filter) saturate(150%) brightness(1.1)' 
+            : 'blur(24px) saturate(160%) brightness(1.05)',
+          WebkitBackdropFilter: isSvgFilterSupported 
+            ? 'url(#liquid-glass-filter) saturate(150%) brightness(1.1)' 
+            : 'blur(24px) saturate(160%) brightness(1.05)',
+          background: isSvgFilterSupported 
+            ? 'rgba(255, 255, 255, 0.015)' 
+            : 'rgba(15, 15, 20, 0.55)',
+          boxShadow: `
+            0 0 2px 1px rgba(255, 255, 255, 0.15) inset,
+            0 0 10px 4px rgba(255, 255, 255, 0.05) inset,
+            0px 4px 16px rgba(0, 0, 0, 0.25),
+            0px 8px 24px rgba(0, 0, 0, 0.3),
+            0px 16px 56px rgba(0, 0, 0, 0.45),
+            0px 4px 16px rgba(0, 0, 0, 0.25) inset,
+            0px 8px 24px rgba(0, 0, 0, 0.2) inset
+          `
         }}
       >
-        {/* Subtle inner glow */}
+        {/* Subtle inner highlight to accentuate glass thickness */}
         <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-[2rem]"></div>
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
