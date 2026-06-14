@@ -4,9 +4,12 @@ import type { UserMasterData } from '@/lib/api';
 
 interface LoginGateProps {
   onLoginSuccess: (data: UserMasterData, userId: string) => void;
+  isMobile?: boolean;
 }
 
-export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
+import MobileLogin from './MobileLogin';
+
+export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) {
   const [phone, setPhone] = useState('');
   const [licenseKey, setLicenseKey] = useState('');
   const [loading, setLoading] = useState(false);
@@ -56,6 +59,10 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
     setShake(true);
     setTimeout(() => setShake(false), 500);
   };
+
+  if (isMobile) {
+    return <MobileLogin onLoginSuccess={onLoginSuccess} />;
+  }
 
   return (
     <div className="fixed inset-0 bg-black flex items-center justify-center"

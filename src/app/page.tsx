@@ -88,7 +88,7 @@ export default function Home() {
 
       {/* Login Gate */}
       {phase === 'login' && (
-        <LoginGate onLoginSuccess={handleLoginSuccess} />
+        <LoginGate onLoginSuccess={handleLoginSuccess} isMobile={isMobile} />
       )}
 
       {/* Desktop/Mobile Environment */}
