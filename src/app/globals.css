@@ -1,6 +1,14 @@
 @import "tailwindcss";
 
-/* ============================================================
+@media (max-width: 768px) {
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  *::-webkit-scrollbar {
+    display: none !important;
+  }
+}/* ============================================================
    YAY by netals — Global Design System
    ============================================================ */
 

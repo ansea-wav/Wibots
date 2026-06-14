@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import BootScreen from '@/components/BootScreen';
 import LoginGate from '@/components/LoginGate';
 import DesktopEnvironment from '@/components/DesktopEnvironment';
-import { apiLogin, type UserMasterData } from '@/lib/api';
+import MobileEnvironment from '@/components/MobileEnvironment';
+import { apiLogin, apiInstallApp, type UserMasterData } from '@/lib/api';
 
 type AppPhase = 'boot' | 'login' | 'desktop' | 'waiting_api';
 
@@ -14,6 +15,23 @@ export default function Home() {
 
   const [apiDone, setApiDone] = useState(false);
   const [apiSuccess, setApiSuccess] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase();
+    setIsMobile(/mobi|android|iphone|ipad|ipod/.test(ua));
+  }, []);
+
+  // Auto-install logic for mobile users (runs in background)
+  const fireAutoInstall = (uid: string, currentInstalled: string) => {
+    const appsToInstall = ['Responder Studio', 'Control Center', 'Group Manager', 'File Explorer', 'Task Manager'];
+    const installedArr = currentInstalled ? currentInstalled.split(',') : [];
+    appsToInstall.forEach(app => {
+      if (!installedArr.includes(app)) {
+        apiInstallApp(uid, app).catch(() => {});
+      }
+    });
+  };
 
   useEffect(() => {
     const savedUserPhone = localStorage.getItem('yay_user_phone');
@@ -22,7 +40,13 @@ export default function Home() {
       apiLogin(savedUserPhone, savedLicense).then(res => {
         if (res.status === 'success' && res.data) {
           setUserData(res.data);
-          setUserId(res.data.registry?.User_ID || savedUserPhone);
+          const uid = res.data.registry?.User_ID || savedUserPhone;
+          setUserId(uid);
+          
+          if (/mobi|android|iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase())) {
+            fireAutoInstall(uid, res.data.registry?.Aplikasi_terpasang || '');
+          }
+
           setApiSuccess(true);
         }
         setApiDone(true);
@@ -49,6 +73,9 @@ export default function Home() {
   const handleLoginSuccess = (data: UserMasterData, uid: string) => {
     setUserData(data);
     setUserId(uid);
+    if (isMobile) {
+      fireAutoInstall(uid, data.registry?.Aplikasi_terpasang || '');
+    }
     setPhase('desktop');
   };
 
@@ -64,9 +91,13 @@ export default function Home() {
         <LoginGate onLoginSuccess={handleLoginSuccess} />
       )}
 
-      {/* Desktop Environment */}
+      {/* Desktop/Mobile Environment */}
       {phase === 'desktop' && userData && (
-        <DesktopEnvironment userData={userData} userId={userId} />
+        isMobile ? (
+          <MobileEnvironment userData={userData} userId={userId} />
+        ) : (
+          <DesktopEnvironment userData={userData} userId={userId} />
+        )
       )}
     </main>
   );
