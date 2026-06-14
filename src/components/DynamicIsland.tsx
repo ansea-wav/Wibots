@@ -36,10 +36,41 @@ export default function DynamicIsland() {
     return () => window.removeEventListener('yay-toast', handleToast);
   }, []);
 
-  // iOS Sequence listener
+  const [musicTitle, setMusicTitle] = useState('Unknown Track');
+
+  // iOS Sequence listener (Triggered by Native App Bridge)
   useEffect(() => {
-    // Disabled auto-play. The island will remain completely hidden (diem) 
-    // unless triggered by an actual music detection event in the future.
+    // 1. Global Function for Native Android App (WebView.evaluateJavascript)
+    (window as any).triggerNowPlaying = (title: string) => {
+      setMusicTitle(title || 'Unknown Track');
+      setPhase(1); // Show "1 Message" briefly
+      
+      setTimeout(() => {
+        setPhase(2); // Drop down to show Now Playing
+      }, 600);
+
+      // Auto-hide after 8 seconds (optional, or wait for triggerNowPlaying(false))
+      setTimeout(() => {
+        setPhase(0);
+      }, 8600);
+    };
+
+    // 2. CustomEvent Alternative for Native Bridge
+    const handleNativeMusic = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail && detail.playing) {
+        (window as any).triggerNowPlaying(detail.title);
+      } else {
+        setPhase(0); // Hide if stopped
+      }
+    };
+
+    window.addEventListener('wibots-music', handleNativeMusic);
+
+    return () => {
+      delete (window as any).triggerNowPlaying;
+      window.removeEventListener('wibots-music', handleNativeMusic);
+    };
   }, []);
 
   return (
@@ -127,10 +158,10 @@ export default function DynamicIsland() {
                       </div>
                     </div>
 
-                    {/* Bottom Row: 1 Message (scaled down) */}
+                    {/* Bottom Row: Music Title */}
                     <div className="flex items-center gap-1.5 opacity-60">
-                      <span className="material-symbols-outlined text-[10px] text-blue-400">chat_bubble</span>
-                      <span className="text-white text-[10px] font-medium tracking-wider">1 Message</span>
+                      <span className="material-symbols-outlined text-[10px] text-blue-400">music_note</span>
+                      <span className="text-white text-[10px] font-medium tracking-wider truncate max-w-[150px]">{musicTitle}</span>
                     </div>
                   </motion.div>
                 )}
