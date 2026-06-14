@@ -21,10 +21,10 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ width: 360, height: 72 });
-  const [isSvgFilterSupported, setIsSvgFilterSupported] = useState(false);
+  const [isSvgFilterSupported, setIsSvgFilterSupported] = useState(true); // Default true, detect fallback later
 
   useEffect(() => {
-    // Feature detection for SVG backdrop-filter support (Chrome/Android supports it, iOS Safari does not)
+    // Feature detection for SVG backdrop-filter support
     const supportsSvgFilter = typeof CSS !== 'undefined' && CSS.supports && (
       CSS.supports('backdrop-filter', 'url(#test)') || 
       CSS.supports('-webkit-backdrop-filter', 'url(#test)')
@@ -33,21 +33,23 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
 
     if (!containerRef.current) return;
 
+    let rafId: number;
     const updateDims = () => {
       if (containerRef.current) {
-        setDims({
-          width: containerRef.current.offsetWidth,
-          height: containerRef.current.offsetHeight,
+        const w = containerRef.current.offsetWidth;
+        const h = containerRef.current.offsetHeight;
+        setDims(prev => {
+          if (prev.width === w && prev.height === h) return prev;
+          return { width: w, height: h };
         });
       }
     };
 
-    // Initial measurement
     updateDims();
 
-    // ResizeObserver to update width/height in real-time
     const observer = new ResizeObserver(() => {
-      updateDims();
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(updateDims);
     });
     observer.observe(containerRef.current);
 
@@ -56,13 +58,14 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', updateDims);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
-  // Construct Jhey's exact SVG displacement map data URI based on container dimensions
   const border = Math.min(dims.width, dims.height) * (0.07 * 0.5);
-  const radius = 32; // Matches rounded-[2rem] (32px)
+  const radius = 32;
 
+  // Exact matching SVG from reference
   const mapSvg = `
     <svg width="${dims.width}" height="${dims.height}" viewBox="0 0 ${dims.width} ${dims.height}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -81,55 +84,36 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
       <rect x="0" y="0" width="${dims.width}" height="${dims.height}" fill="black"></rect>
       <rect x="0" y="0" width="${dims.width}" height="${dims.height}" rx="${radius}" fill="url(#red)" />
       <rect x="0" y="0" width="${dims.width}" height="${dims.height}" rx="${radius}" fill="url(#blue)" style="mix-blend-mode: difference" />
-      <rect x="${border}" y="${border}" width="${dims.width - border * 2}" height="${dims.height - border * 2}" rx="${radius}" fill="hsl(0 0% 50% / 0.93)" filter="url(#inner-blur)" />
+      <rect x="${border}" y="${border}" width="${dims.width - border * 2}" height="${dims.height - border * 2}" rx="${radius}" fill="hsl(0, 0%, 50%)" fill-opacity="0.93" filter="url(#inner-blur)" />
     </svg>
   `.trim();
 
-  // Convert SVG string to data URI
-  const mapUri = `data:image/svg+xml;utf8,${encodeURIComponent(mapSvg)}`;
+  // Removed ;utf8 as it breaks data URI SVG parsing in many mobile webviews
+  const mapUri = `data:image/svg+xml,${encodeURIComponent(mapSvg)}`;
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[400px] z-[9999]">
-      {/* SVG Liquid Glass Filter definition */}
-      {isSvgFilterSupported && (
-        <svg className="hidden absolute pointer-events-none" aria-hidden="true" width="0" height="0">
-          <defs>
-            <filter id="liquid-glass-filter" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
-              <feImage href={mapUri} x="0" y="0" width="100%" height="100%" result="map" preserveAspectRatio="none" />
-              
-              {/* Chromatic aberration with Red, Green, and Blue displacement offset maps */}
-              <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-180" result="dispRed" />
-              <feColorMatrix in="dispRed" type="matrix"
-                values="1 0 0 0 0
-                        0 0 0 0 0
-                        0 0 0 0 0
-                        0 0 0 1 0"
-                result="red" />
-              
-              <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-170" result="dispGreen" />
-              <feColorMatrix in="dispGreen" type="matrix"
-                values="0 0 0 0 0
-                        0 1 0 0 0
-                        0 0 0 0 0
-                        0 0 0 1 0"
-                result="green" />
-              
-              <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-160" result="dispBlue" />
-              <feColorMatrix in="dispBlue" type="matrix"
-                values="0 0 0 0 0
-                        0 0 0 0 0
-                        0 0 1 0 0
-                        0 0 0 1 0"
-                result="blue" />
-              
-              <feBlend in="red" in2="green" mode="screen" result="rg" />
-              <feBlend in="rg" in2="blue" mode="screen" result="rgbOut" />
-              
-              <feGaussianBlur in="rgbOut" stdDeviation="0.3" />
-            </filter>
-          </defs>
-        </svg>
-      )}
+      <svg className="hidden absolute pointer-events-none" aria-hidden="true" width="0" height="0">
+        <defs>
+          <filter id="liquid-glass-filter" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+            <feImage href={mapUri} x="0" y="0" width="100%" height="100%" result="map" preserveAspectRatio="none" />
+            
+            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-180" result="dispRed" />
+            <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red" />
+            
+            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-170" result="dispGreen" />
+            <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green" />
+            
+            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-160" result="dispBlue" />
+            <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue" />
+            
+            <feBlend in="red" in2="green" mode="screen" result="rg" />
+            <feBlend in="rg" in2="blue" mode="screen" result="rgbOut" />
+            
+            <feGaussianBlur in="rgbOut" stdDeviation="0.3" />
+          </filter>
+        </defs>
+      </svg>
 
       <div 
         ref={containerRef}
@@ -155,7 +139,6 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
           `
         }}
       >
-        {/* Subtle inner highlight to accentuate glass thickness */}
         <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-[2rem]"></div>
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
@@ -170,11 +153,9 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
                   {item.icon}
                 </span>
                 
-                {/* Badge "NEW" */}
                 {item.badge && (
                   <div className="absolute -top-3 -right-5">
                     <div className="relative">
-                      {/* Glow Effect */}
                       <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full blur-sm opacity-60"></div>
                       <div className="relative px-1.5 py-0.5 bg-gradient-to-r from-pink-400 to-purple-500 text-white text-[8px] font-black tracking-wider rounded-full shadow-lg border border-white/20 whitespace-nowrap">
                         {item.badge}
@@ -187,7 +168,6 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
                 {item.label}
               </span>
 
-              {/* Active Indicator (subtle glow behind icon) */}
               {isActive && (
                 <motion.div
                   layoutId="bottomNavIndicator"
