@@ -22,7 +22,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#111113] p-6 pt-12 pb-32 overflow-y-auto">
+    <div className="absolute inset-0 h-full flex flex-col items-center min-h-[100vh] bg-[#111113] p-6 pt-12 pb-32 overflow-y-auto">
       
       {/* Top Pill (Speed up charging equivalent -> Account Status) */}
       <motion.div 
@@ -85,6 +85,16 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
           <div className="w-[200px] h-[200px] bg-gradient-to-t from-red-500/40 to-orange-500/0 rounded-full blur-md"></div>
         </div>
       </div>
+
+      {/* Greeting Text */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="text-center mb-10"
+      >
+        <span className="text-white text-lg font-bold tracking-wide">HI ... {registry.WhatsApp_Owner || 'User'}</span>
+      </motion.div>
 
       {/* Date & Sub Info */}
       <motion.div 

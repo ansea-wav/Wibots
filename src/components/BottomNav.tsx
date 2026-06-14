@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import { useTheme } from '@/lib/ThemeContext';
 
 export type MobileTab = 'dashboard' | 'protocols' | 'responder' | 'earn' | 'settings';
 
@@ -11,6 +12,8 @@ interface BottomNavProps {
 }
 
 export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
+  const { theme } = useTheme();
+  
   const navItems = [
     { id: 'dashboard', icon: 'home', label: 'Dashboard' },
     { id: 'protocols', icon: 'apps', label: 'Protocols' },
@@ -121,10 +124,10 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
             className="w-full h-full relative"
             style={{ 
               borderRadius: radius,
-              background: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: isSvgFilterSupported && mapUri ? 'url(#liquid-glass-filter) saturate(1)' : 'blur(24px) saturate(1.5)',
-              WebkitBackdropFilter: isSvgFilterSupported && mapUri ? 'url(#liquid-glass-filter) saturate(1)' : 'blur(24px) saturate(1.5)',
-              boxShadow: `
+              background: theme === 'oled' ? '#000000' : 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: theme === 'oled' ? 'none' : (isSvgFilterSupported && mapUri ? 'url(#liquid-glass-filter) saturate(1)' : 'blur(24px) saturate(1.5)'),
+              WebkitBackdropFilter: theme === 'oled' ? 'none' : (isSvgFilterSupported && mapUri ? 'url(#liquid-glass-filter) saturate(1)' : 'blur(24px) saturate(1.5)'),
+              boxShadow: theme === 'oled' ? 'none' : `
                 0 0 2px 1px rgba(255, 255, 255, 0.1) inset,
                 0 0 10px 4px rgba(255, 255, 255, 0.05) inset,
                 0px 4px 16px rgba(0, 0, 0, 0.15),
@@ -132,11 +135,12 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
                 0px 16px 56px rgba(0, 0, 0, 0.25),
                 0px 4px 16px rgba(0, 0, 0, 0.1) inset,
                 0px 8px 24px rgba(0, 0, 0, 0.05) inset
-              `
+              `,
+              border: theme === 'oled' ? '1px solid rgba(255,255,255,0.05)' : 'none'
             }}
           >
             {/* 3. The precise SVG Filter injected directly inside the container */}
-            {isSvgFilterSupported && mapUri && (
+            {isSvgFilterSupported && mapUri && theme !== 'oled' && (
               <svg className="absolute inset-0 pointer-events-none w-full h-full" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <filter id="liquid-glass-filter" colorInterpolationFilters="sRGB">

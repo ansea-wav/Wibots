@@ -54,7 +54,7 @@ export default function MobileSettings() {
         <div className="bg-[#1a1a1c] border border-white/5 rounded-2xl p-4 shadow-lg">
           <h3 className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-4">Appearance</h3>
           <div className="grid grid-cols-2 gap-2">
-            {themes.map((t_item) => (
+            {themes.filter(t => t.id === 'liquid-glass' || t.id === 'oled').map((t_item) => (
               <button
                 key={t_item.id}
                 onClick={() => setTheme(t_item.id as any)}

@@ -15,7 +15,7 @@ const parseTargetGroups = (tg: any): string[] | 'All' => {
   if (!tg || tg === 'All' || tg === 'Semua') return 'All';
   if (Array.isArray(tg)) return tg;
   if (typeof tg === 'string') {
-    const parts = tg.split(',').map(s => s.trim()).filter(Boolean);
+    const parts = (tg || '').split(',').map(s => s.trim()).filter(Boolean);
     if (parts.length === 0 || parts.includes('All') || parts.includes('Semua')) return 'All';
     return parts;
   }

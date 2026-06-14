@@ -350,7 +350,7 @@ export default function VirtualKeyboard() {
       onMouseDown={(e) => e.preventDefault()}
     >
       {/* HEADER: Native Keyboard, Translate, Close */}
-      <div className="flex justify-between items-center mb-4 px-1 gap-2" onTouchStart={(e) => e.preventDefault()}>
+      <div className="flex justify-between items-center mb-4 px-1 gap-2">
         <div className="flex gap-2">
           <button
             onClick={handleUseNativeKeyboard}
@@ -383,7 +383,7 @@ export default function VirtualKeyboard() {
 
       {/* TRANSLATE MOCKUP BAR */}
       {translating && (
-        <div className="mb-4 px-2" onTouchStart={(e) => e.preventDefault()}>
+        <div className="mb-4 px-2">
           <div className="w-full bg-black/40 border border-white/10 rounded-full h-8 px-4 flex items-center shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)]">
             <span className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider">Ketik untuk terjemahkan...</span>
           </div>
