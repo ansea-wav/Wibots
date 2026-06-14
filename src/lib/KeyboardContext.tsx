@@ -97,14 +97,32 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
       }, 50);
     };
 
+    const handleTouchStart = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === 'INPUT' && !['checkbox', 'radio', 'submit', 'button', 'color', 'file', 'image', 'reset'].includes((target as HTMLInputElement).type)) ||
+        target.tagName === 'TEXTAREA'
+      ) {
+        if (!useNativeKeyboard) {
+          // Temporarily set readonly to prevent native keyboard from showing up
+          target.setAttribute('readonly', 'readonly');
+          setTimeout(() => {
+            target.removeAttribute('readonly');
+          }, 100);
+        }
+      }
+    };
+
     // Use capture phase for focus/blur to ensure we catch it early
     document.addEventListener('focus', handleFocus, true);
     document.addEventListener('blur', handleBlur, true);
+    document.addEventListener('touchstart', handleTouchStart, true);
 
     return () => {
       observer.disconnect();
       document.removeEventListener('focus', handleFocus, true);
       document.removeEventListener('blur', handleBlur, true);
+      document.removeEventListener('touchstart', handleTouchStart, true);
     };
   }, [isMobile, useNativeKeyboard]);
 
