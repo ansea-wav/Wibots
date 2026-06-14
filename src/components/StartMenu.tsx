@@ -50,6 +50,8 @@ export default function StartMenu({
   const LANGUAGES = [
     { code: 'en', name: 'English' },
     { code: 'id', name: 'Bahasa Indonesia' },
+    { code: 'jv', name: 'Basa Jawa' },
+    { code: 'su', name: 'Basa Sunda' },
     { code: 'es', name: 'Español' },
     { code: 'ru', name: 'Русский' },
     { code: 'zh', name: '中文' },

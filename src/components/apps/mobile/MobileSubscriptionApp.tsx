@@ -8,37 +8,37 @@ interface SubscriptionAppProps {
   client: ClientRegistry;
 }
 
-const PLANS = [
+const getPlans = (t: (k: string) => string) => [
   {
     id: 'free',
-    name: 'Free',
+    name: t('plan_free_name'),
     price: 'Rp 0',
-    features: ['1 Respon', 'No File Upload/Media', 'Few Services', '1 Group'],
+    features: [t('feat_1_resp'), t('feat_no_upload'), t('feat_few_services'), t('feat_1_group')],
     color: '#9ca3af',
     icon: 'eco',
   },
   {
     id: 'basic',
-    name: 'Basic',
+    name: t('plan_basic_name'),
     price: 'Rp 2.000',
-    features: ['5 Respon', '500kb per file upload', '50MB Storage Maks', '1 Group', 'Basic Support'],
+    features: [t('feat_5_resp'), t('feat_500kb_upload'), t('feat_50mb_storage'), t('feat_1_group'), t('feat_basic_support')],
     color: '#6b7280',
     icon: 'star',
   },
   {
     id: 'standard',
-    name: 'Standard',
+    name: t('plan_standard_name'),
     price: 'Rp 5.000',
-    features: ['25 Respon', '5MB per file upload', '500MB Storage Maks', '2 Group', '24/7 Support'],
+    features: [t('feat_25_resp'), t('feat_5mb_upload'), t('feat_500mb_storage'), t('feat_2_group'), t('feat_247_support')],
     color: '#3b82f6',
     icon: 'stars',
     popular: true,
   },
   {
     id: 'premium',
-    name: 'Premium',
+    name: t('plan_premium_name'),
     price: 'Rp 20.000',
-    features: ['100 Respon', '15MB per file upload', '1000MB Storage Maks', '5 Group', '24/7 Support'],
+    features: [t('feat_100_resp'), t('feat_15mb_upload'), t('feat_1000mb_storage'), t('feat_5_group'), t('feat_247_support')],
     color: '#a855f7',
     icon: 'diamond',
   },
@@ -71,31 +71,31 @@ export default function MobileSubscriptionApp({ client }: SubscriptionAppProps) 
 
         {/* Current Status */}
         <div className="bg-[#1a1a1c] p-5 rounded-3xl border border-white/5 shadow-lg mb-6">
-          <h3 className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-4">Current Subscription</h3>
+          <h3 className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-4">{t('current_subscription')}</h3>
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <div className="text-[10px] text-white/40 uppercase font-bold tracking-widest mb-1">Plan</div>
-              <div className="font-bold text-white text-sm">{client.Package_Tier}</div>
+              <div className="text-[10px] text-white/40 uppercase font-bold tracking-widest mb-1">{t('plan')}</div>
+              <div className="font-bold text-white text-sm">{t(client.Package_Tier) || client.Package_Tier}</div>
             </div>
             <div>
-              <div className="text-[10px] text-white/40 uppercase font-bold tracking-widest mb-1">Days Left</div>
+              <div className="text-[10px] text-white/40 uppercase font-bold tracking-widest mb-1">{t('days_left')}</div>
               <div className={`font-bold text-sm ${client.Days_Left <= 3 ? 'text-red-500' : client.Days_Left <= 7 ? 'text-yellow-500' : 'text-green-500'}`}>
-                {client.Days_Left} days
+                {client.Days_Left} {t('days')}
               </div>
             </div>
             <div>
-              <div className="text-[10px] text-white/40 uppercase font-bold tracking-widest mb-1">Status</div>
+              <div className="text-[10px] text-white/40 uppercase font-bold tracking-widest mb-1">{t('status')}</div>
               <div className={`font-bold text-sm flex items-center gap-1 ${client.Account_Status === 'Active' ? 'text-green-500' : 'text-red-500'}`}>
-                {client.Account_Status}
+                {t(client.Account_Status) || client.Account_Status}
               </div>
             </div>
           </div>
         </div>
 
         {/* Plan Features */}
-        <h3 className="text-sm font-bold text-white/40 uppercase tracking-widest mb-4">Available Plans</h3>
+        <h3 className="text-sm font-bold text-white/40 uppercase tracking-widest mb-4">{t('available_plans')}</h3>
         <div className="space-y-4">
-          {PLANS.map((plan) => (
+          {getPlans(t).map((plan) => (
             <div
               key={plan.id}
               className="relative rounded-3xl border transition-all bg-[#1a1a1c] overflow-hidden"
@@ -106,7 +106,7 @@ export default function MobileSubscriptionApp({ client }: SubscriptionAppProps) 
               {plan.popular && (
                 <div className="absolute top-0 right-0 px-4 py-1 rounded-bl-xl text-[10px] font-bold uppercase tracking-wider text-white"
                   style={{ background: `linear-gradient(135deg, ${plan.color}, ${plan.color}cc)` }}>
-                  Popular
+                  {t('popular')}
                 </div>
               )}
               <div className="p-5">
@@ -118,7 +118,7 @@ export default function MobileSubscriptionApp({ client }: SubscriptionAppProps) 
                     <div className="text-lg font-bold text-white">{plan.name}</div>
                     <div className="flex items-end gap-1">
                       <span className="text-xl font-bold" style={{ color: plan.color }}>{plan.price}</span>
-                      <span className="text-xs text-white/40 mb-1">/bulan</span>
+                      <span className="text-xs text-white/40 mb-1">{t('per_month')}</span>
                     </div>
                   </div>
                 </div>

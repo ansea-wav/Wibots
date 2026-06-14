@@ -7,37 +7,37 @@ interface SubscriptionAppProps {
   client: ClientRegistry;
 }
 
-const PLANS = [
+const getPlans = (t: (k: string) => string) => [
   {
     id: 'free',
-    name: 'Free',
+    name: t('plan_free_name'),
     price: 'Rp 0',
-    features: ['1 Respon', 'No File Upload/Media', 'Few Services', '1 Group'],
+    features: [t('feat_1_resp'), t('feat_no_upload'), t('feat_few_services'), t('feat_1_group')],
     color: '#9ca3af',
     icon: '🌱',
   },
   {
     id: 'basic',
-    name: 'Basic',
+    name: t('plan_basic_name'),
     price: 'Rp 2.000',
-    features: ['5 Respon', '500kb per file upload', '50MB Storage Maks', '1 Group', 'Basic Support'],
+    features: [t('feat_5_resp'), t('feat_500kb_upload'), t('feat_50mb_storage'), t('feat_1_group'), t('feat_basic_support')],
     color: '#6b7280',
     icon: '⭐',
   },
   {
     id: 'standard',
-    name: 'Standard',
+    name: t('plan_standard_name'),
     price: 'Rp 5.000',
-    features: ['25 Respon', '5MB per file upload', '500MB Storage Maks', '2 Group', '24/7 Support'],
+    features: [t('feat_25_resp'), t('feat_5mb_upload'), t('feat_500mb_storage'), t('feat_2_group'), t('feat_247_support')],
     color: '#3b82f6',
     icon: '🌟',
     popular: true,
   },
   {
     id: 'premium',
-    name: 'Premium',
+    name: t('plan_premium_name'),
     price: 'Rp 20.000',
-    features: ['100 Respon', '15MB per file upload', '1000MB Storage Maks', '5 Group', '24/7 Support'],
+    features: [t('feat_100_resp'), t('feat_15mb_upload'), t('feat_1000mb_storage'), t('feat_5_group'), t('feat_247_support')],
     color: '#a855f7',
     icon: '💎',
   },
@@ -70,19 +70,19 @@ export default function SubscriptionApp({ client }: SubscriptionAppProps) {
         <div className="mt-3 p-3 rounded-xl border border-[var(--border-subtle)] flex items-center justify-between"
           style={{ background: 'var(--surface-glass)' }}>
           <div>
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">Current Plan</div>
-            <div className="text-sm font-semibold text-white">{client.Package_Tier}</div>
+            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">{t('current_subscription')}</div>
+            <div className="text-sm font-semibold text-white">{t(client.Package_Tier) || client.Package_Tier}</div>
           </div>
           <div className="text-right">
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">Days Remaining</div>
+            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">{t('days_left')}</div>
             <div className={`text-sm font-bold ${client.Days_Left <= 3 ? 'text-[var(--neon-red)]' : client.Days_Left <= 7 ? 'text-[var(--neon-amber)]' : 'text-[var(--neon-green)]'}`}>
-              {client.Days_Left} days
+              {client.Days_Left} {t('days')}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">Status</div>
+            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">{t('status')}</div>
             <div className={`text-sm font-semibold ${client.Account_Status === 'Active' ? 'text-[var(--neon-green)]' : 'text-[var(--neon-red)]'}`}>
-              {client.Account_Status}
+              {t(client.Account_Status) || client.Account_Status}
             </div>
           </div>
         </div>
@@ -91,7 +91,7 @@ export default function SubscriptionApp({ client }: SubscriptionAppProps) {
       <div className="flex-1 overflow-auto p-5">
         {/* Plan Features */}
         <div className="space-y-3">
-          {PLANS.map((plan) => (
+          {getPlans(t).map((plan) => (
             <div
               key={plan.id}
               className="relative rounded-xl border transition-all"
@@ -103,7 +103,7 @@ export default function SubscriptionApp({ client }: SubscriptionAppProps) {
               {plan.popular && (
                 <div className="absolute -top-2 right-4 px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider text-white"
                   style={{ background: `linear-gradient(135deg, ${plan.color}, ${plan.color}cc)` }}>
-                  Popular
+                  {t('popular')}
                 </div>
               )}
               <div className="p-4">
@@ -116,7 +116,7 @@ export default function SubscriptionApp({ client }: SubscriptionAppProps) {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-white">{plan.price}</div>
-                    <div className="text-[9px] text-[var(--text-tertiary)]">/bulan</div>
+                    <div className="text-[9px] text-[var(--text-tertiary)]">{t('per_month')}</div>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
