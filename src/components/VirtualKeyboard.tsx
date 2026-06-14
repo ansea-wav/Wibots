@@ -430,9 +430,6 @@ export default function VirtualKeyboard() {
           ))}
         </div>
       </div>
-
-      </div>
-
     </div>
   );
 }
