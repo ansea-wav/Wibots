@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@/lib/ThemeContext';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export type MobileTab = 'dashboard' | 'protocols' | 'responder' | 'earn' | 'settings';
 
@@ -13,13 +14,14 @@ interface BottomNavProps {
 
 export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   
   const navItems = [
-    { id: 'dashboard', icon: 'home', label: 'Dashboard' },
-    { id: 'protocols', icon: 'apps', label: 'Protocols' },
-    { id: 'responder', icon: 'swap_horiz', label: 'Swap' },
-    { id: 'earn', icon: 'diamond', label: 'Earn', badge: 'NEW' },
-    { id: 'settings', icon: 'settings', label: 'Settings' },
+    { id: 'dashboard', icon: 'home', label: t('dashboard') },
+    { id: 'protocols', icon: 'apps', label: t('protocols') },
+    { id: 'responder', icon: 'swap_horiz', label: t('swap') },
+    { id: 'earn', icon: 'diamond', label: t('earn'), badge: t('new') },
+    { id: 'settings', icon: 'settings', label: t('settings') },
   ];
 
   const wrapperRef = useRef<HTMLDivElement>(null);

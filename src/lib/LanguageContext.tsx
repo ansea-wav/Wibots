@@ -13,6 +13,10 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const dictionaries: Record<LanguageCode, Record<string, string>> = {
   en: {
+    'dashboard': 'Dashboard',
+    'swap': 'Swap',
+    'earn': 'Earn',
+    'new': 'NEW',
     'settings': 'Settings',
     'language': 'Language',
     'appearance': 'Appearance',
@@ -111,6 +115,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'delete': 'Delete'
   },
   id: {
+    'dashboard': 'Dasbor',
+    'swap': 'Tukar',
+    'earn': 'Hasil',
+    'new': 'BARU',
     'settings': 'Pengaturan',
     'language': 'Bahasa',
     'appearance': 'Tampilan',
@@ -209,6 +217,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'delete': 'Hapus'
   },
   jv: {
+    'dashboard': 'Dasbor',
+    'swap': 'Ganti',
+    'earn': 'Oleh',
+    'new': 'ANYAR',
     'settings': 'Setelan',
     'language': 'Basa',
     'appearance': 'Tampilan',
@@ -307,6 +319,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'delete': 'Mbusak'
   },
   su: {
+    'dashboard': 'Dasbor',
+    'swap': 'Tuker',
+    'earn': 'Kenging',
+    'new': 'ANYAR',
     'settings': 'Setélan',
     'language': 'Basa',
     'appearance': 'Pintonan',
