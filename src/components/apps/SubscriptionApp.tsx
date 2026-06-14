@@ -43,12 +43,26 @@ const PLANS = [
 ];
 
 export default function SubscriptionApp({ client }: SubscriptionAppProps) {
+  const [showCalc, setShowCalc] = useState(false);
+  const [responSlots, setResponSlots] = useState(25);
+  const [groupSlots, setGroupSlots] = useState(2);
+  const [serviceType, setServiceType] = useState<'basic' | '24/7'>('24/7');
+
+  const calculatePrice = () => {
+    const responPrice = (responSlots / 25) * 1000;
+    const groupPrice = groupSlots * 1100;
+    const supportPrice = serviceType === '24/7' ? 1800 : 0;
+    return responPrice + groupPrice + supportPrice;
+  };
+
+  const totalPrice = calculatePrice();
+
   return (
     <div className="flex flex-col h-full" style={{ background: 'var(--surface-panel)' }}>
       {/* Header */}
       <div className="p-5 border-b border-[var(--border-subtle)] flex-shrink-0">
         <h2 className="text-lg font-bold text-white">💎 Layanan & Pricing</h2>
-        <p className="text-[11px] text-[var(--text-tertiary)] mt-0.5">YAY Subscription Plans</p>
+        <p className="text-[11px] text-[var(--text-tertiary)] mt-0.5">Wazle Subscription Plans</p>
 
         {/* Current Status */}
         <div className="mt-3 p-3 rounded-xl border border-[var(--border-subtle)] flex items-center justify-between"
@@ -120,12 +134,84 @@ export default function SubscriptionApp({ client }: SubscriptionAppProps) {
           ))}
         </div>
         
-        {/* Footer Contact */}
-        <div className="mt-8 mb-4 p-4 rounded-xl border border-[var(--border-subtle)] text-center" style={{ background: 'var(--surface-glass)' }}>
-          <p className="text-xs font-semibold text-white">Hubungi staff YAY untuk mengupgrade / menurunkan layanan kamu</p>
-          <a href="#" className="inline-block mt-2 px-4 py-2 rounded-lg text-xs font-bold bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white transition-all cursor-pointer">
-            Hubungi Staff
-          </a>
+        {/* Footer Contact -> Budget Adjustment */}
+        <div className="mt-8 mb-4 p-4 rounded-xl border border-[var(--border-subtle)]" style={{ background: 'var(--surface-glass)' }}>
+          {!showCalc ? (
+            <div className="text-center">
+              <p className="text-xs font-semibold text-white">Ingin menyesuaikan limit sesuai budget Anda?</p>
+              <button 
+                onClick={() => setShowCalc(true)}
+                className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-lg text-xs font-bold bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white transition-all cursor-pointer"
+              >
+                <i className="fi fi-rr-settings-sliders"></i>
+                Budget Adjustment
+              </button>
+            </div>
+          ) : (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="flex justify-between items-center mb-4 pb-2 border-b border-[var(--border-subtle)]">
+                <h3 className="font-bold text-white text-sm">Sesuaikan Paket</h3>
+                <button onClick={() => setShowCalc(false)} className="text-[var(--text-tertiary)] hover:text-white transition-colors">
+                  <i className="fi fi-rr-cross-small"></i>
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between text-xs mb-1.5">
+                    <span className="text-[var(--text-secondary)]">Slot Respon</span>
+                    <span className="font-bold text-[var(--accent-primary)]">{responSlots}</span>
+                  </div>
+                  <input type="range" min="25" max="100" step="25" value={responSlots} onChange={(e) => setResponSlots(Number(e.target.value))} className="w-full" style={{ accentColor: 'var(--accent-primary)' }} />
+                  <div className="flex justify-between text-[9px] text-[var(--text-tertiary)] mt-1"><span>25</span><span>100</span></div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs mb-1.5">
+                    <span className="text-[var(--text-secondary)]">Grup WhatsApp</span>
+                    <span className="font-bold text-[var(--accent-primary)]">{groupSlots}</span>
+                  </div>
+                  <input type="range" min="1" max="5" step="1" value={groupSlots} onChange={(e) => setGroupSlots(Number(e.target.value))} className="w-full" style={{ accentColor: 'var(--accent-primary)' }} />
+                  <div className="flex justify-between text-[9px] text-[var(--text-tertiary)] mt-1"><span>1</span><span>5</span></div>
+                </div>
+
+                <div>
+                  <span className="text-[var(--text-secondary)] text-xs block mb-1.5">Layanan Bantuan</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button 
+                      onClick={() => setServiceType('basic')}
+                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all ${serviceType === 'basic' ? 'bg-[var(--accent-primary)] text-white' : 'bg-white/5 text-[var(--text-secondary)] border border-white/10'}`}
+                    >
+                      Basic Service
+                    </button>
+                    <button 
+                      onClick={() => setServiceType('24/7')}
+                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all ${serviceType === '24/7' ? 'bg-[var(--accent-primary)] text-white' : 'bg-white/5 text-[var(--text-secondary)] border border-white/10'}`}
+                    >
+                      Service 24/7
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-[var(--border-subtle)] mt-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider font-bold mb-0.5">Total Estimasi</div>
+                      <div className="text-xl font-bold text-white">Rp {totalPrice.toLocaleString('id-ID')} <span className="text-[10px] font-normal text-[var(--text-tertiary)]">/bln</span></div>
+                    </div>
+                    <a 
+                      href={`https://wa.me/628123456789?text=Halo admin, saya mau pesan custom plan: ${responSlots} Respon, ${groupSlots} Grup, ${serviceType === '24/7' ? '24/7 Support' : 'Basic Support'}. Estimasi Rp ${totalPrice.toLocaleString('id-ID')}/bln.`}
+                      target="_blank"
+                      className="px-4 py-2 rounded-lg bg-[var(--neon-green)] text-black font-bold text-xs flex items-center gap-2 hover:brightness-110 transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)]"
+                    >
+                      <i className="fi fi-rr-comment-alt"></i>
+                      Order via WA
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

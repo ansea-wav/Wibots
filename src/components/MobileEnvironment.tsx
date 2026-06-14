@@ -18,7 +18,7 @@ import MobileControlCenter from './apps/mobile/MobileControlCenter';
 import MobileFileExplorer from './apps/mobile/MobileFileExplorer';
 import MobileTaskManager from './apps/mobile/MobileTaskManager';
 import MobileGroupManager from './apps/mobile/MobileGroupManager';
-import MobileUserManager from './apps/mobile/MobileUserManager';
+
 import MobileResponderStudio from './apps/mobile/MobileResponderStudio';
 import MobileSubscriptionApp from './apps/mobile/MobileSubscriptionApp';
 import MobileSetupScreen from './MobileSetupScreen';
@@ -183,11 +183,6 @@ export default function MobileEnvironment({ userData, userId }: MobileProps) {
         return renderAppWrapper(
           <MobileGroupManager client={clientRegistry} onUpdate={handleUpdateAccount} />, 
           'Group Manager', backFn
-        );
-      case 'user-manager': 
-        return renderAppWrapper(
-          <MobileUserManager apiBase={API_BASE} />, 
-          'User Manager', backFn
         );
       default: return null;
     }

@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { ClientRegistry } from '@/lib/api';
 
 interface SubscriptionAppProps {
@@ -43,6 +44,20 @@ const PLANS = [
 ];
 
 export default function MobileSubscriptionApp({ client }: SubscriptionAppProps) {
+  const [showCalc, setShowCalc] = useState(false);
+  const [responSlots, setResponSlots] = useState(25);
+  const [groupSlots, setGroupSlots] = useState(2);
+  const [serviceType, setServiceType] = useState<'basic' | '24/7'>('24/7');
+
+  const calculatePrice = () => {
+    const responPrice = (responSlots / 25) * 1000;
+    const groupPrice = groupSlots * 1100;
+    const supportPrice = serviceType === '24/7' ? 1800 : 0;
+    return responPrice + groupPrice + supportPrice;
+  };
+
+  const totalPrice = calculatePrice();
+
   return (
     <div className="flex flex-col h-full bg-[#111113]">
       <div className="flex-1 overflow-y-auto p-4 pb-32">
@@ -119,14 +134,83 @@ export default function MobileSubscriptionApp({ client }: SubscriptionAppProps) 
           ))}
         </div>
         
-        {/* Footer Contact */}
-        <div className="mt-8 mb-4 p-5 rounded-3xl border border-white/5 bg-[#1a1a1c] text-center">
-          <span className="material-symbols-outlined text-3xl text-white/40 mb-2 block">support_agent</span>
-          <p className="text-sm font-medium text-white mb-4">Hubungi staff Wazle untuk mengupgrade / menurunkan layanan kamu</p>
-          <button className="w-full py-4 rounded-full bg-blue-500 text-white font-bold text-lg flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg shadow-blue-500/20">
-            <span className="material-symbols-outlined">chat</span>
-            Hubungi Staff
-          </button>
+        {/* Footer Contact -> Budget Adjustment */}
+        <div className="mt-8 mb-4 p-5 rounded-3xl border border-white/5 bg-[#1a1a1c]">
+          <AnimatePresence mode="wait">
+            {!showCalc ? (
+              <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center">
+                <span className="material-symbols-outlined text-3xl text-white/40 mb-2 block">tune</span>
+                <p className="text-sm font-medium text-white mb-4">Ingin menyesuaikan limit sesuai budget Anda?</p>
+                <button 
+                  onClick={() => setShowCalc(true)}
+                  className="w-full py-4 rounded-full bg-blue-500 text-white font-bold text-lg flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg shadow-blue-500/20"
+                >
+                  <span className="material-symbols-outlined">calculate</span>
+                  Budget Adjustment
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div key="calc" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="font-bold text-white text-lg">Sesuaikan Paket</h3>
+                  <button onClick={() => setShowCalc(false)} className="text-white/40"><span className="material-symbols-outlined">close</span></button>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-white/70">Slot Respon</span>
+                      <span className="font-bold text-blue-400">{responSlots}</span>
+                    </div>
+                    <input type="range" min="25" max="100" step="25" value={responSlots} onChange={(e) => setResponSlots(Number(e.target.value))} className="w-full accent-blue-500" />
+                    <div className="flex justify-between text-[10px] text-white/30 mt-1"><span>25</span><span>100</span></div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-white/70">Grup WhatsApp</span>
+                      <span className="font-bold text-blue-400">{groupSlots}</span>
+                    </div>
+                    <input type="range" min="1" max="5" step="1" value={groupSlots} onChange={(e) => setGroupSlots(Number(e.target.value))} className="w-full accent-blue-500" />
+                    <div className="flex justify-between text-[10px] text-white/30 mt-1"><span>1</span><span>5</span></div>
+                  </div>
+
+                  <div>
+                    <span className="text-white/70 text-sm block mb-2">Layanan Bantuan</span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button 
+                        onClick={() => setServiceType('basic')}
+                        className={`py-2 rounded-xl text-xs font-bold transition-all ${serviceType === 'basic' ? 'bg-blue-500 text-white' : 'bg-white/5 text-white/50 border border-white/10'}`}
+                      >
+                        Basic Service
+                      </button>
+                      <button 
+                        onClick={() => setServiceType('24/7')}
+                        className={`py-2 rounded-xl text-xs font-bold transition-all ${serviceType === '24/7' ? 'bg-blue-500 text-white' : 'bg-white/5 text-white/50 border border-white/10'}`}
+                      >
+                        Service 24/7
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-white/10">
+                    <div className="text-center mb-4">
+                      <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Total Estimasi</div>
+                      <div className="text-3xl font-bold text-white">Rp {totalPrice.toLocaleString('id-ID')} <span className="text-sm font-normal text-white/40">/bln</span></div>
+                    </div>
+                    <a 
+                      href={`https://wa.me/628123456789?text=Halo admin, saya mau pesan custom plan: ${responSlots} Respon, ${groupSlots} Grup, ${serviceType === '24/7' ? '24/7 Support' : 'Basic Support'}. Estimasi Rp ${totalPrice.toLocaleString('id-ID')}/bln.`}
+                      target="_blank"
+                      className="w-full py-4 rounded-full bg-green-500 text-white font-bold text-lg flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg shadow-green-500/20 block text-center"
+                    >
+                      <span className="material-symbols-outlined">chat</span>
+                      Order via WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>

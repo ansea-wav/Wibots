@@ -14,7 +14,7 @@ export default function MobileProtocols({ onOpenApp }: MobileProtocolsProps) {
     { id: 'fileexplorer', name: 'File Explorer', icon: 'folder', color: 'from-orange-500 to-yellow-500', desc: 'Manage bot storage' },
     { id: 'taskmanager', name: 'Task Manager', icon: 'analytics', color: 'from-green-500 to-emerald-500', desc: 'Monitor system resources' },
     { id: 'groupmanager', name: 'Group Manager', icon: 'groups', color: 'from-purple-500 to-pink-500', desc: 'Manage connected groups' },
-    { id: 'user-manager', name: 'User Manager', icon: 'person', color: 'from-red-500 to-orange-500', desc: 'Manage bot users' },
+
   ];
 
   return (

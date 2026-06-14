@@ -12,7 +12,7 @@ import AccountApp from './apps/AccountApp';
 import ControlCenterApp from './apps/ControlCenterApp';
 import ResponderStudioApp from './apps/ResponderStudioApp';
 import FileExplorerApp from './apps/FileExplorerApp';
-import UserManagerApp from './apps/UserManagerApp';
+
 import AppStoreApp from './apps/AppStoreApp';
 import TaskManagerApp from './apps/TaskManagerApp';
 import SubscriptionApp from './apps/SubscriptionApp';
@@ -27,7 +27,7 @@ interface DesktopProps {
   userId: string;
 }
 
-type AppId = 'account' | 'controlcenter' | 'responderstudio' | 'fileexplorer' | 'taskmanager' | 'subscription' | 'groupmanager' | 'user-manager' | 'appstore' | 'yayapp';
+type AppId = 'account' | 'controlcenter' | 'responderstudio' | 'fileexplorer' | 'taskmanager' | 'subscription' | 'groupmanager' | 'appstore' | 'yayapp';
 
 const APP_DEFINITIONS: Record<AppId, { title: string; icon: string; defaultWidth: number; defaultHeight: number; minWidth: number; minHeight: number }> = {
   account:         { title: 'Account.exe',            icon: 'fi fi-rr-credit-card', defaultWidth: 440, defaultHeight: 620, minWidth: 380, minHeight: 500 },
@@ -37,7 +37,7 @@ const APP_DEFINITIONS: Record<AppId, { title: string; icon: string; defaultWidth
   taskmanager:     { title: 'TaskManager.exe',         icon: 'fi fi-rr-chart-histogram', defaultWidth: 500, defaultHeight: 550, minWidth: 420, minHeight: 400 },
   subscription:    { title: 'Subscription.app',        icon: 'fi fi-rr-gem', defaultWidth: 520, defaultHeight: 620, minWidth: 440, minHeight: 500 },
   groupmanager:    { title: 'GroupManager.app',        icon: 'fi fi-rr-users', defaultWidth: 480, defaultHeight: 580, minWidth: 400, minHeight: 450 },
-  'user-manager':  { title: 'UserManager.exe',         icon: 'fi fi-rr-users', defaultWidth: 600, defaultHeight: 500, minWidth: 400, minHeight: 300 },
+
   'appstore':      { title: 'AppStore.exe',          icon: 'fi fi-rr-apps', defaultWidth: 500, defaultHeight: 400, minWidth: 300, minHeight: 200 },
   'yayapp':        { title: 'YAY.app',                 icon: 'fi fi-rr-sparkles', defaultWidth: 520, defaultHeight: 640, minWidth: 440, minHeight: 500 },
 };
@@ -388,7 +388,7 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
     { id: 'groupmanager', name: 'GroupManager.app', icon: 'fi fi-rr-users' },
     { id: 'taskmanager', name: 'TaskManager.exe', icon: 'fi fi-rr-chart-histogram' },
     { id: 'subscription', name: 'Subscription.app', icon: 'fi fi-rr-gem' },
-    { id: 'user-manager', name: 'UserManager.exe', icon: 'fi fi-rr-users' },
+
   ];
 
   const availableApps = ALL_APPS.filter(app => {
@@ -398,9 +398,6 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
     // Normal users always get File Explorer, App Store, and YAY.app
     if (app.id === 'appstore' || app.id === 'fileexplorer' || app.id === 'yayapp') return true;
     
-    // UserManager is ONLY for God
-    if (app.id === 'user-manager') return false;
-
     // Check if installed
     const installed = clientRegistry.Aplikasi_terpasang ? clientRegistry.Aplikasi_terpasang.split(',') : [];
     return installed.includes(app.id);
