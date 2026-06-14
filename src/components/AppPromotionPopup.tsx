@@ -58,7 +58,7 @@ export default function AppPromotionPopup() {
               <i className="fi fi-rr-mobile text-[var(--neon-blue)] text-lg mt-1"></i>
             </div>
             <div>
-              <h3 className="text-white text-sm font-bold leading-tight">YAY Mobile App</h3>
+              <h3 className="text-white text-sm font-bold leading-tight">Wazle Mobile App</h3>
               <p className="text-[var(--text-secondary)] text-[10px] mt-0.5">Native Android Experience</p>
             </div>
           </div>

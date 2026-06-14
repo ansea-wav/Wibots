@@ -70,7 +70,7 @@ export default function MobileLogin({ onLoginSuccess }: MobileLoginProps) {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <h1 className="text-4xl font-black text-white tracking-tight mb-2 drop-shadow-xl">Log in to YAY</h1>
+            <h1 className="text-4xl font-black text-white tracking-tight mb-2 drop-shadow-xl">Log in to Wazle</h1>
             <p className="text-white/70 text-sm font-medium">Welcome to the future of automation</p>
           </motion.div>
         </div>
@@ -122,7 +122,7 @@ export default function MobileLogin({ onLoginSuccess }: MobileLoginProps) {
           </button>
 
           <p className="text-white/40 text-xs text-center mt-6 leading-relaxed px-4">
-            Logging in to a YAY account means you agree to the <span className="text-white/60 font-semibold underline decoration-white/30">Privacy Policy</span> and <span className="text-white/60 font-semibold underline decoration-white/30">Terms of Service</span>.
+            Logging in to a Wazle account means you agree to the <span className="text-white/60 font-semibold underline decoration-white/30">Privacy Policy</span> and <span className="text-white/60 font-semibold underline decoration-white/30">Terms of Service</span>.
           </p>
 
           <div className="mt-auto pt-6 text-center text-sm">

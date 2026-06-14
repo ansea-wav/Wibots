@@ -49,7 +49,7 @@ export default function MobileSubscriptionApp({ client }: SubscriptionAppProps) 
         <div className="mb-6 p-6 rounded-3xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-center relative overflow-hidden">
           <span className="material-symbols-outlined text-6xl text-blue-400 mb-2">diamond</span>
           <h2 className="text-xl font-bold text-white">Layanan & Pricing</h2>
-          <p className="text-sm text-white/70 mt-2">YAY Subscription Plans</p>
+          <p className="text-sm text-white/70 mt-2">Wazle Subscription Plans</p>
         </div>
 
         {/* Current Status */}
@@ -122,7 +122,7 @@ export default function MobileSubscriptionApp({ client }: SubscriptionAppProps) 
         {/* Footer Contact */}
         <div className="mt-8 mb-4 p-5 rounded-3xl border border-white/5 bg-[#1a1a1c] text-center">
           <span className="material-symbols-outlined text-3xl text-white/40 mb-2 block">support_agent</span>
-          <p className="text-sm font-medium text-white mb-4">Hubungi staff YAY untuk mengupgrade / menurunkan layanan kamu</p>
+          <p className="text-sm font-medium text-white mb-4">Hubungi staff Wazle untuk mengupgrade / menurunkan layanan kamu</p>
           <button className="w-full py-4 rounded-full bg-blue-500 text-white font-bold text-lg flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg shadow-blue-500/20">
             <span className="material-symbols-outlined">chat</span>
             Hubungi Staff

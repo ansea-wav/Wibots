@@ -41,7 +41,7 @@ export default function MobileSetupScreen({ client, onUpdate, onComplete }: Mobi
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-[2rem] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 shadow-2xl mb-6 backdrop-blur-xl">
             <span className="material-symbols-outlined text-4xl text-white">robot_2</span>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Selamat Datang di YAY</h1>
+          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Selamat Datang di Wazle</h1>
           <p className="text-white/60 text-sm px-4">Langkah terakhir, masukkan link grup WhatsApp target kamu agar bot dapat beroperasi.</p>
         </div>
 

@@ -77,7 +77,7 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
                 {isLocked && (
                   <p className="flex items-center gap-2 text-xs text-orange-400 font-bold mt-2 bg-orange-400/10 p-3 rounded-xl">
                     <span className="material-symbols-outlined text-base">lock</span>
-                    Contact YAY staff to change this link.
+                    Contact Wazle staff to change this link.
                   </p>
                 )}
               </div>
