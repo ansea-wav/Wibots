@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import type { AutoResponder, ClientRegistry } from '@/lib/api';
+import { useLanguage } from '@/lib/LanguageContext';
 
 interface ResponderStudioProps {
   client: ClientRegistry;
@@ -11,6 +12,7 @@ interface ResponderStudioProps {
 }
 
 export default function MobileResponderStudio({ client, responders, onAdd, onDelete }: ResponderStudioProps) {
+  const { t } = useLanguage();
   const [newKeyword, setNewKeyword] = useState('');
   const [newMatchType, setNewMatchType] = useState<'Exact' | 'Contains'>('Exact');
   const [newResponse, setNewResponse] = useState('');
@@ -47,10 +49,10 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
           <div>
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               <span className="material-symbols-outlined text-purple-400">forum</span>
-              Auto Responders
+              {t('auto_responders')}
             </h2>
             <div className="text-xs text-white/50 mt-1">
-              {responders.length} / {maxResponders} digunakan
+              {responders.length} / {maxResponders} {t('used')}
             </div>
           </div>
           <button 
@@ -65,24 +67,24 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
         {/* Add Form */}
         {showAdd && (
           <div className="bg-[#1a1a1c] p-5 rounded-3xl border border-white/5 shadow-lg mb-6 animate-in slide-in-from-top-4">
-            <h3 className="font-bold text-white mb-4">Buat Respon Baru</h3>
+            <h3 className="font-bold text-white mb-4">{t('create_new_response')}</h3>
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">Kata Kunci (Keyword)</label>
+                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">{t('keyword_label')}</label>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40">key</span>
                   <input 
                     type="text" 
                     value={newKeyword} 
                     onChange={e => setNewKeyword(e.target.value)} 
-                    placeholder="Contoh: ping" 
+                    placeholder={t('example_ping')} 
                     className="w-full pl-12 pr-4 py-3 bg-black/40 border border-white/10 rounded-2xl text-white outline-none focus:border-purple-500 transition-colors" 
                   />
                 </div>
               </div>
               
               <div>
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">Tipe Kecocokan (Match Type)</label>
+                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">{t('match_type_label')}</label>
                 <div className="relative flex bg-black/40 border border-white/10 p-1 rounded-full w-full">
                   <div 
                     className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-[0_4px_12px_rgba(255,255,255,0.2)] transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${newMatchType === 'Contains' ? 'translate-x-full' : 'translate-x-0'}`}
@@ -93,24 +95,24 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
                     onClick={() => setNewMatchType('Exact')}
                     className={`relative z-10 flex-1 py-3 text-sm font-bold transition-colors duration-300 ${newMatchType === 'Exact' ? 'text-black' : 'text-white/50 hover:text-white'}`}
                   >
-                    Exact
+                    {t('exact')}
                   </button>
                   <button
                     type="button"
                     onClick={() => setNewMatchType('Contains')}
                     className={`relative z-10 flex-1 py-3 text-sm font-bold transition-colors duration-300 ${newMatchType === 'Contains' ? 'text-black' : 'text-white/50 hover:text-white'}`}
                   >
-                    Contains
+                    {t('contains')}
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">Balasan Bot</label>
+                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">{t('bot_reply_label')}</label>
                 <textarea 
                   value={newResponse} 
                   onChange={e => setNewResponse(e.target.value)} 
-                  placeholder="Contoh: pong!" 
+                  placeholder={t('example_pong')} 
                   className="w-full h-24 p-4 bg-black/40 border border-white/10 rounded-2xl text-white outline-none focus:border-purple-500 transition-colors resize-none" 
                 />
               </div>
@@ -120,7 +122,7 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
                 className="w-full py-4 rounded-full bg-purple-500 text-white font-bold text-lg flex items-center justify-center gap-2 mt-2 shadow-lg shadow-purple-500/20 disabled:opacity-50 disabled:shadow-none"
               >
                 <span className="material-symbols-outlined">{saving ? 'hourglass_empty' : 'save'}</span>
-                {saving ? 'Menyimpan...' : 'Simpan Auto Respon'}
+                {saving ? t('saving') : t('save_auto_response')}
               </button>
             </div>
           </div>
@@ -131,7 +133,7 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
           {responders.length === 0 ? (
             <div className="text-center p-12 text-white/40">
               <span className="material-symbols-outlined text-6xl opacity-50 mb-4 block">speaker_notes_off</span>
-              Belum ada auto responder.
+              {t('no_auto_responders')}
             </div>
           ) : (
             responders.map(r => (
@@ -153,7 +155,7 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
                     onClick={() => onDelete(r.Response_ID)} 
                     className="px-4 py-2 rounded-xl bg-red-500/10 text-red-500 text-xs font-bold flex items-center gap-2 hover:bg-red-500/20 transition-colors"
                   >
-                    <span className="material-symbols-outlined text-sm">delete</span> Hapus
+                    <span className="material-symbols-outlined text-sm">delete</span> {t('delete')}
                   </button>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export type ProtocolAppId = 'controlcenter' | 'fileexplorer' | 'taskmanager' | 'groupmanager' | 'user-manager';
 
@@ -9,11 +10,12 @@ interface MobileProtocolsProps {
 }
 
 export default function MobileProtocols({ onOpenApp }: MobileProtocolsProps) {
+  const { t } = useLanguage();
   const apps = [
-    { id: 'controlcenter', name: 'Control Center', icon: 'settings_applications', color: 'from-blue-500 to-cyan-500', desc: 'Bot configuration & logic' },
-    { id: 'fileexplorer', name: 'File Explorer', icon: 'folder', color: 'from-orange-500 to-yellow-500', desc: 'Manage bot storage' },
-    { id: 'taskmanager', name: 'Task Manager', icon: 'analytics', color: 'from-green-500 to-emerald-500', desc: 'Monitor system resources' },
-    { id: 'groupmanager', name: 'Group Manager', icon: 'groups', color: 'from-purple-500 to-pink-500', desc: 'Manage connected groups' },
+    { id: 'controlcenter', name: t('control_center'), icon: 'settings_applications', color: 'from-blue-500 to-cyan-500', desc: t('desc_control_center') },
+    { id: 'fileexplorer', name: t('file_explorer'), icon: 'folder', color: 'from-orange-500 to-yellow-500', desc: t('desc_file_explorer') },
+    { id: 'taskmanager', name: t('task_manager'), icon: 'analytics', color: 'from-green-500 to-emerald-500', desc: t('desc_task_manager') },
+    { id: 'groupmanager', name: t('group_manager'), icon: 'groups', color: 'from-purple-500 to-pink-500', desc: t('desc_group_manager') },
 
   ];
 
@@ -22,9 +24,9 @@ export default function MobileProtocols({ onOpenApp }: MobileProtocolsProps) {
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-white flex items-center gap-2">
           <span className="material-symbols-outlined text-3xl text-blue-400">apps</span>
-          Protocols
+          {t('protocols')}
         </h2>
-        <p className="text-white/40 text-sm mt-1">Access all your installed modules</p>
+        <p className="text-white/40 text-sm mt-1">{t('access_modules')}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

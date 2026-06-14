@@ -3,8 +3,10 @@
 import { motion } from 'framer-motion';
 import type { UserMasterData } from '@/lib/api';
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export default function MobileDashboard({ userData }: { userData: UserMasterData }) {
+  const { t } = useLanguage();
   const { registry } = userData;
   const maxDays = 30; // Standard month for the circle gauge
   const daysLeft = registry.Days_Left || 0;
@@ -31,7 +33,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
         className="bg-gradient-to-r from-orange-900/40 to-red-900/40 border border-orange-500/20 px-6 py-2.5 rounded-full flex items-center gap-3 shadow-[0_0_20px_rgba(255,100,0,0.15)] mb-12"
       >
         <span className="material-symbols-outlined text-green-500 text-lg">bolt</span>
-        <span className="text-white text-sm font-medium">Status: {registry.Account_Status}</span>
+        <span className="text-white text-sm font-medium">{t('status')}: {t(registry.Account_Status) || registry.Account_Status}</span>
       </motion.div>
 
       {/* Main Circular Gauge */}
@@ -77,7 +79,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
               {daysLeft}
             </motion.span>
           </div>
-          <span className="text-white/70 text-lg mt-1 font-medium tracking-widest">DAYS</span>
+          <span className="text-white/70 text-lg mt-1 font-medium tracking-widest">{t('days').toUpperCase()}</span>
         </div>
 
         {/* Bottom Liquid Effect (Stylized as a glowing semi-circle at the bottom) */}
@@ -93,7 +95,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
         transition={{ delay: 0.4 }}
         className="text-center shrink-0 mb-10 mt-2 z-10 relative"
       >
-        <span className="text-white text-xl font-bold tracking-wide">HI ... {registry.WhatsApp_Owner || 'User'}</span>
+        <span className="text-white text-xl font-bold tracking-wide">{t('hi')} ... {registry.WhatsApp_Owner || 'User'}</span>
       </motion.div>
 
       {/* Date & Sub Info */}
@@ -111,8 +113,8 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
         <div className="w-px h-10 bg-white/10"></div>
         
         <div className="flex flex-col items-start pl-2">
-          <span className="text-white text-xl font-medium">{registry.Package_Tier}</span>
-          <span className="text-white/50 text-xs">Plan Active</span>
+          <span className="text-white text-xl font-medium">{t(registry.Package_Tier) || registry.Package_Tier}</span>
+          <span className="text-white/50 text-xs">{t('plan_active')}</span>
         </div>
       </motion.div>
 
@@ -123,7 +125,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
         transition={{ delay: 0.7 }}
         className="w-full max-w-[320px] bg-[#1a1a1c] border border-white/5 rounded-3xl p-5 shadow-2xl"
       >
-        <h3 className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-4">Profile Information</h3>
+        <h3 className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-4">{t('profile_information')}</h3>
         
         <div className="space-y-4">
           <div className="flex items-center gap-4">
@@ -132,7 +134,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
             </div>
             <div>
               <div className="text-white text-sm font-medium">{registry.User_ID}</div>
-              <div className="text-white/40 text-[10px] mt-0.5">User ID</div>
+              <div className="text-white/40 text-[10px] mt-0.5">{t('user_id')}</div>
             </div>
           </div>
           
@@ -142,7 +144,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
             </div>
             <div>
               <div className="text-white text-sm font-medium">+{registry.WhatsApp_Owner}</div>
-              <div className="text-white/40 text-[10px] mt-0.5">Connected WhatsApp</div>
+              <div className="text-white/40 text-[10px] mt-0.5">{t('connected_whatsapp')}</div>
             </div>
           </div>
 
@@ -152,7 +154,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
             </div>
             <div>
               <div className="text-white text-sm font-medium">{registry.Expiry_Date}</div>
-              <div className="text-white/40 text-[10px] mt-0.5">Valid Until</div>
+              <div className="text-white/40 text-[10px] mt-0.5">{t('valid_until')}</div>
             </div>
           </div>
         </div>
