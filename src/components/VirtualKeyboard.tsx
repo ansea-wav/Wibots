@@ -9,28 +9,28 @@ const ALPHABET_LOWER = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
   ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
   ['{shift}', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '{backspace}'],
-  ['{space}', ',', '.', '{enter}']
+  ['{mode}', ',', '{space}', '.', '{enter}']
 ];
 
 const ALPHABET_UPPER = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
   ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
   ['{shift}', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '{backspace}'],
-  ['{space}', ',', '.', '{enter}']
+  ['{mode}', ',', '{space}', '.', '{enter}']
 ];
 
 const NUMBERS_NORMAL = [
   ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
   ['@', '#', '$', '%', '&', '-', '+', '(', ')'],
   ['{shift}', '*', '"', "'", ':', ';', '!', '?', '{backspace}'],
-  ['{space}', ',', '.', '{enter}']
+  ['{mode}', ',', '{space}', '.', '{enter}']
 ];
 
 const NUMBERS_UPPERSCAPE = [
   ['¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹', '⁰'],
   ['∞', '≈', '≠', '∑', '∆', 'π', 'Ω', 'µ', '§'],
   ['{shift}', '[', ']', '{', '}', '<', '>', '\\', '{backspace}'],
-  ['{space}', ',', '.', '{enter}']
+  ['{mode}', ',', '{space}', '.', '{enter}']
 ];
 
 export default function VirtualKeyboard() {
@@ -199,6 +199,10 @@ export default function VirtualKeyboard() {
       case '{space}':
         insertText(' ');
         break;
+      case '{mode}':
+        setMode(prev => prev === 'abc' ? '123' : 'abc');
+        setIsShift(false);
+        break;
       default:
         insertText(key);
         // Auto unshift if not caps lock
@@ -242,9 +246,13 @@ export default function VirtualKeyboard() {
       display = <i className="fi fi-rr-arrow-turn-down-left text-[16px] flex items-center justify-center"></i>;
       flexBasis = 'flex-[1.5] max-w-[15%]';
       isSpecial = true;
+    } else if (key === '{mode}') {
+      display = <span className="text-[12px] font-bold tracking-widest">{mode === 'abc' ? '?123' : 'ABC'}</span>;
+      flexBasis = 'flex-[1.5] max-w-[15%]';
+      isSpecial = true;
     } else if (key === '{space}') {
       display = 'Space';
-      flexBasis = 'flex-[4] max-w-[50%]';
+      flexBasis = 'flex-[4] max-w-[40%]';
     }
 
     // Set custom event handlers based on the key
@@ -423,15 +431,6 @@ export default function VirtualKeyboard() {
         </div>
       </div>
 
-      {/* FOOTER: Static Combined Toggle Button */}
-      <div className="mt-4 flex justify-center px-4 max-w-[200px] mx-auto w-full" onTouchStart={(e) => e.preventDefault()}>
-        <button
-          onTouchStart={(e) => { e.preventDefault(); setMode(mode === 'abc' ? '123' : 'abc'); setIsShift(false); }}
-          onMouseDown={(e) => { e.preventDefault(); setMode(mode === 'abc' ? '123' : 'abc'); setIsShift(false); }}
-          className="w-full h-10 rounded-full flex items-center justify-center text-[12px] font-bold tracking-widest uppercase transition-all duration-300 bg-white/10 text-white shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),0_0_15px_rgba(255,255,255,0.1)] border border-white/20 active:bg-white/25 hover:bg-white/15"
-        >
-          {mode === 'abc' ? '?123' : 'ABC'}
-        </button>
       </div>
 
     </div>
