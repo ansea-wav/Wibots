@@ -13,6 +13,8 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const dictionaries: Record<LanguageCode, Record<string, string>> = {
   en: {
+    'settings': 'Settings',
+    'language': 'Language',
     'appearance': 'Appearance',
     'theme': 'Theme',
     'task_manager': 'Task Manager',
@@ -80,6 +82,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'Premium': 'Premium'
   },
   id: {
+    'settings': 'Pengaturan',
+    'language': 'Bahasa',
     'appearance': 'Tampilan',
     'theme': 'Tema',
     'task_manager': 'Manajer Tugas',
@@ -147,6 +151,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'Premium': 'Premium'
   },
   jv: {
+    'settings': 'Setelan',
+    'language': 'Basa',
     'appearance': 'Tampilan',
     'theme': 'Tema',
     'task_manager': 'Manajer Tugas',
@@ -214,6 +220,8 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'Premium': 'Premium'
   },
   su: {
+    'settings': 'Setélan',
+    'language': 'Basa',
     'appearance': 'Pintonan',
     'theme': 'Téma',
     'task_manager': 'Pangatur Tugas',

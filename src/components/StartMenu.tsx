@@ -200,7 +200,7 @@ export default function StartMenu({
         >
           <span className="text-base flex items-center justify-center text-[var(--neon-blue)] w-5 h-5"><i className="fi fi-rr-globe text-sm"></i></span>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-medium text-white">Language</div>
+            <div className="text-xs font-medium text-white">{t('language')}</div>
             <div className="text-[10px] text-[var(--text-tertiary)]">
               {LANGUAGES.find(l => l.code === language)?.name}
             </div>
