@@ -112,7 +112,16 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'saving': 'Saving...',
     'save_auto_response': 'Save Auto Response',
     'no_auto_responders': 'No auto responders yet.',
-    'delete': 'Delete'
+    'delete': 'Delete',
+    'group_links': 'Group Links',
+    'your_tier_is': 'Your tier is',
+    'max': 'Max',
+    'groups_lowercase': 'groups',
+    'whatsapp_group_prefix': 'WhatsApp Group',
+    'clear_link': 'Clear Link',
+    'contact_staff_lock': 'Contact Wazle staff to change this link.',
+    'locked': 'Locked',
+    'save_links': 'Save Links'
   },
   id: {
     'dashboard': 'Dasbor',
@@ -214,7 +223,16 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'saving': 'Menyimpan...',
     'save_auto_response': 'Simpan Auto Respon',
     'no_auto_responders': 'Belum ada auto responder.',
-    'delete': 'Hapus'
+    'delete': 'Hapus',
+    'group_links': 'Tautan Grup',
+    'your_tier_is': 'Paket Anda adalah',
+    'max': 'Maksimal',
+    'groups_lowercase': 'grup',
+    'whatsapp_group_prefix': 'Grup WhatsApp',
+    'clear_link': 'Hapus Tautan',
+    'contact_staff_lock': 'Hubungi staf Wazle untuk mengubah tautan ini.',
+    'locked': 'Terkunci',
+    'save_links': 'Simpan Tautan'
   },
   jv: {
     'dashboard': 'Dasbor',
@@ -316,7 +334,16 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'saving': 'Nyimpen...',
     'save_auto_response': 'Simpen Auto Respon',
     'no_auto_responders': 'Urung ana auto responder.',
-    'delete': 'Mbusak'
+    'delete': 'Mbusak',
+    'group_links': 'Tautan Grup',
+    'your_tier_is': 'Paket panjenengan yaiku',
+    'max': 'Maksimal',
+    'groups_lowercase': 'grup',
+    'whatsapp_group_prefix': 'Grup WhatsApp',
+    'clear_link': 'Mbusak Tautan',
+    'contact_staff_lock': 'Hubungi staf Wazle kanggo ngganti tautan iki.',
+    'locked': 'Kunci',
+    'save_links': 'Simpen Tautan'
   },
   su: {
     'dashboard': 'Dasbor',
@@ -418,7 +445,16 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'saving': 'Nyimpen...',
     'save_auto_response': 'Simpen Auto Réspon',
     'no_auto_responders': 'Teu acan aya auto responder.',
-    'delete': 'Hapus'
+    'delete': 'Hapus',
+    'group_links': 'Tautan Grup',
+    'your_tier_is': 'Pakét anjeun nyaéta',
+    'max': 'Maksimal',
+    'groups_lowercase': 'grup',
+    'whatsapp_group_prefix': 'Grup WhatsApp',
+    'clear_link': 'Hapus Tautan',
+    'contact_staff_lock': 'Hubungi staf Wazle kanggo ngarobih tautan ieu.',
+    'locked': 'Terkonci',
+    'save_links': 'Simpen Tautan'
   },
   es: { }, ru: { }, zh: { }, ms: { }, fil: { }, ko: { }, ar: { }
 };

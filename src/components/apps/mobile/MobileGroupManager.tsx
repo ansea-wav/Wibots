@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import type { ClientRegistry } from '@/lib/api';
+import { useLanguage } from '@/lib/LanguageContext';
 
 interface GroupManagerProps {
   client: ClientRegistry;
@@ -8,6 +9,7 @@ interface GroupManagerProps {
 }
 
 export default function MobileGroupManager({ client, onUpdate }: GroupManagerProps) {
+  const { t } = useLanguage();
   const [groups, setGroups] = useState({
     Group_1: client.Group_1 || '',
     Group_2: client.Group_2 || '',
@@ -33,13 +35,13 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
 
   return (
     <div className="flex flex-col h-full bg-[#111113]">
-      <div className="flex-1 overflow-y-auto p-4 pb-24">
+      <div className="flex-1 overflow-y-auto p-4 pb-32">
         
         <div className="mb-8 p-6 rounded-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-center relative overflow-hidden">
           <span className="material-symbols-outlined text-6xl text-purple-400 mb-2">groups</span>
-          <h2 className="text-xl font-bold text-white">Group Links</h2>
+          <h2 className="text-xl font-bold text-white">{t('group_links')}</h2>
           <p className="text-sm text-white/70 mt-2">
-            Your tier is <span className="font-bold text-white">{tier}</span>. Max {maxGroups} groups.
+            {t('your_tier_is')} <span className="font-bold text-white">{t(tier) || tier}</span>. {t('max')} {maxGroups} {t('groups_lowercase')}.
           </p>
         </div>
 
@@ -52,7 +54,7 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
               <div key={groupKey} className="bg-[#1a1a1c] p-5 rounded-3xl border border-white/5 shadow-lg">
                 <label className="flex items-center gap-2 text-sm font-bold text-white mb-3 uppercase tracking-wider">
                   <span className="material-symbols-outlined text-purple-400">forum</span>
-                  WhatsApp Group {i + 1}
+                  {t('whatsapp_group_prefix')} {i + 1}
                 </label>
                 
                 <input
@@ -70,32 +72,32 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
                     className="w-full py-3 bg-white/5 text-red-400 hover:bg-red-500/20 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
                   >
                     <span className="material-symbols-outlined text-lg">backspace</span>
-                    Clear Link
+                    {t('clear_link')}
                   </button>
                 )}
                 
                 {isLocked && (
                   <p className="flex items-center gap-2 text-xs text-orange-400 font-bold mt-2 bg-orange-400/10 p-3 rounded-xl">
                     <span className="material-symbols-outlined text-base">lock</span>
-                    Contact Wazle staff to change this link.
+                    {t('contact_staff_lock')}
                   </p>
                 )}
               </div>
             );
           })}
         </div>
-      </div>
 
-      {/* Save Button Fixed Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#111113] via-[#111113] to-transparent pt-12 pointer-events-none">
-        <button
-          onClick={handleSave}
-          disabled={isBasicLocked || saving}
-          className="w-full flex items-center justify-center gap-3 py-4 rounded-full bg-purple-500 text-white font-bold text-lg shadow-lg shadow-purple-500/20 active:scale-[0.98] transition-transform pointer-events-auto disabled:opacity-50 disabled:grayscale"
-        >
-          <span className="material-symbols-outlined">{saving ? 'hourglass_empty' : 'save'}</span>
-          {isBasicLocked ? 'Locked' : saving ? 'Saving...' : 'Save Links'}
-        </button>
+        {/* Save Button */}
+        <div className="mt-8 mb-4">
+          <button
+            onClick={handleSave}
+            disabled={isBasicLocked || saving}
+            className="w-full flex items-center justify-center gap-3 py-4 rounded-full bg-purple-500 text-white font-bold text-lg shadow-lg shadow-purple-500/20 active:scale-[0.98] transition-transform pointer-events-auto disabled:opacity-50 disabled:grayscale"
+          >
+            <span className="material-symbols-outlined">{saving ? 'hourglass_empty' : 'save'}</span>
+            {isBasicLocked ? t('locked') : saving ? t('saving') : t('save_links')}
+          </button>
+        </div>
       </div>
     </div>
   );
