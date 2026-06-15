@@ -124,7 +124,19 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
         <h3 className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-4">{t('profile_information')}</h3>
         
         <div className="space-y-4">
-          <div className="flex items-center gap-4">
+          <motion.div 
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              if (registry.User_ID) {
+                navigator.clipboard.writeText(registry.User_ID);
+                import('@/components/DynamicIsland').then(({ toast }) => {
+                  toast('Got it, copied!', 'success');
+                });
+                if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(50);
+              }
+            }}
+            className="flex items-center gap-4 cursor-pointer active:opacity-50 transition-opacity"
+          >
             <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 border border-white/10">
               <span className="material-symbols-outlined text-xl">person</span>
             </div>
@@ -132,7 +144,7 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
               <div className="text-white text-sm font-medium">{registry.User_ID}</div>
               <div className="text-white/40 text-[10px] mt-0.5">{t('user_id')}</div>
             </div>
-          </div>
+          </motion.div>
           
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 border border-white/10">
