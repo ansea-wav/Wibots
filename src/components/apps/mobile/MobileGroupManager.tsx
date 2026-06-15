@@ -103,7 +103,7 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             className="absolute bottom-28 left-4 right-4 bg-[#1a1a1c] border border-white/10 rounded-2xl p-4 shadow-2xl flex items-center justify-between z-[10000]"
           >
-            <span className="text-sm font-bold text-white/80">Hold on, you changed something.</span>
+            <span className="text-sm font-bold text-white/80">{t('hold_on_changes')}</span>
             <button
               onClick={handleSave}
               disabled={saving}

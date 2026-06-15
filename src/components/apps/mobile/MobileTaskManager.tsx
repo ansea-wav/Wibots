@@ -1,5 +1,5 @@
 'use client';
-
+import { useLanguage } from '@/lib/LanguageContext';
 interface TaskInfo {
   id: string;
   title: string;
@@ -17,7 +17,8 @@ interface TaskManagerProps {
   uptime: number;
 }
 
-export default function MobileTaskManager({ botStatus, uptime }: TaskManagerProps) {
+  const { t } = useLanguage();
+
   const formatUptime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -26,12 +27,12 @@ export default function MobileTaskManager({ botStatus, uptime }: TaskManagerProp
   };
 
   const systemProcesses = [
-    { name: 'wazle-kernel.sys', cpu: '0.2%', mem: '12 MB', status: 'Running', icon: 'memory' },
-    { name: 'window-manager.exe', cpu: '1.1%', mem: '24 MB', status: 'Running', icon: 'grid_view' },
-    { name: 'server-bridge.svc', cpu: '0.5%', mem: '18 MB', status: 'Running', icon: 'cloud_sync' },
-    { name: 'baileys-engine.exe', cpu: botStatus === 'ONLINE' ? '3.4%' : '0.0%', mem: botStatus === 'ONLINE' ? '86 MB' : '4 MB', status: botStatus === 'ONLINE' ? 'Running' : 'Idle', icon: 'smart_toy' },
-    { name: 'cache-daemon.sys', cpu: '0.1%', mem: '32 MB', status: 'Running', icon: 'storage' },
-    { name: 'cron-scheduler.svc', cpu: '0.0%', mem: '8 MB', status: 'Waiting', icon: 'schedule' },
+    { name: 'wazle-kernel.sys', cpu: '0.2%', mem: '12 MB', status: t('running'), icon: 'memory' },
+    { name: 'window-manager.exe', cpu: '1.1%', mem: '24 MB', status: t('running'), icon: 'grid_view' },
+    { name: 'server-bridge.svc', cpu: '0.5%', mem: '18 MB', status: t('running'), icon: 'cloud_sync' },
+    { name: 'baileys-engine.exe', cpu: botStatus === 'ONLINE' ? '3.4%' : '0.0%', mem: botStatus === 'ONLINE' ? '86 MB' : '4 MB', status: botStatus === 'ONLINE' ? t('running') : t('idle'), icon: 'smart_toy' },
+    { name: 'cache-daemon.sys', cpu: '0.1%', mem: '32 MB', status: t('running'), icon: 'storage' },
+    { name: 'cron-scheduler.svc', cpu: '0.0%', mem: '8 MB', status: t('waiting'), icon: 'schedule' },
   ];
 
   return (
@@ -39,17 +40,17 @@ export default function MobileTaskManager({ botStatus, uptime }: TaskManagerProp
       {/* Stats Header */}
       <div className="grid grid-cols-2 gap-4 px-4 mt-2 mb-6">
         <div className="p-4 rounded-3xl border border-white/5 bg-[#1a1a1c] shadow-lg text-center">
-          <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">Bot Engine</div>
+          <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">{t('bot_engine')}</div>
           <div className="flex items-center justify-center gap-2">
             <span className="material-symbols-outlined text-3xl" style={{ color: botStatus === 'ONLINE' ? '#22c55e' : botStatus === 'CONNECTING' ? '#f59e0b' : '#ef4444' }}>
               robot_2
             </span>
-            <span className="text-xl font-bold text-white">{botStatus}</span>
+            <span className="text-xl font-bold text-white">{botStatus === 'CONNECTING' ? t('connecting') : botStatus === 'OFFLINE' ? t('offline') : botStatus}</span>
           </div>
         </div>
 
         <div className="p-4 rounded-3xl border border-white/5 bg-[#1a1a1c] shadow-lg text-center">
-          <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">Uptime</div>
+          <div className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">{t('uptime')}</div>
           <div className="flex items-center justify-center gap-2">
             <span className="material-symbols-outlined text-3xl text-blue-400">timer</span>
             <span className="text-xl font-bold font-mono text-white">{formatUptime(uptime)}</span>
@@ -59,7 +60,7 @@ export default function MobileTaskManager({ botStatus, uptime }: TaskManagerProp
 
       {/* Process List */}
       <div className="flex-1 px-4 overflow-y-auto pb-32">
-        <h3 className="text-sm font-bold text-white/40 uppercase tracking-widest mb-4">System Processes</h3>
+        <h3 className="text-sm font-bold text-white/40 uppercase tracking-widest mb-4">{t('system_processes')}</h3>
         
         <div className="space-y-3">
           {systemProcesses.map((proc, i) => (
@@ -78,8 +79,8 @@ export default function MobileTaskManager({ botStatus, uptime }: TaskManagerProp
 
               <div className="shrink-0 text-right">
                 <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider ${
-                  proc.status === 'Running' ? 'bg-green-500/20 text-green-500' :
-                  proc.status === 'Idle' ? 'bg-white/10 text-white/50' :
+                  proc.status === t('running') ? 'bg-green-500/20 text-green-500' :
+                  proc.status === t('idle') ? 'bg-white/10 text-white/50' :
                   'bg-yellow-500/20 text-yellow-500'
                 }`}>
                   {proc.status}

@@ -11,7 +11,10 @@ interface MobileMacrosBuilderProps {
   setMacros: React.Dispatch<React.SetStateAction<MacroRegistry[]>>;
 }
 
+import { useLanguage } from '@/lib/LanguageContext';
+
 export default function MobileMacrosBuilder({ userId, client, macros, setMacros }: MobileMacrosBuilderProps) {
+  const { t } = useLanguage();
   const [isEnabled, setIsEnabled] = useState(false);
   
   // Form States
@@ -59,9 +62,9 @@ export default function MobileMacrosBuilder({ userId, client, macros, setMacros 
   };
 
   const actionOptions = [
-    { id: 'Save_To_Cloud', label: 'Save Media to Cloud', icon: 'cloud_upload' },
-    { id: 'Auto_Forward', label: 'Auto Forward', icon: 'forward_to_inbox' },
-    { id: 'Webhook_Trigger', label: 'Trigger Webhook', icon: 'webhook' }
+    { id: 'Save_To_Cloud', label: t('save_media_cloud'), icon: 'cloud_upload' },
+    { id: 'Auto_Forward', label: t('auto_forward'), icon: 'forward_to_inbox' },
+    { id: 'Webhook_Trigger', label: t('trigger_webhook'), icon: 'webhook' }
   ];
 
   return (
@@ -77,9 +80,9 @@ export default function MobileMacrosBuilder({ userId, client, macros, setMacros 
           <div>
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               <span className="material-symbols-outlined text-indigo-400">auto_fix_high</span>
-              Macros Builder
+              {t('macros_builder')}
             </h2>
-            <p className="text-xs text-white/50 mt-1">Status: {isEnabled ? 'Active' : 'Disabled'}</p>
+            <p className="text-xs text-white/50 mt-1">Status: {isEnabled ? t('status_active') : t('status_disabled')}</p>
           </div>
           <div className={`w-14 h-8 rounded-full p-1 transition-colors duration-300 ${isEnabled ? 'bg-indigo-500' : 'bg-white/10'}`}>
             <motion.div 
@@ -103,14 +106,14 @@ export default function MobileMacrosBuilder({ userId, client, macros, setMacros 
               
               {/* Syntax Input */}
               <div className="bg-[#1a1a1c] p-5 rounded-3xl border border-white/5 shadow-lg">
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-3">Trigger Syntax</label>
+                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-3">{t('trigger_syntax')}</label>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/40">keyboard</span>
                   <input 
                     type="text" 
                     value={newSyntax} 
                     onChange={handleSyntaxChange} 
-                    placeholder="e.g., !save" 
+                    placeholder={t('trigger_placeholder')} 
                     className="w-full pl-12 pr-4 py-4 bg-black/40 border border-white/10 rounded-2xl text-white outline-none focus:border-indigo-500 transition-colors font-mono" 
                   />
                 </div>
@@ -118,7 +121,7 @@ export default function MobileMacrosBuilder({ userId, client, macros, setMacros 
 
               {/* Action Type */}
               <div className="bg-[#1a1a1c] p-5 rounded-3xl border border-white/5 shadow-lg">
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-3">Action Output</label>
+                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-3">{t('action_output')}</label>
                 <div className="grid gap-3">
                   {actionOptions.map(opt => (
                     <motion.button
@@ -147,7 +150,7 @@ export default function MobileMacrosBuilder({ userId, client, macros, setMacros 
 
               {/* Target Groups (Multi-Select) */}
               <div className="bg-[#1a1a1c] p-5 rounded-3xl border border-white/5 shadow-lg">
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-3">Active Groups</label>
+                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-3">{t('active_groups')}</label>
                 <div className="flex flex-wrap gap-2">
                   {targetOptions.map(target => {
                     const isSelected = selectedGroups.includes(target);
@@ -195,7 +198,7 @@ export default function MobileMacrosBuilder({ userId, client, macros, setMacros 
                 <span className="material-symbols-outlined text-indigo-400">cloud_done</span>
               )}
               <span className={`text-sm font-bold ${autosaveState === 'saving' ? 'text-indigo-400' : 'text-white/80'}`}>
-                {autosaveState === 'saving' ? 'Autosave' : 'Applying changes...'}
+                {autosaveState === 'saving' ? t('autosave') : t('applying_changes')}
               </span>
             </div>
             

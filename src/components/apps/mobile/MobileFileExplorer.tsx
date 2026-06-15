@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import type { FileEntry, ClientRegistry } from '@/lib/api';
 
+import { useLanguage } from '@/lib/LanguageContext';
+
 interface FileExplorerProps {
   client: ClientRegistry;
   files: FileEntry[];
@@ -12,6 +14,7 @@ interface FileExplorerProps {
 }
 
 export default function MobileFileExplorer({ client, files, onUpload, onDelete, onCopyUrl, apiBase }: FileExplorerProps) {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
 
   const formatSize = (bytes: number) => {
@@ -53,8 +56,8 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
               <span className="material-symbols-outlined text-2xl">cloud</span>
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Storage</h2>
-              <div className="text-xs text-white/50">{formatSize(usedBytes)} / {quotaMB} MB used</div>
+              <h2 className="text-lg font-bold text-white">{t('storage')}</h2>
+              <div className="text-xs text-white/50">{formatSize(usedBytes)} / {quotaMB} MB {t('used')}</div>
             </div>
           </div>
         </div>
@@ -70,19 +73,19 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
       <div className="px-4 mb-6">
         <label className={`flex items-center justify-center gap-3 w-full p-4 rounded-2xl bg-blue-500 text-white font-bold text-lg shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-transform ${loading ? 'opacity-70 pointer-events-none' : ''}`}>
           <span className="material-symbols-outlined">{loading ? 'hourglass_empty' : 'upload_file'}</span>
-          {loading ? 'Uploading...' : 'Upload File'}
+          {loading ? t('uploading') : t('upload_file')}
           <input type="file" className="hidden" onChange={doUpload} disabled={loading} />
         </label>
       </div>
 
       {/* File List */}
       <div className="flex-1 px-4 overflow-y-auto pb-6">
-        <h3 className="text-sm font-bold text-white/40 uppercase tracking-widest mb-4">Your Files ({files.length})</h3>
+        <h3 className="text-sm font-bold text-white/40 uppercase tracking-widest mb-4">{t('your_files')} ({files.length})</h3>
         
         {files.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <span className="material-symbols-outlined text-6xl text-white/10 mb-4">folder_open</span>
-            <div className="text-white/50 text-sm">No files uploaded yet</div>
+            <div className="text-white/50 text-sm">{t('no_files_uploaded_yet')}</div>
           </div>
         ) : (
           <div className="space-y-3">

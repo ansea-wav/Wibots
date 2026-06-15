@@ -168,6 +168,15 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
         </div>
       </motion.div>
 
+      {/* Version Info */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.9 }}
+        className="mt-8 mb-4 text-center"
+      >
+        <span className="text-white/20 text-[10px] font-mono tracking-widest uppercase">{t('version_info')}</span>
+      </motion.div>
     </div>
   );
 }

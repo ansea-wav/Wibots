@@ -17,8 +17,13 @@ export default function MobileProtocols({ onOpenApp }: MobileProtocolsProps) {
     { id: 'fileexplorer', name: t('file_explorer'), icon: 'folder', color: 'from-orange-500 to-yellow-500', desc: t('desc_file_explorer') },
     { id: 'taskmanager', name: t('task_manager'), icon: 'analytics', color: 'from-green-500 to-emerald-500', desc: t('desc_task_manager') },
     { id: 'groupmanager', name: t('group_manager'), icon: 'groups', color: 'from-purple-500 to-pink-500', desc: t('desc_group_manager') },
-    { id: 'macros', name: 'Macros Builder', icon: 'auto_fix_high', color: 'from-indigo-500 to-purple-500', desc: 'Create advanced custom commands and cloud storage hooks.' },
-    { id: 'minigames', name: 'Minigames', icon: 'sports_esports', color: 'from-rose-500 to-red-500', desc: 'Interactive games like Werewolf and Truth or Dare for groups.', comingSoon: true },
+    { id: 'macros', name: t('macros_builder'), icon: 'auto_fix_high', color: 'from-indigo-500 to-purple-500', desc: t('desc_macros_builder') },
+    { id: 'minigames', name: t('minigames'), icon: 'sports_esports', color: 'from-rose-500 to-red-500', desc: t('desc_minigames'), comingSoon: true },
+    { id: 'ai_persona', name: t('ai_persona'), icon: 'face', color: 'from-emerald-400 to-teal-500', desc: t('desc_ai_persona'), comingSoon: true },
+    { id: 'broadcast', name: t('broadcast_manager'), icon: 'campaign', color: 'from-amber-400 to-orange-500', desc: t('desc_broadcast_manager'), comingSoon: true },
+    { id: 'analytics', name: t('analytics_insights'), icon: 'monitoring', color: 'from-sky-400 to-blue-600', desc: t('desc_analytics_insights'), comingSoon: true },
+    { id: 'tickets', name: t('ticketing_system'), icon: 'confirmation_number', color: 'from-fuchsia-400 to-pink-600', desc: t('desc_ticketing_system'), comingSoon: true },
+    { id: 'webhooks', name: t('app_integrations'), icon: 'hub', color: 'from-violet-400 to-indigo-600', desc: t('desc_app_integrations'), comingSoon: true },
   ];
 
   const handleAppClick = (app: any) => {
