@@ -54,10 +54,10 @@ export default function PricingPage() {
             period=""
             description="Untuk kreator yang baru mengambil langkah pertama dengan sistem otomatisasi."
             features={[
-              "Auto-Responder Dasar",
-              "Batas 100 Pesan/hari",
-              "Integrasi Web Sederhana",
-              "Akses Web & Mobile"
+              "1 Respon",
+              "Tanpa Upload File",
+              "Layanan Terbatas",
+              "1 Grup"
             ]}
             buttonText="Pilih Gratis"
             variant="default"
@@ -66,14 +66,15 @@ export default function PricingPage() {
           {/* BASIC PLAN */}
           <PricingCard 
             title="Basic"
-            price="$4.99"
+            price="Rp 2.000"
             period="/m"
             description="Untuk freelancer dan bisnis kecil yang butuh kebebasan lebih."
             features={[
-              "Batas 1.000 Pesan/hari",
-              "Control Center",
-              "Fitur Anti-Link Group",
-              "Dukungan Email Prioritas"
+              "5 Respon",
+              "500kb per file upload",
+              "Maks. 50MB Storage",
+              "1 Grup",
+              "Dukungan Dasar"
             ]}
             buttonText="Pilih Basic"
             variant="default"
@@ -82,14 +83,15 @@ export default function PricingPage() {
           {/* STANDARD PLAN */}
           <PricingCard 
             title="Standard"
-            price="$9.99"
+            price="Rp 5.000"
             period="/m"
             description="Solusi lengkap untuk operasional tim dan toko online."
             features={[
-              "Pesan Tanpa Batas*",
-              "Koneksi Multi-Device",
-              "Grup Manager Otomatis",
-              "Tim (Hingga 5 Anggota)"
+              "25 Respon",
+              "5MB per file upload",
+              "Maks. 500MB Storage",
+              "2 Grup",
+              "Dukungan 24/7"
             ]}
             buttonText="Pilih Standard"
             variant="popular"
@@ -98,14 +100,15 @@ export default function PricingPage() {
           {/* PREMIUM PLAN */}
           <PricingCard 
             title="Premium"
-            price="$19.99"
+            price="Rp 20.000"
             period="/m"
             description="Didesain untuk agensi, studio, dan bisnis berskala besar."
             features={[
-              "Koneksi AI Terintegrasi",
-              "Custom Webhook API",
-              "Dukungan WhatsApp 24/7",
-              "White-label / Tanpa Watermark"
+              "100 Respon",
+              "15MB per file upload",
+              "Maks. 1GB Storage",
+              "5 Grup",
+              "Dukungan 24/7"
             ]}
             buttonText="Pilih Premium"
             variant="premium"
