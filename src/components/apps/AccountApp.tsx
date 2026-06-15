@@ -37,7 +37,8 @@ export default function AccountApp({ client }: AccountAppProps) {
     God:      { color: '#fbbf24', gradient: 'from-yellow-400 to-yellow-600', features: ['God Mode', 'Unlimited Everything', 'Server Control'] },
   };
 
-  const tier = tierConfig[client.Package_Tier] || tierConfig.Basic;
+  const normalizedTier = client.Package_Tier === 'Standart' ? 'Standard' : client.Package_Tier;
+  const tier = tierConfig[normalizedTier as keyof typeof tierConfig] || tierConfig.Basic;
 
   return (
     <div className="p-6 space-y-6 h-full overflow-y-auto" style={{ background: 'var(--surface-panel)' }}>
