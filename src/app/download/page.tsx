@@ -8,7 +8,7 @@ export default function DownloadPage() {
   const { t, language, setLanguage } = useLanguage();
   const [cooldown, setCooldown] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
-  const apkUrl = "https://github.com/ansea-wav/Wazle/releases/download/v0.2/Wazle-beta-v0.2.apk";
+  const apkUrl = "https://github.com/ansea-wav/Wazle/releases/download/Wazle/Wazle-beta-v0.2.apk";
 
   const handleDownload = () => {
     if (cooldown > 0 || isDownloading) return;
