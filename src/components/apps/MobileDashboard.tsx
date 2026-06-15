@@ -80,10 +80,8 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
           <span className="text-white/70 text-lg mt-1 font-medium tracking-widest">{t('days').toUpperCase()}</span>
         </div>
 
-        {/* Bottom Liquid Effect (Stylized as a glowing semi-circle at the bottom) */}
-        <div className="absolute bottom-0 w-[200px] h-[80px] overflow-hidden rounded-b-[100px] z-0">
-          <div className="w-[200px] h-[200px] bg-gradient-to-t from-red-500/40 to-orange-500/0 rounded-full blur-md"></div>
-        </div>
+        {/* Bottom Soft Red Glow Effect */}
+        <div className="absolute bottom-[-20px] w-[200px] h-[200px] bg-red-500/20 rounded-full blur-3xl z-0 pointer-events-none"></div>
       </div>
 
       {/* Greeting Text */}
