@@ -17,6 +17,7 @@ interface TaskManagerProps {
   uptime: number;
 }
 
+export default function MobileTaskManager({ botStatus, uptime }: TaskManagerProps) {
   const { t } = useLanguage();
 
   const formatUptime = (seconds: number) => {

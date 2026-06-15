@@ -31,7 +31,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'autosave': 'Autosave',
     'applying_changes': 'Applying changes...',
     'storage': 'Storage',
-    'used': 'used',
+
     'uploading': 'Uploading...',
     'upload_file': 'Upload File',
     'your_files': 'Your Files',
@@ -237,7 +237,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'autosave': 'Simpan Otomatis',
     'applying_changes': 'Menerapkan perubahan...',
     'storage': 'Penyimpanan',
-    'used': 'terpakai',
+
     'uploading': 'Mengunggah...',
     'upload_file': 'Unggah File',
     'your_files': 'File Anda',
@@ -443,7 +443,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'autosave': 'Simpen Otomatis',
     'applying_changes': 'Ngetrapake owah-owahan...',
     'storage': 'Panyimpenan',
-    'used': 'kanggo',
+
     'uploading': 'Ngunggah...',
     'upload_file': 'Unggah File',
     'your_files': 'File Panjenengan',
@@ -616,7 +616,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'autosave': 'Simpen Otomatis',
     'applying_changes': 'Nerapkeun parobahan...',
     'storage': 'Panyimpenan',
-    'used': 'kapake',
+
     'uploading': 'Ngunggah...',
     'upload_file': 'Unggah Pail',
     'your_files': 'Pail Anjeun',
@@ -789,7 +789,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'autosave': 'บันทึกอัตโนมัติ',
     'applying_changes': 'กำลังใช้การเปลี่ยนแปลง...',
     'storage': 'พื้นที่จัดเก็บ',
-    'used': 'ใช้ไป',
+
     'uploading': 'กำลังอัปโหลด...',
     'upload_file': 'อัปโหลดไฟล์',
     'your_files': 'ไฟล์ของคุณ',
@@ -900,7 +900,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'autosave': '自动保存',
     'applying_changes': '正在应用更改...',
     'storage': '存储',
-    'used': '已用',
+
     'uploading': '正在上传...',
     'upload_file': '上传文件',
     'your_files': '您的文件',
@@ -1011,7 +1011,7 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'autosave': '자동 저장',
     'applying_changes': '변경 사항 적용 중...',
     'storage': '저장소',
-    'used': '사용됨',
+
     'uploading': '업로드 중...',
     'upload_file': '파일 업로드',
     'your_files': '내 파일',
