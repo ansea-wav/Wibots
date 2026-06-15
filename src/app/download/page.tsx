@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 export default function DownloadPage() {
   const [cooldown, setCooldown] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
-  const apkUrl = "https://github.com/ansea-wav/Antarac/releases/download/Antarac/Antrac-beta-v0.1.apk";
+  const apkUrl = "https://github.com/ansea-wav/Wazle/releases/download/v0.2/Wazle-beta-v0.2.apk";
 
   const handleDownload = () => {
     if (cooldown > 0 || isDownloading) return;
@@ -72,8 +72,9 @@ export default function DownloadPage() {
           )}
         </button>
 
-        <p className="text-white/30 text-xs mt-6">
-          Versi: Beta v0.1 • Ukuran: ~30MB
+        <p className="text-white/40 text-xs mt-6 flex flex-col gap-1.5">
+          <span>Versi: Beta v0.2 • Ukuran: 6MB</span>
+          <span className="text-[10px] text-[var(--neon-blue)]/80">Catatan: Siapkan ruang kosong setidaknya 30MB (free up at least 30MB)</span>
         </p>
       </motion.div>
     </div>
