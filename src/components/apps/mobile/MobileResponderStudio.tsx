@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { AutoResponder, ClientRegistry } from '@/lib/api';
 import { useLanguage } from '@/lib/LanguageContext';
 import { toast } from '@/components/DynamicIsland';
@@ -28,6 +28,72 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
   const maxGroups = (tier === 'Premium' || tier === 'God') ? 5 : (tier === 'Standard' || tier === 'Standart') ? 2 : 1;
 
   const targetOptions = ['All', ...Array.from({length: maxGroups}, (_, i) => `Group_${i + 1}`)];
+
+  // Dragging States for Match Type
+  const [isDraggingMatch, setIsDraggingMatch] = useState(false);
+  const dragMatchTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handlePointerDownMatch = (e: React.PointerEvent) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragMatchTimerRef.current = setTimeout(() => {
+      setIsDraggingMatch(true);
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(50);
+    }, 250);
+  };
+
+  const handlePointerMoveMatch = (e: React.PointerEvent) => {
+    if (!isDraggingMatch) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const tabWidth = rect.width / 2;
+    const index = Math.max(0, Math.min(Math.floor(x / tabWidth), 1));
+    const newVal = index === 0 ? 'Exact' : 'Contains';
+    if (newMatchType !== newVal) {
+      setNewMatchType(newVal);
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
+    }
+  };
+
+  const handlePointerUpMatch = (e: React.PointerEvent) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    if (dragMatchTimerRef.current) clearTimeout(dragMatchTimerRef.current);
+    setIsDraggingMatch(false);
+  };
+
+  // Dragging States for Target Group
+  const [isDraggingTarget, setIsDraggingTarget] = useState(false);
+  const dragTargetTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handlePointerDownTarget = (e: React.PointerEvent) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragTargetTimerRef.current = setTimeout(() => {
+      setIsDraggingTarget(true);
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(50);
+    }, 250);
+  };
+
+  const handlePointerMoveTarget = (e: React.PointerEvent) => {
+    if (!isDraggingTarget) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const tabWidth = rect.width / targetOptions.length;
+    const index = Math.max(0, Math.min(Math.floor(x / tabWidth), targetOptions.length - 1));
+    const newVal = targetOptions[index];
+    if (newTargetGroup !== newVal) {
+      setNewTargetGroup(newVal);
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
+    }
+  };
+
+  const handlePointerUpTarget = (e: React.PointerEvent) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    if (dragTargetTimerRef.current) clearTimeout(dragTargetTimerRef.current);
+    setIsDraggingTarget(false);
+  };
 
   const handleAdd = async () => {
     if (!newKeyword || !newResponse) return;
@@ -102,7 +168,15 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
               
               <div>
                 <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">{t('match_type_label')}</label>
-                <div className="relative flex bg-black/40 border border-white/10 p-1 rounded-full w-full">
+                <div 
+                  className={`relative flex bg-black/40 border border-white/10 p-1 rounded-full w-full select-none ${isDraggingMatch ? 'cursor-grabbing' : 'cursor-grab'}`}
+                  style={{ touchAction: 'none' }}
+                  onPointerDown={handlePointerDownMatch}
+                  onPointerMove={handlePointerMoveMatch}
+                  onPointerUp={handlePointerUpMatch}
+                  onPointerCancel={handlePointerUpMatch}
+                  onPointerLeave={handlePointerUpMatch}
+                >
                   <div 
                     className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-[0_4px_12px_rgba(255,255,255,0.2)] transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${newMatchType === 'Contains' ? 'translate-x-[calc(100%+8px)]' : 'translate-x-0'}`}
                   ></div>
@@ -126,7 +200,15 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
 
               <div>
                 <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">Target Group</label>
-                <div className="relative flex bg-black/40 border border-white/10 p-1 rounded-full w-full">
+                <div 
+                  className={`relative flex bg-black/40 border border-white/10 p-1 rounded-full w-full select-none ${isDraggingTarget ? 'cursor-grabbing' : 'cursor-grab'}`}
+                  style={{ touchAction: 'none' }}
+                  onPointerDown={handlePointerDownTarget}
+                  onPointerMove={handlePointerMoveTarget}
+                  onPointerUp={handlePointerUpTarget}
+                  onPointerCancel={handlePointerUpTarget}
+                  onPointerLeave={handlePointerUpTarget}
+                >
                   {targetOptions.map(target => (
                     <motion.button
                       key={target}
