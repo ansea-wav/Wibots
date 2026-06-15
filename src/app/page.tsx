@@ -9,7 +9,7 @@ import { apiLogin, apiInstallApp, type UserMasterData } from '@/lib/api';
 type AppPhase = 'boot' | 'login' | 'desktop' | 'waiting_api';
 
 export default function Home() {
-  const [phase, setPhase] = useState<AppPhase>('boot');
+  const [phase, setPhase] = useState<AppPhase>('waiting_api');
   const [userData, setUserData] = useState<UserMasterData | null>(null);
   const [userId, setUserId] = useState<string>('');
 
@@ -61,6 +61,16 @@ export default function Home() {
       setPhase(apiSuccess ? 'desktop' : 'login');
     }
   }, [phase, apiDone, apiSuccess]);
+
+  useEffect(() => {
+    if (phase === 'desktop' && userId) {
+      const t = setTimeout(() => {
+        const event = new CustomEvent('yay-toast', { detail: { message: `Welcome back ${userId}`, type: 'info' } });
+        window.dispatchEvent(event);
+      }, 2000);
+      return () => clearTimeout(t);
+    }
+  }, [phase, userId]);
 
   const handleBootComplete = () => {
     if (apiDone) {
