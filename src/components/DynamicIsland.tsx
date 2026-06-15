@@ -44,8 +44,8 @@ export default function DynamicIsland() {
       
       // Auto-hide after 3.5 seconds
       hideTimeout = setTimeout(() => {
-        setPhase(0);
-        setTimeout(() => setToasts([]), 500); // Clear toasts after animation
+        // Just clear the toasts to trigger the smooth exit animation of the entire container
+        setToasts([]);
       }, 3500);
     };
 
@@ -62,13 +62,13 @@ export default function DynamicIsland() {
   return (
     <>
       <AnimatePresence>
-        {phase > 0 && currentToast && (
+        {toasts.length > 0 && currentToast && (
           <motion.div 
             key="island-container"
-            initial={{ y: -50, opacity: 0, scale: 0.9 }}
+            initial={{ y: -50, opacity: 0, scale: 0.8 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -40, opacity: 0, scale: 0.8 }}
-            transition={{ type: "spring", stiffness: 250, damping: 30 }}
+            exit={{ y: -50, opacity: 0, scale: 0.8 }}
+            transition={{ type: "spring", stiffness: 200, damping: 25 }}
             ref={containerRef} 
             className="fixed top-4 left-4 right-4 z-[99998] pointer-events-none flex justify-center"
           >
@@ -81,7 +81,7 @@ export default function DynamicIsland() {
             >
               <motion.div
                 animate={{
-                  width: phase === 0 ? 80 : phase === 1 ? 150 : 280,
+                  width: phase === 1 ? 160 : 280,
                   height: phase === 2 ? 46 : 36,
                   borderRadius: 32
                 }}
@@ -108,6 +108,7 @@ export default function DynamicIsland() {
                       key="phase2"
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ type: "spring", stiffness: 200, damping: 25 }}
                       className="absolute inset-0 flex items-center px-5 gap-3"
                     >
