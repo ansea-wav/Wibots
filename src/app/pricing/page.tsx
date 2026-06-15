@@ -139,9 +139,9 @@ export default function PricingPage() {
         </div>
 
         {/* FOOTER NOTE */}
-        <p className="text-white/30 text-xs font-medium tracking-wide mb-10 flex items-center gap-2">
-          <span className="material-symbols-outlined text-[14px]">info</span>
-          Catatan: Penyimpanan data tidak dihitung (Unlimited Storage).
+        <p className="text-white/30 text-xs font-medium tracking-wide mb-10 flex items-center gap-2 text-center max-w-2xl text-balance">
+          <span className="material-symbols-outlined text-[14px] flex-shrink-0">info</span>
+          Catatan: Kapasitas storage di atas hanya berlaku untuk unggahan media (gambar/dokumen). Data teks pesan WhatsApp tidak memakan ruang penyimpanan.
         </p>
 
       </main>
