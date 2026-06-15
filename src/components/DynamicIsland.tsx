@@ -40,8 +40,10 @@ export default function DynamicIsland() {
 
   // iOS Sequence listener (Triggered by Native App Bridge)
   useEffect(() => {
+    let hideTimeout: NodeJS.Timeout;
+
     // 1. Global Function for Native Android App (WebView.evaluateJavascript)
-    (window as any).triggerNowPlaying = (title: string) => {
+    (window as any).triggerNowPlaying = (title: string, persist: boolean = false) => {
       setMusicTitle(title || 'Unknown Track');
       setPhase(1); // Show "1 Message" briefly
       
@@ -49,17 +51,20 @@ export default function DynamicIsland() {
         setPhase(2); // Drop down to show Now Playing
       }, 600);
 
-      // Auto-hide after 8 seconds (optional, or wait for triggerNowPlaying(false))
-      setTimeout(() => {
-        setPhase(0);
-      }, 8600);
+      // Auto-hide only if persist is false
+      clearTimeout(hideTimeout);
+      if (!persist) {
+        hideTimeout = setTimeout(() => {
+          setPhase(0);
+        }, 8600);
+      }
     };
 
     // 2. CustomEvent Alternative for Native Bridge
     const handleNativeMusic = (e: Event) => {
       const detail = (e as CustomEvent).detail;
       if (detail && detail.playing) {
-        (window as any).triggerNowPlaying(detail.title);
+        (window as any).triggerNowPlaying(detail.title, true); // true = keep it open
       } else {
         setPhase(0); // Hide if stopped
       }

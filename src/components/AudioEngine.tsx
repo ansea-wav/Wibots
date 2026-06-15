@@ -48,8 +48,7 @@ export default function AudioEngine() {
       ref={audioRef} 
       src={DEFAULT_MUSIC_URL} 
       loop 
-      preload="none" 
-      className="hidden"
+      preload="auto"
     />
   );
 }
