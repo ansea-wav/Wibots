@@ -1,12 +1,11 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
-
-export const metadata = {
-  title: 'Pricing - Wazle',
-  description: 'Choose the right plan for your business.',
-};
+import { useLanguage } from '@/lib/LanguageContext';
 
 export default function PricingPage() {
+  const { t, language, setLanguage } = useLanguage();
+
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden relative selection:bg-[var(--accent-primary)] selection:text-white pb-20">
       
@@ -20,15 +19,26 @@ export default function PricingPage() {
       </div>
 
       {/* HEADER NAVIGATION PLACEHOLDER */}
-      <header className="relative z-10 pt-8 pb-4 px-6 max-w-7xl mx-auto flex justify-center">
+      <header className="relative z-10 pt-8 pb-4 px-6 max-w-7xl mx-auto flex justify-between items-center">
+        <div className="w-[100px]"></div> {/* Spacer */}
         <nav className="flex items-center gap-8 bg-white/5 border border-white/10 px-8 py-3 rounded-full backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
-          <Link href="/" className="text-white/60 hover:text-white transition-colors text-sm font-medium">Home</Link>
+          <Link href="/" className="text-white/60 hover:text-white transition-colors text-sm font-medium">{t('nav_home')}</Link>
           <Link href="/pricing" className="text-white font-semibold text-sm relative">
-            Pricing
+            {t('nav_pricing')}
             <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-white rounded-full shadow-[0_0_8px_white]"></span>
           </Link>
-          <Link href="/download" className="text-white/60 hover:text-white transition-colors text-sm font-medium">Download</Link>
+          <Link href="/download" className="text-white/60 hover:text-white transition-colors text-sm font-medium">{t('nav_download')}</Link>
         </nav>
+        {/* Language Switcher */}
+        <div className="w-[100px] flex justify-end">
+          <button 
+            onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition border border-white/20 px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-bold text-white shadow-lg"
+          >
+            <span className="material-symbols-outlined text-[14px]">language</span>
+            {language === 'id' ? 'ID' : 'EN'}
+          </button>
+        </div>
       </header>
 
       {/* MAIN CONTENT */}
@@ -37,10 +47,10 @@ export default function PricingPage() {
         {/* HERO TITLE */}
         <div className="text-center mb-20 relative">
           <h1 className="text-7xl md:text-8xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white via-white/90 to-white/30 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
-            Pricing
+            {t('pricing_title')}
           </h1>
           <p className="text-xl md:text-2xl text-white/50 font-medium max-w-2xl mx-auto">
-            Temukan paket yang paling cocok untuk mengembangkan skala bisnis Anda.
+            {t('pricing_subtitle')}
           </p>
         </div>
 
@@ -52,65 +62,65 @@ export default function PricingPage() {
             title="Free"
             price="Free"
             period=""
-            description="Untuk kreator yang baru mengambil langkah pertama dengan sistem otomatisasi."
+            description={t('plan_free_desc')}
             features={[
-              "1 Respon",
-              "Tanpa Upload File",
-              "Layanan Terbatas",
-              "1 Grup"
+              t('feat_1_resp'),
+              t('feat_no_upload'),
+              t('feat_few_services'),
+              t('feat_1_group')
             ]}
-            buttonText="Pilih Gratis"
+            buttonText={t('btn_choose_free')}
             variant="default"
           />
 
           {/* BASIC PLAN */}
           <PricingCard 
             title="Basic"
-            price="Rp 2.000"
-            period="/m"
-            description="Untuk freelancer dan bisnis kecil yang butuh kebebasan lebih."
+            price={language === 'id' ? 'Rp 2.000' : '$4.99'}
+            period={t('per_month')}
+            description={t('plan_basic_desc')}
             features={[
-              "5 Respon",
-              "500kb per file upload",
-              "Maks. 50MB Storage",
-              "1 Grup",
-              "Dukungan Dasar"
+              t('feat_5_resp'),
+              t('feat_500kb_upload'),
+              t('feat_50mb_storage'),
+              t('feat_1_group'),
+              t('feat_basic_support')
             ]}
-            buttonText="Pilih Basic"
+            buttonText={t('btn_choose_basic')}
             variant="default"
           />
 
           {/* STANDARD PLAN */}
           <PricingCard 
             title="Standard"
-            price="Rp 5.000"
-            period="/m"
-            description="Solusi lengkap untuk operasional tim dan toko online."
+            price={language === 'id' ? 'Rp 5.000' : '$9.99'}
+            period={t('per_month')}
+            description={t('plan_standard_desc')}
             features={[
-              "25 Respon",
-              "5MB per file upload",
-              "Maks. 500MB Storage",
-              "2 Grup",
-              "Dukungan 24/7"
+              t('feat_25_resp'),
+              t('feat_5mb_upload'),
+              t('feat_500mb_storage'),
+              t('feat_2_group'),
+              t('feat_247_support')
             ]}
-            buttonText="Pilih Standard"
+            buttonText={t('btn_choose_standard')}
             variant="popular"
           />
 
           {/* PREMIUM PLAN */}
           <PricingCard 
             title="Premium"
-            price="Rp 20.000"
-            period="/m"
-            description="Didesain untuk agensi, studio, dan bisnis berskala besar."
+            price={language === 'id' ? 'Rp 20.000' : '$19.99'}
+            period={t('per_month')}
+            description={t('plan_premium_desc')}
             features={[
-              "100 Respon",
-              "15MB per file upload",
-              "Maks. 1GB Storage",
-              "5 Grup",
-              "Dukungan 24/7"
+              t('feat_100_resp'),
+              t('feat_15mb_upload'),
+              t('feat_1000mb_storage'),
+              t('feat_5_group'),
+              t('feat_247_support')
             ]}
-            buttonText="Pilih Premium"
+            buttonText={t('btn_choose_premium')}
             variant="premium"
           />
 
@@ -120,9 +130,9 @@ export default function PricingPage() {
         <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center p-12 rounded-[40px] bg-white/[0.02] border border-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-xl relative overflow-hidden mb-16 text-center">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent opacity-50"></div>
           
-          <h2 className="text-3xl font-bold text-white mb-4">Custom Billing</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">{t('custom_billing_title')}</h2>
           <p className="text-white/50 mb-8 max-w-xl">
-            Butuh limit khusus, integrasi ERP perusahaan, atau keamanan jaringan <span className="font-bold text-white">on-premise</span>? Kami dapat menyusun arsitektur sistem sesuai kebutuhan spesifik Anda.
+            {t('custom_billing_desc')}
           </p>
           
           {/* WHATSAPP CONTACT */}
@@ -133,7 +143,7 @@ export default function PricingPage() {
             className="group relative inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-bold text-sm transition-transform hover:scale-105 hover:shadow-[0_10px_30px_rgba(255,255,255,0.2)]"
           >
             <span className="material-symbols-outlined text-xl">chat</span>
-            Hubungi Kami via WhatsApp
+            {t('btn_contact_wa')}
             <div className="absolute inset-0 rounded-full ring-2 ring-white/20 ring-offset-2 ring-offset-black scale-100 group-hover:scale-110 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
           </a>
         </div>
@@ -141,7 +151,7 @@ export default function PricingPage() {
         {/* FOOTER NOTE */}
         <p className="text-white/30 text-xs font-medium tracking-wide mb-10 flex items-center gap-2 text-center max-w-2xl text-balance">
           <span className="material-symbols-outlined text-[14px] flex-shrink-0">info</span>
-          Catatan: Kapasitas storage di atas hanya berlaku untuk unggahan media (gambar/dokumen). Data teks pesan WhatsApp tidak memakan ruang penyimpanan.
+          {t('footer_storage_note')}
         </p>
 
       </main>

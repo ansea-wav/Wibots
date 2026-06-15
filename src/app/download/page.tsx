@@ -2,8 +2,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export default function DownloadPage() {
+  const { t, language, setLanguage } = useLanguage();
   const [cooldown, setCooldown] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
   const apkUrl = "https://github.com/ansea-wav/Wazle/releases/download/v0.2/Wazle-beta-v0.2.apk";
@@ -37,15 +39,26 @@ export default function DownloadPage() {
       </div>
 
       {/* HEADER NAVIGATION */}
-      <header className="absolute top-0 left-0 w-full z-20 pt-8 pb-4 px-6 flex justify-center pointer-events-none">
+      <header className="absolute top-0 left-0 w-full z-20 pt-8 pb-4 px-6 flex justify-between items-center pointer-events-none">
+        <div className="w-[100px]"></div> {/* Spacer */}
         <nav className="flex items-center gap-8 bg-white/5 border border-white/10 px-8 py-3 rounded-full backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)] pointer-events-auto">
-          <Link href="/" className="text-white/60 hover:text-white transition-colors text-sm font-medium">Home</Link>
-          <Link href="/pricing" className="text-white/60 hover:text-white transition-colors text-sm font-medium">Pricing</Link>
+          <Link href="/" className="text-white/60 hover:text-white transition-colors text-sm font-medium">{t('nav_home')}</Link>
+          <Link href="/pricing" className="text-white/60 hover:text-white transition-colors text-sm font-medium">{t('nav_pricing')}</Link>
           <Link href="/download" className="text-white font-semibold text-sm relative">
-            Download
+            {t('nav_download')}
             <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-white rounded-full shadow-[0_0_8px_white]"></span>
           </Link>
         </nav>
+        {/* Language Switcher */}
+        <div className="w-[100px] flex justify-end pointer-events-auto">
+          <button 
+            onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition border border-white/20 px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-bold text-white shadow-lg"
+          >
+            <span className="material-symbols-outlined text-[14px]">language</span>
+            {language === 'id' ? 'ID' : 'EN'}
+          </button>
+        </div>
       </header>
 
       <motion.div 
@@ -58,9 +71,9 @@ export default function DownloadPage() {
           <span className="material-symbols-outlined text-4xl text-white">android</span>
         </div>
 
-        <h1 className="text-3xl font-black text-white tracking-tight mb-2">Wazle App</h1>
+        <h1 className="text-3xl font-black text-white tracking-tight mb-2">{t('download_title')}</h1>
         <p className="text-white/60 text-sm mb-8 leading-relaxed">
-          Dapatkan pengalaman terbaik dan fitur terlengkap dengan aplikasi native Android kami.
+          {t('download_subtitle')}
         </p>
 
         <button
@@ -75,19 +88,19 @@ export default function DownloadPage() {
           {cooldown > 0 ? (
             <>
               <span className="material-symbols-outlined animate-spin text-xl">hourglass_empty</span>
-              Menyiapkan... {cooldown}s
+              {t('download_preparing')} {cooldown}s
             </>
           ) : (
             <>
               <span className="material-symbols-outlined text-xl">download</span>
-              Download APK
+              {t('download_btn')}
             </>
           )}
         </button>
 
         <p className="text-white/40 text-xs mt-6 flex flex-col gap-1.5">
-          <span>Versi: Beta v0.2 • Ukuran: 6MB</span>
-          <span className="text-[10px] text-[var(--neon-blue)]/80">Catatan: Siapkan ruang kosong setidaknya 30MB (free up at least 30MB)</span>
+          <span>{t('download_version')}</span>
+          <span className="text-[10px] text-[var(--neon-blue)]/80">{t('download_note')}</span>
         </p>
       </motion.div>
     </div>
