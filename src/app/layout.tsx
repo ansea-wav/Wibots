@@ -45,6 +45,7 @@ export default function RootLayout({
               window.location.reload();
             }
           `
+        }} />
         <DynamicIsland />
         <LanguageProvider>
           <ThemeProvider>{children}</ThemeProvider>
