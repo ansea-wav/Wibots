@@ -17,7 +17,7 @@ export default function MobileProtocols({ onOpenApp }: MobileProtocolsProps) {
     { id: 'fileexplorer', name: t('file_explorer'), icon: 'folder', color: 'from-orange-500 to-yellow-500', desc: t('desc_file_explorer') },
     { id: 'taskmanager', name: t('task_manager'), icon: 'analytics', color: 'from-green-500 to-emerald-500', desc: t('desc_task_manager') },
     { id: 'groupmanager', name: t('group_manager'), icon: 'groups', color: 'from-purple-500 to-pink-500', desc: t('desc_group_manager') },
-    { id: 'macros', name: 'Macros Builder', icon: 'auto_fix_high', color: 'from-indigo-500 to-purple-500', desc: 'Create advanced custom commands and cloud storage hooks.', comingSoon: true },
+    { id: 'macros', name: 'Macros Builder', icon: 'auto_fix_high', color: 'from-indigo-500 to-purple-500', desc: 'Create advanced custom commands and cloud storage hooks.' },
     { id: 'minigames', name: 'Minigames', icon: 'sports_esports', color: 'from-rose-500 to-red-500', desc: 'Interactive games like Werewolf and Truth or Dare for groups.', comingSoon: true },
   ];
 

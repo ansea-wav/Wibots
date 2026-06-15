@@ -71,10 +71,20 @@ export interface AutoResponder {
   Target_Groups?: string[] | 'All';
 }
 
+export interface MacroRegistry {
+  Macro_ID: string;
+  User_ID: string;
+  Trigger_Syntax: string;
+  Action_Type: string;
+  Selected_Groups: string[];
+  Status: 'Active' | 'Disabled';
+}
+
 export interface UserMasterData {
   registry: ClientRegistry;
   config: BotConfig;
   responders: AutoResponder[];
+  macros?: MacroRegistry[];
 }
 
 export interface FileEntry {
@@ -241,6 +251,38 @@ export async function apiUploadFile(userId: string, file: File) {
 
 export async function apiDeleteFile(userId: string, filename: string) {
   const res = await customFetch(`${API_BASE}/api/files/${userId}/${filename}`, {
+    method: 'DELETE',
+  });
+  return res.json();
+}
+
+// --- Macros APIs ---
+
+export async function apiGetMacros(userId: string) {
+  const res = await customFetch(`${API_BASE}/api/macros/${userId}`);
+  return res.json();
+}
+
+export async function apiAddMacro(userId: string, data: Partial<MacroRegistry>) {
+  const res = await customFetch(`${API_BASE}/api/macros/${userId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function apiUpdateMacro(userId: string, macroId: string, data: Partial<MacroRegistry>) {
+  const res = await customFetch(`${API_BASE}/api/macros/${userId}/${macroId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function apiDeleteMacro(userId: string, macroId: string) {
+  const res = await customFetch(`${API_BASE}/api/macros/${userId}/${macroId}`, {
     method: 'DELETE',
   });
   return res.json();

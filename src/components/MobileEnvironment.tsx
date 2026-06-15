@@ -22,6 +22,7 @@ import MobileGroupManager from './apps/mobile/MobileGroupManager';
 
 import MobileResponderStudio from './apps/mobile/MobileResponderStudio';
 import MobileSubscriptionApp from './apps/mobile/MobileSubscriptionApp';
+import MobileMacrosBuilder from './apps/mobile/MobileMacrosBuilder';
 import MobileSetupScreen from './MobileSetupScreen';
 
 interface MobileProps {
@@ -35,6 +36,7 @@ export default function MobileEnvironment({ userData, userId }: MobileProps) {
 
   const [clientRegistry, setClientRegistry] = useState<ClientRegistry>(userData.registry || {} as ClientRegistry);
   const [responders, setResponders] = useState<AutoResponder[]>(userData.responders || []);
+  const [macros, setMacros] = useState<any[]>(userData.macros || []);
   const [config, setConfig] = useState<BotConfig>(userData.config || {} as BotConfig);
   const [botStatus, setBotStatus] = useState<'ONLINE' | 'OFFLINE' | 'CONNECTING' | 'SCAN_QR'>('OFFLINE');
   const [qrCode, setQrCode] = useState<string | null>(null);
@@ -203,6 +205,11 @@ export default function MobileEnvironment({ userData, userId }: MobileProps) {
         return renderAppWrapper(
           <MobileGroupManager client={clientRegistry} onUpdate={handleUpdateAccount} />, 
           'Group Manager', backFn
+        );
+      case 'macros':
+        return renderAppWrapper(
+          <MobileMacrosBuilder userId={userId} client={clientRegistry} macros={macros} setMacros={setMacros} />,
+          'Macros Builder', backFn
         );
       default: return null;
     }
