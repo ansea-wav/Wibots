@@ -299,7 +299,7 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
                     })()}
                   </td>
                   <td className="px-4 py-3 max-w-[200px]">
-                    <div className="text-[var(--text-secondary)] truncate">{r.Payload_Data}</div>
+                    <div className="text-[var(--text-secondary)] truncate select-text">{r.Payload_Data}</div>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
@@ -310,7 +310,7 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
                         Edit
                       </button>
                       <button
-                        onClick={() => onDelete(r.Response_ID)}
+                        onClick={() => { onDelete(r.Response_ID); showToast('Responder berhasil dihapus!', 'success'); }}
                         className="px-2 py-1 rounded text-[10px] text-[var(--neon-red)] hover:bg-[var(--neon-red)]/10 transition-colors cursor-pointer"
                       >
                         Delete

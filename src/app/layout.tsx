@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { LanguageProvider } from "@/lib/LanguageContext";
-import { KeyboardProvider } from "@/lib/KeyboardContext";
 import DynamicIsland from "@/components/DynamicIsland";
-import VirtualKeyboard from "@/components/VirtualKeyboard";
 import "./globals.css";
 
 const inter = Inter({
@@ -47,14 +45,10 @@ export default function RootLayout({
               window.location.reload();
             }
           `
-        }} />
-        <KeyboardProvider>
-          <DynamicIsland />
-          <LanguageProvider>
-            <ThemeProvider>{children}</ThemeProvider>
-          </LanguageProvider>
-          <VirtualKeyboard />
-        </KeyboardProvider>
+        <DynamicIsland />
+        <LanguageProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

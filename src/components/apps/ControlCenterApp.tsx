@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import type { BotConfig, ClientRegistry } from '@/lib/api';
 import { QRCodeSVG } from 'qrcode.react';
+import { toast } from '@/components/DynamicIsland';
 
 interface ControlCenterProps {
   client: ClientRegistry;
@@ -45,6 +46,7 @@ export default function ControlCenterApp({
 
   const handleSaveWelcome = () => {
     onUpdateWelcomeText(welcomeText);
+    toast('Template sambutan berhasil disimpan!', 'success');
     setSavedWelcome(true);
     setTimeout(() => setSavedWelcome(false), 2000);
   };
@@ -154,7 +156,10 @@ export default function ControlCenterApp({
               </div>
               <div
                 className={`toggle-track ${isActive ? 'active' : ''}`}
-                onClick={() => onToggle(item.key as keyof BotConfig, !isActive)}
+                onClick={() => {
+                  onToggle(item.key as keyof BotConfig, !isActive);
+                  toast(`Pengaturan ${item.label} diperbarui!`, 'success');
+                }}
               >
                 <div className="toggle-thumb" />
               </div>

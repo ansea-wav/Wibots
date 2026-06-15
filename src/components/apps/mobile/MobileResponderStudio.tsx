@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import type { AutoResponder, ClientRegistry } from '@/lib/api';
 import { useLanguage } from '@/lib/LanguageContext';
+import { toast } from '@/components/DynamicIsland';
 
 interface ResponderStudioProps {
   client: ClientRegistry;
@@ -34,12 +35,20 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
         Response_Type: 'Text',
         Target_Groups: 'All'
       });
+      toast('Responder berhasil ditambahkan!', 'success');
       setNewKeyword('');
       setNewMatchType('Exact');
       setNewResponse('');
       setShowAdd(false);
-    } catch (e) {}
+    } catch (e) {
+      toast('Gagal menambahkan responder.', 'error');
+    }
     setSaving(false);
+  };
+
+  const handleDelete = (id: string) => {
+    onDelete(id);
+    toast('Responder berhasil dihapus!', 'success');
   };
 
   return (
@@ -145,14 +154,14 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
                   </div>
                 </div>
                 
-                <div className="text-white/80 text-sm whitespace-pre-wrap flex-1 mb-4">
+                <div className="text-white/80 text-sm whitespace-pre-wrap flex-1 mb-4 select-text">
                   {r.Payload_Data}
                 </div>
 
                 <div className="flex justify-between items-center mt-auto pt-2">
                   <span className="text-[10px] text-white/30 uppercase tracking-widest">{r.Match_Type} • {r.Response_Type}</span>
                   <button 
-                    onClick={() => onDelete(r.Response_ID)} 
+                    onClick={() => handleDelete(r.Response_ID)} 
                     className="px-4 py-2 rounded-xl bg-red-500/10 text-red-500 text-xs font-bold flex items-center gap-2 hover:bg-red-500/20 transition-colors"
                   >
                     <span className="material-symbols-outlined text-sm">delete</span> {t('delete')}
