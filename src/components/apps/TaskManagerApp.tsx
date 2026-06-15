@@ -29,7 +29,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
   const systemProcesses = [
     { name: 'yay-kernel.sys', cpu: '0.2%', mem: '12 MB', status: 'Running' },
     { name: 'window-manager.exe', cpu: '1.1%', mem: '24 MB', status: 'Running' },
-    { name: 'gas-bridge.svc', cpu: '0.5%', mem: '18 MB', status: 'Running' },
+    { name: 'server-bridge.svc', cpu: '0.5%', mem: '18 MB', status: 'Running' },
     { name: 'baileys-engine.exe', cpu: botStatus === 'ONLINE' ? '3.4%' : '0.0%', mem: botStatus === 'ONLINE' ? '86 MB' : '4 MB', status: botStatus === 'ONLINE' ? 'Running' : 'Idle' },
     { name: 'cache-daemon.sys', cpu: '0.1%', mem: '32 MB', status: 'Running' },
     { name: 'cron-scheduler.svc', cpu: '0.0%', mem: '8 MB', status: 'Waiting' },

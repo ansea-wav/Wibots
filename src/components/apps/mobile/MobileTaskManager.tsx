@@ -28,7 +28,7 @@ export default function MobileTaskManager({ botStatus, uptime }: TaskManagerProp
   const systemProcesses = [
     { name: 'wazle-kernel.sys', cpu: '0.2%', mem: '12 MB', status: 'Running', icon: 'memory' },
     { name: 'window-manager.exe', cpu: '1.1%', mem: '24 MB', status: 'Running', icon: 'grid_view' },
-    { name: 'gas-bridge.svc', cpu: '0.5%', mem: '18 MB', status: 'Running', icon: 'cloud_sync' },
+    { name: 'server-bridge.svc', cpu: '0.5%', mem: '18 MB', status: 'Running', icon: 'cloud_sync' },
     { name: 'baileys-engine.exe', cpu: botStatus === 'ONLINE' ? '3.4%' : '0.0%', mem: botStatus === 'ONLINE' ? '86 MB' : '4 MB', status: botStatus === 'ONLINE' ? 'Running' : 'Idle', icon: 'smart_toy' },
     { name: 'cache-daemon.sys', cpu: '0.1%', mem: '32 MB', status: 'Running', icon: 'storage' },
     { name: 'cron-scheduler.svc', cpu: '0.0%', mem: '8 MB', status: 'Waiting', icon: 'schedule' },
