@@ -50,8 +50,8 @@ export default function PricingPage() {
           {/* FREE PLAN */}
           <PricingCard 
             title="Free"
-            price="Rp 0"
-            period="/month"
+            price="Free"
+            period=""
             description="Untuk kreator yang baru mengambil langkah pertama dengan sistem otomatisasi."
             features={[
               "Auto-Responder Dasar",
@@ -66,7 +66,7 @@ export default function PricingPage() {
           {/* BASIC PLAN */}
           <PricingCard 
             title="Basic"
-            price="Rp 49.000"
+            price="$4.99"
             period="/m"
             description="Untuk freelancer dan bisnis kecil yang butuh kebebasan lebih."
             features={[
@@ -82,7 +82,7 @@ export default function PricingPage() {
           {/* STANDARD PLAN */}
           <PricingCard 
             title="Standard"
-            price="Rp 99.000"
+            price="$9.99"
             period="/m"
             description="Solusi lengkap untuk operasional tim dan toko online."
             features={[
@@ -98,7 +98,7 @@ export default function PricingPage() {
           {/* PREMIUM PLAN */}
           <PricingCard 
             title="Premium"
-            price="Rp 199.000"
+            price="$19.99"
             period="/m"
             description="Didesain untuk agensi, studio, dan bisnis berskala besar."
             features={[

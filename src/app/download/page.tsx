@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function DownloadPage() {
   const [cooldown, setCooldown] = useState(0);
@@ -34,6 +35,18 @@ export default function DownloadPage() {
         <div className="absolute top-[-10%] left-[-20%] w-[80%] h-[60%] bg-blue-500/20 rounded-full blur-[100px]"></div>
         <div className="absolute bottom-[-10%] right-[-20%] w-[70%] h-[60%] bg-purple-500/20 rounded-full blur-[100px]"></div>
       </div>
+
+      {/* HEADER NAVIGATION */}
+      <header className="absolute top-0 left-0 w-full z-20 pt-8 pb-4 px-6 flex justify-center pointer-events-none">
+        <nav className="flex items-center gap-8 bg-white/5 border border-white/10 px-8 py-3 rounded-full backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)] pointer-events-auto">
+          <Link href="/" className="text-white/60 hover:text-white transition-colors text-sm font-medium">Home</Link>
+          <Link href="/pricing" className="text-white/60 hover:text-white transition-colors text-sm font-medium">Pricing</Link>
+          <Link href="/download" className="text-white font-semibold text-sm relative">
+            Download
+            <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-white rounded-full shadow-[0_0_8px_white]"></span>
+          </Link>
+        </nav>
+      </header>
 
       <motion.div 
         initial={{ scale: 0.9, opacity: 0, y: 20 }}

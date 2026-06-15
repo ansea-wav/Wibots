@@ -89,7 +89,8 @@ body {
   background: var(--surface-dark);
   color: var(--text-primary);
   font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   user-select: none;
   -webkit-user-select: none;
   overscroll-behavior-y: contain;
