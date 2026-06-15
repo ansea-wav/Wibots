@@ -2,7 +2,7 @@
 // YAY by netals — API Configuration & Types (UTF-8 Fixed)
 // ============================================================
 
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzmLCeDZOjeDN22BVFlw2QAwilEQo-inOw3SOLfzgg5WKKiFj5-Zba1kXoMz-I_iqietA/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxAlOco5h-pleUg5mQnptCt4qf_HUf6d6lahnmJZv6DmPojiUtPveArecBTHi_1ZebbXA/exec';
 const GAS_TOKEN = 'NETALS_SECURE_SECRET_2026_XYZ';
 
 // Cache URL tunnel di memori browser (tidak perlu fetch ulang tiap request)
