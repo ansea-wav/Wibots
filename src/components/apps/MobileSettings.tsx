@@ -11,7 +11,10 @@ export default function MobileSettings() {
     { code: 'en', name: 'English' },
     { code: 'id', name: 'Bahasa Indonesia' },
     { code: 'jv', name: 'Basa Jawa' },
-    { code: 'su', name: 'Basa Sunda' }
+    { code: 'su', name: 'Basa Sunda' },
+    { code: 'th', name: 'ภาษาไทย' },
+    { code: 'zh', name: '中文' },
+    { code: 'ko', name: '한국어' }
   ];
 
   const handleLogout = () => {

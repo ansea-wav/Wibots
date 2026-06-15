@@ -52,13 +52,9 @@ export default function StartMenu({
     { code: 'id', name: 'Bahasa Indonesia' },
     { code: 'jv', name: 'Basa Jawa' },
     { code: 'su', name: 'Basa Sunda' },
-    { code: 'es', name: 'Español' },
-    { code: 'ru', name: 'Русский' },
+    { code: 'th', name: 'ภาษาไทย' },
     { code: 'zh', name: '中文' },
-    { code: 'ms', name: 'Bahasa Malaysia' },
-    { code: 'fil', name: 'Filipino' },
-    { code: 'ko', name: '한국어' },
-    { code: 'ar', name: 'العربية' },
+    { code: 'ko', name: '한국어' }
   ];
 
   // Close on outside click

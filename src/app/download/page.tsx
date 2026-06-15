@@ -50,13 +50,23 @@ export default function DownloadPage() {
         </nav>
         {/* Language Switcher */}
         <div className="absolute top-4 right-4 md:top-8 md:right-8 pointer-events-auto">
-          <button 
-            onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition border border-white/20 px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-bold text-white shadow-lg"
-          >
-            <span className="material-symbols-outlined text-[14px]">language</span>
-            {language === 'id' ? 'ID' : 'EN'}
-          </button>
+          <div className="relative flex items-center bg-white/10 hover:bg-white/20 transition border border-white/20 rounded-full backdrop-blur-md shadow-lg pr-2">
+            <span className="material-symbols-outlined text-[14px] text-white pl-3 pointer-events-none absolute">language</span>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as any)}
+              className="appearance-none bg-transparent text-white text-xs font-bold py-1.5 pl-8 pr-4 outline-none cursor-pointer"
+            >
+              <option value="en" className="text-black">EN</option>
+              <option value="id" className="text-black">ID</option>
+              <option value="jv" className="text-black">Basa Jawa</option>
+              <option value="su" className="text-black">Basa Sunda</option>
+              <option value="th" className="text-black">ภาษาไทย</option>
+              <option value="zh" className="text-black">中文</option>
+              <option value="ko" className="text-black">한국어</option>
+            </select>
+            <span className="material-symbols-outlined text-[12px] text-white pointer-events-none absolute right-2">expand_more</span>
+          </div>
         </div>
       </header>
 
