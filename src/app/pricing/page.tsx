@@ -59,7 +59,7 @@ export default function PricingPage() {
           {/* FREE PLAN */}
           <PricingCard 
             title="Free"
-            price="Free"
+            price={language === 'id' ? 'Gratis' : 'Free'}
             period=""
             description={t('plan_free_desc')}
             features={[
@@ -215,7 +215,10 @@ function PricingCard({ title, price, period, description, features, buttonText, 
       </ul>
 
       {/* Action Button */}
-      <button 
+      <a 
+        href={`https://wa.me/62882008677172?text=Halo%20Wazle,%20saya%20mau%20pesan%20paket%20${title}`}
+        target="_blank"
+        rel="noopener noreferrer"
         className={`w-full py-4 rounded-2xl font-bold text-sm transition-all flex items-center justify-center
           ${isHighlighted 
             ? 'bg-white text-black shadow-[0_10px_20px_rgba(255,255,255,0.1)] hover:shadow-[0_15px_30px_rgba(255,255,255,0.2)] hover:scale-[1.02]' 
@@ -224,7 +227,7 @@ function PricingCard({ title, price, period, description, features, buttonText, 
         `}
       >
         {buttonText}
-      </button>
+      </a>
 
     </div>
   );
