@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import type { ClientRegistry } from '@/lib/api';
 import { useLanguage } from '@/lib/LanguageContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface GroupManagerProps {
   client: ClientRegistry;
@@ -33,8 +34,13 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
     setSaving(false);
   };
 
+  const hasChanges = Object.keys(groups).some(key => {
+    const k = key as keyof typeof groups;
+    return groups[k] !== (client[k as keyof ClientRegistry] || '');
+  });
+
   return (
-    <div className="flex flex-col h-full bg-[#111113]">
+    <div className="flex flex-col h-full bg-[#111113] relative">
       <div className="flex-1 overflow-y-auto p-4 pb-32">
         
         <div className="mb-8 p-6 rounded-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-center relative overflow-hidden">
@@ -51,11 +57,20 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
             const isLocked = i === 0 && isBasicLocked;
 
             return (
-              <div key={groupKey} className="bg-[#1a1a1c] p-5 rounded-3xl border border-white/5 shadow-lg">
-                <label className="flex items-center gap-2 text-sm font-bold text-white mb-3 uppercase tracking-wider">
-                  <span className="material-symbols-outlined text-purple-400">forum</span>
-                  {t('whatsapp_group_prefix')} {i + 1}
-                </label>
+              <div key={groupKey} className="bg-[#1a1a1c] p-5 rounded-3xl border border-white/5 shadow-lg relative">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center">
+                    {i + 1}
+                  </div>
+                  {tier !== 'Basic' && groups[groupKey] && (
+                    <button
+                      onClick={() => setGroups({ ...groups, [groupKey]: '' })}
+                      className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-sm">close</span>
+                    </button>
+                  )}
+                </div>
                 
                 <input
                   type="text"
@@ -63,18 +78,8 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
                   value={groups[groupKey]}
                   disabled={isLocked}
                   onChange={(e) => setGroups({ ...groups, [groupKey]: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-base text-white outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:bg-white/5 mb-3"
+                  className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-base text-white outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:bg-white/5"
                 />
-                
-                {tier !== 'Basic' && (
-                  <button
-                    onClick={() => setGroups({ ...groups, [groupKey]: '' })}
-                    className="w-full py-3 bg-white/5 text-red-400 hover:bg-red-500/20 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
-                  >
-                    <span className="material-symbols-outlined text-lg">backspace</span>
-                    {t('clear_link')}
-                  </button>
-                )}
                 
                 {isLocked && (
                   <p className="flex items-center gap-2 text-xs text-orange-400 font-bold mt-2 bg-orange-400/10 p-3 rounded-xl">
@@ -86,19 +91,29 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
             );
           })}
         </div>
-
-        {/* Save Button */}
-        <div className="mt-8 mb-4">
-          <button
-            onClick={handleSave}
-            disabled={isBasicLocked || saving}
-            className="w-full flex items-center justify-center gap-3 py-4 rounded-full bg-purple-500 text-white font-bold text-lg shadow-lg shadow-purple-500/20 active:scale-[0.98] transition-transform pointer-events-auto disabled:opacity-50 disabled:grayscale"
-          >
-            <span className="material-symbols-outlined">{saving ? 'hourglass_empty' : 'save'}</span>
-            {isBasicLocked ? t('locked') : saving ? t('saving') : t('save_links')}
-          </button>
-        </div>
       </div>
+
+      {/* Floating Save Bar */}
+      <AnimatePresence>
+        {hasChanges && !isBasicLocked && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            className="absolute bottom-4 left-4 right-4 bg-[#1a1a1c] border border-white/10 rounded-2xl p-4 shadow-2xl flex items-center justify-between z-50"
+          >
+            <span className="text-sm font-bold text-white/80">Hold on, you changed something.</span>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="bg-[#22c55e] hover:bg-[#16a34a] text-[#111113] font-bold py-2.5 px-6 rounded-xl transition-colors disabled:opacity-50 active:scale-95"
+            >
+              {saving ? t('saving') : t('save_links')}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -151,19 +151,38 @@ export default function MobileEnvironment({ userData, userId }: MobileProps) {
     </div>
   );
 
+  useEffect(() => {
+    window.history.replaceState({ activeTab: 'dashboard', openedProtocolApp: null }, '');
+    const handlePopState = (e: PopStateEvent) => {
+      if (e.state) {
+        if (e.state.openedProtocolApp !== undefined) setOpenedProtocolApp(e.state.openedProtocolApp);
+        if (e.state.activeTab !== undefined) setActiveTab(e.state.activeTab);
+      } else {
+        setActiveTab('dashboard');
+        setOpenedProtocolApp(null);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const handleTabChange = (tab: MobileTab) => {
     setActiveTab(tab);
-    if (tab !== 'protocols') {
-      setOpenedProtocolApp(null);
-    }
+    setOpenedProtocolApp(null);
+    window.history.pushState({ activeTab: tab, openedProtocolApp: null }, '');
+  };
+
+  const handleOpenApp = (appId: ProtocolAppId | null) => {
+    setOpenedProtocolApp(appId);
+    window.history.pushState({ activeTab: 'protocols', openedProtocolApp: appId }, '');
   };
 
   const renderProtocolContent = () => {
     if (!openedProtocolApp) {
-      return <MobileProtocols onOpenApp={setOpenedProtocolApp} />;
+      return <MobileProtocols onOpenApp={handleOpenApp} />;
     }
     
-    const backFn = () => setOpenedProtocolApp(null);
+    const backFn = () => window.history.back();
     switch (openedProtocolApp) {
       case 'controlcenter': 
         return renderAppWrapper(
@@ -202,7 +221,7 @@ export default function MobileEnvironment({ userData, userId }: MobileProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-[#111113] overflow-hidden text-white flex flex-col">
+    <div className="fixed inset-0 bg-[#111113] overflow-hidden text-white flex flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       <NotificationEngine client={clientRegistry} />
       <DynamicIsland />
       {/* Content Area */}

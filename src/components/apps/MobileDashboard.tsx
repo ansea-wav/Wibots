@@ -26,18 +26,16 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
   return (
     <div className="absolute inset-0 h-full flex flex-col items-center min-h-[100vh] bg-[#111113] p-6 pt-12 pb-32 overflow-y-auto">
       
-      {/* Top Pill (Speed up charging equivalent -> Account Status) */}
-      <motion.div 
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="bg-gradient-to-r from-orange-900/40 to-red-900/40 border border-orange-500/20 px-6 py-2.5 rounded-full flex items-center gap-3 shadow-[0_0_20px_rgba(255,100,0,0.15)] mb-12"
+      {/* Top Right Refresh Button */}
+      <button 
+        onClick={() => window.location.reload()}
+        className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#a7f3d0]/20 text-[#a7f3d0] flex items-center justify-center shadow-lg shadow-[#a7f3d0]/10 hover:bg-[#a7f3d0]/30 transition-colors active:scale-95"
       >
-        <span className="material-symbols-outlined text-green-500 text-lg">bolt</span>
-        <span className="text-white text-sm font-medium">{t('status')}: {t(registry.Account_Status) || registry.Account_Status}</span>
-      </motion.div>
+        <span className="material-symbols-outlined text-xl">refresh</span>
+      </button>
 
       {/* Main Circular Gauge */}
-      <div className="relative shrink-0 w-[280px] h-[280px] flex items-center justify-center mb-10">
+      <div className="relative shrink-0 w-[280px] h-[280px] flex items-center justify-center mt-10 mb-10">
         {/* Glow Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-red-600/5 rounded-full blur-2xl"></div>
 

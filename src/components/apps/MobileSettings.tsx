@@ -2,10 +2,13 @@
 
 import { useLanguage } from '@/lib/LanguageContext';
 import { useTheme } from '@/lib/ThemeContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 
 export default function MobileSettings() {
   const { language, setLanguage, t } = useLanguage();
   const { theme, setTheme, themes } = useTheme();
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   const LANGUAGES = [
     { code: 'en', name: 'English' },
@@ -23,37 +26,15 @@ export default function MobileSettings() {
     window.location.reload();
   };
 
+  const selectedLang = LANGUAGES.find(l => l.code === language) || LANGUAGES[0];
+
   return (
     <div className="flex flex-col h-full bg-[#111113] p-6 pb-24 overflow-y-auto">
       <h2 className="text-2xl font-bold text-white mb-6">{t('settings')}</h2>
 
       <div className="space-y-6">
         
-        {/* Language Section */}
-        <div className="bg-[#1a1a1c] border border-white/5 rounded-2xl p-4 shadow-lg">
-          <h3 className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-4">{t('language')}</h3>
-          <div className="space-y-2">
-            {LANGUAGES.map((l) => (
-              <button
-                key={l.code}
-                onClick={() => setLanguage(l.code as any)}
-                className={`w-full flex items-center justify-between p-3 rounded-xl transition-all ${
-                  language === l.code 
-                    ? 'bg-blue-500/10 border border-blue-500/20 text-blue-400' 
-                    : 'bg-white/[0.02] border border-transparent text-white/70 hover:bg-white/[0.05]'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-lg">language</span>
-                  <span className="text-sm font-medium">{l.name}</span>
-                </div>
-                {language === l.code && <span className="material-symbols-outlined text-lg">check</span>}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Theme Section */}
+        {/* Theme Section (Moved above Language) */}
         <div className="bg-[#1a1a1c] border border-white/5 rounded-2xl p-4 shadow-lg">
           <h3 className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-4">{t('appearance')}</h3>
           <div className="grid grid-cols-2 gap-2">
@@ -75,6 +56,64 @@ export default function MobileSettings() {
                 <span className="text-xs font-medium">{t_item.name}</span>
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Language Section with Animated Dropdown */}
+        <div className="bg-[#1a1a1c] border border-white/5 rounded-2xl p-4 shadow-lg">
+          <h3 className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-4">{t('language')}</h3>
+          
+          <div className="relative">
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setIsLangOpen(!isLangOpen)}
+              className="w-full flex items-center justify-between p-4 bg-black/40 border border-white/10 rounded-2xl text-white outline-none focus:border-purple-500 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-lg text-white/70">language</span>
+                <span className="text-sm font-bold">{selectedLang.name}</span>
+              </div>
+              <motion.span 
+                animate={{ rotate: isLangOpen ? 180 : 0 }} 
+                className="material-symbols-outlined text-white/50"
+              >
+                expand_more
+              </motion.span>
+            </motion.button>
+
+            <AnimatePresence>
+              {isLangOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-[#222225] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50"
+                >
+                  {LANGUAGES.map((l) => (
+                    <motion.button
+                      key={l.code}
+                      onClick={() => {
+                        setLanguage(l.code as any);
+                        setTimeout(() => setIsLangOpen(false), 300); // Wait for wobble animation to finish
+                      }}
+                      whileTap={{
+                        scale: [1, 1.1, 0.95, 1.05, 0.98, 1], // Jello / Wobble effect
+                        transition: { duration: 0.4 }
+                      }}
+                      className={`w-full flex items-center justify-between p-4 transition-colors ${
+                        language === l.code 
+                          ? 'bg-purple-500/20 text-purple-400' 
+                          : 'hover:bg-white/5 text-white/80'
+                      }`}
+                    >
+                      <span className="text-sm font-bold">{l.name}</span>
+                      {language === l.code && <span className="material-symbols-outlined text-lg">check</span>}
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 

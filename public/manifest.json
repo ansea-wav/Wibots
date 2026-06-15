@@ -1,0 +1,22 @@
+{
+  "name": "YAY Virtual Machine",
+  "short_name": "YAY",
+  "description": "Premium WhatsApp Bot Management System",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#111113",
+  "theme_color": "#111113",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo-color.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-color.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

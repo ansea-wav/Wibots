@@ -58,7 +58,7 @@ export default function MobileTaskManager({ botStatus, uptime }: TaskManagerProp
       </div>
 
       {/* Process List */}
-      <div className="flex-1 px-4 overflow-y-auto pb-6">
+      <div className="flex-1 px-4 overflow-y-auto pb-32">
         <h3 className="text-sm font-bold text-white/40 uppercase tracking-widest mb-4">System Processes</h3>
         
         <div className="space-y-3">

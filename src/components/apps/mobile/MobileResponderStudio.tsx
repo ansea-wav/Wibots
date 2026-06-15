@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { AutoResponder, ClientRegistry } from '@/lib/api';
 import { useLanguage } from '@/lib/LanguageContext';
 import { toast } from '@/components/DynamicIsland';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ResponderStudioProps {
   client: ClientRegistry;
@@ -16,6 +17,7 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
   const { t } = useLanguage();
   const [newKeyword, setNewKeyword] = useState('');
   const [newMatchType, setNewMatchType] = useState<'Exact' | 'Contains'>('Exact');
+  const [newTargetGroup, setNewTargetGroup] = useState('All');
   const [newResponse, setNewResponse] = useState('');
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -23,6 +25,9 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
   const tier = client.Package_Tier;
   const maxResponders = (tier === 'God' || tier === 'Premium') ? 100 : tier === 'Standard' ? 25 : 5;
   const isFull = responders.length >= maxResponders;
+  const maxGroups = (tier === 'Premium' || tier === 'God') ? 5 : tier === 'Standard' ? 2 : 1;
+
+  const targetOptions = ['All', ...Array.from({length: maxGroups}, (_, i) => `Group_${i + 1}`)];
 
   const handleAdd = async () => {
     if (!newKeyword || !newResponse) return;
@@ -32,7 +37,7 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
       Payload_Data: newResponse,
       Match_Type: newMatchType,
       Response_Type: 'Text',
-      Target_Groups: 'All'
+      Target_Groups: newTargetGroup === 'All' ? 'All' : [newTargetGroup]
     };
     try {
       await onAdd(form);
@@ -40,6 +45,7 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
       
       setNewKeyword('');
       setNewMatchType('Exact');
+      setNewTargetGroup('All');
       setNewResponse('');
       setShowAdd(false);
     } catch (e) {
@@ -98,7 +104,7 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
                 <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">{t('match_type_label')}</label>
                 <div className="relative flex bg-black/40 border border-white/10 p-1 rounded-full w-full">
                   <div 
-                    className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-[0_4px_12px_rgba(255,255,255,0.2)] transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${newMatchType === 'Contains' ? 'translate-x-full' : 'translate-x-0'}`}
+                    className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-[0_4px_12px_rgba(255,255,255,0.2)] transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${newMatchType === 'Contains' ? 'translate-x-[calc(100%+8px)]' : 'translate-x-0'}`}
                   ></div>
                   
                   <button
@@ -115,6 +121,34 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
                   >
                     {t('contains')}
                   </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">Target Group</label>
+                <div className="relative flex bg-black/40 border border-white/10 p-1 rounded-full w-full">
+                  {targetOptions.map(target => (
+                    <motion.button
+                      key={target}
+                      type="button"
+                      onClick={() => setNewTargetGroup(target)}
+                      whileTap={{
+                        scale: [1, 1.1, 0.95, 1.05, 0.98, 1],
+                        transition: { duration: 0.4 }
+                      }}
+                      className={`relative z-10 flex-1 py-3 text-sm font-bold transition-colors duration-300 ${newTargetGroup === target ? 'text-black' : 'text-white/50 hover:text-white'}`}
+                    >
+                      {newTargetGroup === target && (
+                        <motion.div
+                          layoutId="targetGroupSliderBg"
+                          className="absolute inset-0 bg-white rounded-full shadow-[0_4px_12px_rgba(255,255,255,0.2)]"
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                          style={{ zIndex: -1 }}
+                        />
+                      )}
+                      {target === 'All' ? 'Semua' : target.replace('Group_', '')}
+                    </motion.button>
+                  ))}
                 </div>
               </div>
 
@@ -153,6 +187,9 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
                   <div className="flex items-center gap-2 font-mono font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-lg">
                     <span className="material-symbols-outlined text-base">key</span>
                     {r.Keyword}
+                  </div>
+                  <div className="bg-white/10 px-2 py-1 rounded text-xs text-white/70 font-bold">
+                    {r.Target_Groups === 'All' ? 'Semua' : Array.isArray(r.Target_Groups) ? r.Target_Groups.map(g => g.replace('Group_', '')).join(', ') : 'Semua'}
                   </div>
                 </div>
                 

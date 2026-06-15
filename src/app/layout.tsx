@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { LanguageProvider } from "@/lib/LanguageContext";
@@ -17,10 +17,25 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#111113",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
   title: "YAY by netals — Virtual Machine",
   description: "Premium WhatsApp Bot Management System. Control your bot through a virtual desktop environment.",
   keywords: ["YAY", "netals", "WhatsApp Bot", "SaaS", "Bot Management"],
+  appleWebApp: {
+    capable: true,
+    title: "YAY Bot",
+    statusBarStyle: "black-translucent",
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
