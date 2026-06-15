@@ -18,19 +18,18 @@ export default function PricingPage() {
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-5"></div>
       </div>
 
-      {/* HEADER NAVIGATION PLACEHOLDER */}
-      <header className="relative z-10 pt-8 pb-4 px-6 max-w-7xl mx-auto flex justify-between items-center">
-        <div className="w-[100px]"></div> {/* Spacer */}
-        <nav className="flex items-center gap-8 bg-white/5 border border-white/10 px-8 py-3 rounded-full backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
-          <Link href="/" className="text-white/60 hover:text-white transition-colors text-sm font-medium">{t('nav_home')}</Link>
-          <Link href="/pricing" className="text-white font-semibold text-sm relative">
+      {/* HEADER NAVIGATION */}
+      <header className="relative z-10 pt-16 md:pt-8 pb-4 px-4 md:px-6 max-w-7xl mx-auto flex justify-center items-center">
+        <nav className="flex items-center gap-5 md:gap-8 bg-white/5 border border-white/10 px-6 md:px-8 py-3 rounded-full backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
+          <Link href="/" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm font-medium">{t('nav_home')}</Link>
+          <Link href="/pricing" className="text-white font-semibold text-xs md:text-sm relative">
             {t('nav_pricing')}
             <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-white rounded-full shadow-[0_0_8px_white]"></span>
           </Link>
-          <Link href="/download" className="text-white/60 hover:text-white transition-colors text-sm font-medium">{t('nav_download')}</Link>
+          <Link href="/download" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm font-medium">{t('nav_download')}</Link>
         </nav>
         {/* Language Switcher */}
-        <div className="w-[100px] flex justify-end">
+        <div className="absolute top-4 right-4 md:top-8 md:right-6">
           <button 
             onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
             className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition border border-white/20 px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-bold text-white shadow-lg"
