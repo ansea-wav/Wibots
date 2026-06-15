@@ -122,12 +122,12 @@ export default function PricingPage() {
           
           <h2 className="text-3xl font-bold text-white mb-4">Custom Billing</h2>
           <p className="text-white/50 mb-8 max-w-xl">
-            Butuh limit khusus, integrasi ERP perusahaan, atau keamanan jaringan *on-premise*? Kami dapat menyusun arsitektur sistem sesuai kebutuhan spesifik Anda.
+            Butuh limit khusus, integrasi ERP perusahaan, atau keamanan jaringan <span className="font-bold text-white">on-premise</span>? Kami dapat menyusun arsitektur sistem sesuai kebutuhan spesifik Anda.
           </p>
           
           {/* WHATSAPP CONTACT */}
           <a 
-            href="https://wa.me/6281234567890?text=Halo%20Wazle,%20saya%20tertarik%20dengan%20Custom%20Billing" 
+            href="https://wa.me/62882008677172?text=Halo%20Wazle,%20saya%20tertarik%20dengan%20Custom%20Billing" 
             target="_blank" 
             rel="noopener noreferrer"
             className="group relative inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-bold text-sm transition-transform hover:scale-105 hover:shadow-[0_10px_30px_rgba(255,255,255,0.2)]"
