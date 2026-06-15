@@ -38,7 +38,7 @@ export interface ClientRegistry {
   User_ID: string;
   WhatsApp_Owner: string;
   License_Key: string;
-  Package_Tier: 'Basic' | 'Standard' | 'Premium' | 'God';
+  Package_Tier: 'Basic' | 'Standard' | 'Standart' | 'Premium' | 'God';
   Registration_Date: string;
   Expiry_Date: string;
   Days_Left: number;
