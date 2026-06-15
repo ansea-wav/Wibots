@@ -79,6 +79,44 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
     }
   }, [dims]);
 
+  const dragTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragTimerRef.current = setTimeout(() => {
+      setIsDragging(true);
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(50);
+    }, 250);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging) return;
+
+    if (wrapperRef.current) {
+      const rect = wrapperRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const tabWidth = rect.width / navItems.length;
+      let index = Math.floor(x / tabWidth);
+      
+      index = Math.max(0, Math.min(index, navItems.length - 1));
+      const targetTab = navItems[index].id as MobileTab;
+      
+      if (targetTab !== activeTab) {
+        onTabChange(targetTab);
+        if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
+      }
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    if (dragTimerRef.current) clearTimeout(dragTimerRef.current);
+    setIsDragging(false);
+  };
+
   const radius = 32;
   const border = Math.min(dims.width || 360, dims.height || 72) * (0.07 * 0.5);
 
@@ -167,7 +205,15 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
             )}
 
             {/* Nav content wrapped with overflow hidden exactly like .nav-wrap */}
-            <div className="w-full h-full overflow-hidden flex justify-between items-center p-2 px-4 relative z-10" style={{ borderRadius: 'inherit' }}>
+            <div 
+              className={`w-full h-full overflow-hidden flex justify-between items-center p-2 px-4 relative z-10 select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+              style={{ borderRadius: 'inherit', touchAction: 'none' }}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+            >
               {navItems.map((item) => {
                 const isActive = activeTab === item.id;
                 return (
