@@ -20,7 +20,7 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
   });
 
   const tier = client.Package_Tier;
-  const maxGroups = (tier === 'Premium' || tier === 'God') ? 5 : tier === 'Standard' ? 2 : 1;
+  const maxGroups = (tier === 'Premium' || tier === 'God') ? 5 : (tier === 'Standard' || tier === 'Standart') ? 2 : 1;
   const [saving, setSaving] = useState(false);
   const isBasicLocked = tier === 'Basic' && !!client.Group_1;
 

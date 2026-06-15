@@ -65,7 +65,7 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
           style={{
             background: packageTier === 'God' ? 'linear-gradient(135deg, #f59e0b, #ef4444)' :
                          packageTier === 'Premium' ? 'linear-gradient(135deg, #a855f7, #6366f1)' :
-                         packageTier === 'Standard' ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' :
+                         (packageTier === 'Standard' || packageTier === 'Standart') ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' :
                          'linear-gradient(135deg, #6b7280, #4b5563)',
             fontSize: '9px'
           }}>
@@ -100,7 +100,7 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
           style={{
             background: packageTier === 'God' ? 'linear-gradient(135deg, #f59e0b, #ef4444)' :
                          packageTier === 'Premium' ? 'linear-gradient(135deg, #a855f7, #6366f1)' :
-                         packageTier === 'Standard' ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' :
+                         (packageTier === 'Standard' || packageTier === 'Standart') ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' :
                          'linear-gradient(135deg, #6b7280, #4b5563)',
             fontSize: '9px'
           }}>

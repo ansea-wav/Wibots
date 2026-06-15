@@ -23,9 +23,9 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
   const [saving, setSaving] = useState(false);
 
   const tier = client.Package_Tier;
-  const maxResponders = (tier === 'God' || tier === 'Premium') ? 100 : tier === 'Standard' ? 25 : 5;
+  const maxResponders = (tier === 'God' || tier === 'Premium') ? 100 : (tier === 'Standard' || tier === 'Standart') ? 25 : 5;
   const isFull = responders.length >= maxResponders;
-  const maxGroups = (tier === 'Premium' || tier === 'God') ? 5 : tier === 'Standard' ? 2 : 1;
+  const maxGroups = (tier === 'Premium' || tier === 'God') ? 5 : (tier === 'Standard' || tier === 'Standart') ? 2 : 1;
 
   const targetOptions = ['All', ...Array.from({length: maxGroups}, (_, i) => `Group_${i + 1}`)];
 

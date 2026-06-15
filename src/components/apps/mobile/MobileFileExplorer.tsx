@@ -21,7 +21,7 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
   };
 
   const tier = client?.Package_Tier || 'Basic';
-  const quotaMB = (tier === 'Premium' || tier === 'God') ? 1000 : tier === 'Standard' ? 400 : 40;
+  const quotaMB = (tier === 'Premium' || tier === 'God') ? 1000 : (tier === 'Standard' || tier === 'Standart') ? 400 : 40;
   const quotaBytes = quotaMB * 1024 * 1024;
   const usedBytes = files.reduce((sum, f) => sum + f.size, 0);
   const percentUsed = Math.min(100, (usedBytes / quotaBytes) * 100);

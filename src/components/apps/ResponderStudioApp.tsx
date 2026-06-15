@@ -102,7 +102,7 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
     const normalized = parseTargetGroups(form.Target_Groups);
     let currentTargets = Array.isArray(normalized) ? [...normalized] : [];
     
-    if (tier === 'Standard') {
+    if ((tier === 'Standard' || tier === 'Standart')) {
       // Standard: Pilih 1 grup spesifik atau Semua
       setForm({ ...form, Target_Groups: [target] });
       return;
