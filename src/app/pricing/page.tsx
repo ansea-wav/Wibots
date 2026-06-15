@@ -46,7 +46,7 @@ export default function PricingPage() {
         
         {/* HERO TITLE */}
         <div className="text-center mb-20 relative">
-          <h1 className="text-7xl md:text-8xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white via-white/90 to-white/30 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+          <h1 className="text-7xl md:text-8xl font-black tracking-tighter mb-4 py-2 bg-clip-text text-transparent bg-gradient-to-b from-white via-white/90 to-white/30 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
             {t('pricing_title')}
           </h1>
           <p className="text-xl md:text-2xl text-white/50 font-medium max-w-2xl mx-auto">
@@ -76,7 +76,7 @@ export default function PricingPage() {
           {/* BASIC PLAN */}
           <PricingCard 
             title="Basic"
-            price={language === 'id' ? 'Rp 2.000' : '$4.99'}
+            price={language === 'id' ? 'Rp 2.000' : '2.000 IDR'}
             period={t('per_month')}
             description={t('plan_basic_desc')}
             features={[
@@ -93,7 +93,7 @@ export default function PricingPage() {
           {/* STANDARD PLAN */}
           <PricingCard 
             title="Standard"
-            price={language === 'id' ? 'Rp 5.000' : '$9.99'}
+            price={language === 'id' ? 'Rp 5.000' : '5.000 IDR'}
             period={t('per_month')}
             description={t('plan_standard_desc')}
             features={[
@@ -110,7 +110,7 @@ export default function PricingPage() {
           {/* PREMIUM PLAN */}
           <PricingCard 
             title="Premium"
-            price={language === 'id' ? 'Rp 20.000' : '$19.99'}
+            price={language === 'id' ? 'Rp 20.000' : '20.000 IDR'}
             period={t('per_month')}
             description={t('plan_premium_desc')}
             features={[
