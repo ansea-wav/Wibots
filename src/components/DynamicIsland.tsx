@@ -9,6 +9,39 @@ export const toast = (message: string, type: 'success' | 'error' | 'info' = 'inf
   }
 };
 
+const playSound = (type: 'success' | 'error' | 'info') => {
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    
+    if (type === 'success' || type === 'info') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
+      gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    } else {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(150, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.2);
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
+      gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+    }
+  } catch (e) {
+    // Ignore
+  }
+};
+
 interface ToastMessage {
   id: number;
   message: string;
@@ -29,6 +62,8 @@ export default function DynamicIsland() {
       const customEvent = e as CustomEvent;
       const newToast = { id: Date.now(), ...customEvent.detail };
       
+      playSound(customEvent.detail.type);
+
       setToasts([newToast]); // Replace with the latest toast
       
       // Start Phase 1 (1 Message bubble)

@@ -33,9 +33,9 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
         Group_4: groups.Group_4,
         Group_5: groups.Group_5,
       });
-      showToast('Data grup berhasil disimpan!', 'success');
+      showToast(t('toast_group_saved'), 'success');
     } catch (e) {
-      showToast('Gagal menyimpan. Pastikan Bypass Localtunnel sudah dilakukan.', 'error');
+      showToast(t('toast_group_save_failed'), 'error');
     }
     setSaving(false);
   };

@@ -27,28 +27,35 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
   const handleAdd = async () => {
     if (!newKeyword || !newResponse) return;
     setSaving(true);
+    const form = {
+      Keyword: newKeyword,
+      Payload_Data: newResponse,
+      Match_Type: newMatchType,
+      Response_Type: 'Text',
+      Target_Groups: 'All'
+    };
     try {
-      onAdd({
-        Keyword: newKeyword,
-        Payload_Data: newResponse,
-        Match_Type: newMatchType,
-        Response_Type: 'Text',
-        Target_Groups: 'All'
-      });
-      toast('Responder berhasil ditambahkan!', 'success');
+      if (editId) {
+        await onUpdate(editId, form);
+        toast(t('toast_responder_updated'), 'success');
+      } else {
+        await onAdd(form);
+        toast(t('toast_responder_added'), 'success');
+      }
       setNewKeyword('');
       setNewMatchType('Exact');
       setNewResponse('');
+      setEditId(null);
       setShowAdd(false);
     } catch (e) {
-      toast('Gagal menambahkan responder.', 'error');
+      toast(t('toast_responder_failed'), 'error');
     }
     setSaving(false);
   };
 
   const handleDelete = (id: string) => {
     onDelete(id);
-    toast('Responder berhasil dihapus!', 'success');
+    toast(t('toast_responder_deleted'), 'success');
   };
 
   return (

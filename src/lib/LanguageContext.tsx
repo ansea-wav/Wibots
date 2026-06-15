@@ -149,7 +149,17 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'download_btn': 'Download APK',
     'download_preparing': 'Preparing...',
     'download_version': 'Version: Beta v0.2 • Size: 6MB',
-    'download_note': 'Note: Please free up at least 30MB of storage space.'
+    'download_note': 'Note: Please free up at least 30MB of storage space.',
+    'toast_welcome_saved': 'Welcome template saved successfully!',
+    'toast_settings_updated': 'Settings for {label} updated!',
+    'toast_file_uploaded': 'File uploaded successfully!',
+    'toast_file_deleted': 'File deleted successfully!',
+    'toast_group_saved': 'Group data saved successfully!',
+    'toast_group_save_failed': 'Failed to save. Ensure Localtunnel bypass is done.',
+    'toast_responder_updated': 'Responder updated successfully!',
+    'toast_responder_added': 'Responder added successfully!',
+    'toast_responder_deleted': 'Responder deleted successfully!',
+    'toast_responder_failed': 'Failed to save responder.'
   },
   id: {
     'dashboard': 'Dasbor',
@@ -288,7 +298,17 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'download_btn': 'Unduh APK',
     'download_preparing': 'Menyiapkan...',
     'download_version': 'Versi: Beta v0.2 • Ukuran: 6MB',
-    'download_note': 'Catatan: Siapkan ruang kosong setidaknya 30MB (free up at least 30MB)'
+    'download_note': 'Catatan: Siapkan ruang kosong setidaknya 30MB (free up at least 30MB)',
+    'toast_welcome_saved': 'Template sambutan berhasil disimpan!',
+    'toast_settings_updated': 'Pengaturan {label} diperbarui!',
+    'toast_file_uploaded': 'File berhasil diupload!',
+    'toast_file_deleted': 'File berhasil dihapus!',
+    'toast_group_saved': 'Data grup berhasil disimpan!',
+    'toast_group_save_failed': 'Gagal menyimpan. Pastikan Bypass Localtunnel sudah dilakukan.',
+    'toast_responder_updated': 'Responder berhasil diupdate!',
+    'toast_responder_added': 'Responder berhasil ditambahkan!',
+    'toast_responder_deleted': 'Responder berhasil dihapus!',
+    'toast_responder_failed': 'Gagal menyimpan responder.'
   },
   jv: {
     'dashboard': 'Dasbor',

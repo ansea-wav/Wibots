@@ -45,8 +45,12 @@ export default function ControlCenterApp({
   ];
 
   const handleSaveWelcome = () => {
+    setIsSaving(true);
     onUpdateWelcomeText(welcomeText);
-    toast('Template sambutan berhasil disimpan!', 'success');
+    setTimeout(() => {
+      setIsSaving(false);
+      toast(t('toast_welcome_saved'), 'success');
+    }, 1500);
     setSavedWelcome(true);
     setTimeout(() => setSavedWelcome(false), 2000);
   };
@@ -157,8 +161,12 @@ export default function ControlCenterApp({
               <div
                 className={`toggle-track ${isActive ? 'active' : ''}`}
                 onClick={() => {
+                  setSavingStates(prev => ({ ...prev, [item.key]: true }));
                   onToggle(item.key as keyof BotConfig, !isActive);
-                  toast(`Pengaturan ${item.label} diperbarui!`, 'success');
+                  setTimeout(() => {
+                    setSavingStates(prev => ({ ...prev, [item.key]: false }));
+                    toast(t('toast_settings_updated').replace('{label}', t(item.label) || item.label), 'success');
+                  }, 1000);
                 }}
               >
                 <div className="toggle-thumb" />

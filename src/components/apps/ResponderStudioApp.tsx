@@ -46,14 +46,14 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
     try {
       if (editId) {
         await onUpdate(editId, form);
-        showToast('Responder berhasil diupdate!', 'success');
+        showToast(t('toast_responder_updated'), 'success');
       } else {
         await onAdd(form);
-        showToast('Responder berhasil ditambahkan!', 'success');
+        showToast(t('toast_responder_added'), 'success');
       }
       resetForm();
     } catch (e) {
-      showToast('Gagal menyimpan responder.', 'error');
+      showToast(t('toast_responder_failed'), 'error');
     }
   };
 
@@ -310,8 +310,9 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
                         Edit
                       </button>
                       <button
-                        onClick={() => { onDelete(r.Response_ID); showToast('Responder berhasil dihapus!', 'success'); }}
-                        className="px-2 py-1 rounded text-[10px] text-[var(--neon-red)] hover:bg-[var(--neon-red)]/10 transition-colors cursor-pointer"
+                        onClick={() => { onDelete(r.Response_ID); showToast(t('toast_responder_deleted'), 'success'); }}
+                        className="p-1.5 rounded bg-white/5 hover:bg-red-500/20 hover:text-red-400 text-[var(--text-tertiary)] transition-colors"
+                        title={t('delete')}
                       >
                         Delete
                       </button>
