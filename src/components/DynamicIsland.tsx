@@ -77,11 +77,11 @@ export default function DynamicIsland() {
         setPhase(2);
       }, 700);
       
-      // Auto-hide after 3.5 seconds
+      // Auto-hide after 4 seconds (increased by 0.5s)
       hideTimeout = setTimeout(() => {
         // Just clear the toasts to trigger the smooth exit animation of the entire container
         setToasts([]);
-      }, 3500);
+      }, 4000);
     };
 
     window.addEventListener('yay-toast', handleToast);
@@ -101,9 +101,9 @@ export default function DynamicIsland() {
           <motion.div 
             key="island-container"
             initial={{ y: -50, opacity: 0, scale: 0.8 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -50, opacity: 0, scale: 0.8 }}
-            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+            animate={{ y: [-50, 10, 0], opacity: 1, scale: [0.8, 1.05, 1] }}
+            exit={{ y: [0, 10, -50], opacity: [1, 1, 0], scale: [1, 0.95, 0.8] }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             ref={containerRef} 
             className="fixed top-4 left-4 right-4 z-[99998] pointer-events-none flex justify-center"
           >

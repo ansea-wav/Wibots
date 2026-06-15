@@ -65,7 +65,7 @@ export default function MobileSettings() {
           
           <div className="relative">
             <motion.button
-              whileTap={{ scale: 0.97 }}
+              whileTap={{ scale: [1, 1.05, 0.95, 1.02, 0.98, 1], transition: { duration: 0.4 } }}
               onClick={() => setIsLangOpen(!isLangOpen)}
               className="w-full flex items-center justify-between p-4 bg-black/40 border border-white/10 rounded-2xl text-white outline-none focus:border-purple-500 transition-colors"
             >
@@ -84,11 +84,11 @@ export default function MobileSettings() {
             <AnimatePresence>
               {isLangOpen && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 8 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                  className="absolute top-full left-0 right-0 mt-2 bg-[#222225] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50"
+                  className="bg-[#222225] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
                 >
                   {LANGUAGES.map((l) => (
                     <motion.button
