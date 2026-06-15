@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-[#050505] text-white overflow-hidden relative selection:bg-[var(--accent-primary)] selection:text-white pb-20">
+    <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden relative selection:bg-[var(--accent-primary)] selection:text-white pb-20">
       
       {/* BACKGROUND BLOBS / GLOW EFFECTS */}
       <div className="fixed inset-0 pointer-events-none z-0">
