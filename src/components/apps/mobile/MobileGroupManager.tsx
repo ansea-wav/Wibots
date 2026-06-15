@@ -101,7 +101,7 @@ export default function MobileGroupManager({ client, onUpdate }: GroupManagerPro
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="absolute bottom-4 left-4 right-4 bg-[#1a1a1c] border border-white/10 rounded-2xl p-4 shadow-2xl flex items-center justify-between z-50"
+            className="absolute bottom-28 left-4 right-4 bg-[#1a1a1c] border border-white/10 rounded-2xl p-4 shadow-2xl flex items-center justify-between z-[10000]"
           >
             <span className="text-sm font-bold text-white/80">Hold on, you changed something.</span>
             <button
