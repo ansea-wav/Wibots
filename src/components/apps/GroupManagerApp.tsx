@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import type { ClientRegistry } from '@/lib/api';
 import { useToast } from '@/hooks/useToast';
+import { useLanguage } from '@/lib/LanguageContext';
 
 interface GroupManagerProps {
   client: ClientRegistry;
@@ -22,6 +23,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
 
   const [saving, setSaving] = useState(false);
   const { showToast, toastElement } = useToast();
+  const { t } = useLanguage();
 
   const handleSave = async () => {
     setSaving(true);

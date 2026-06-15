@@ -27,7 +27,7 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
   const handleAdd = async () => {
     if (!newKeyword || !newResponse) return;
     setSaving(true);
-    const form = {
+    const form: Partial<AutoResponder> = {
       Keyword: newKeyword,
       Payload_Data: newResponse,
       Match_Type: newMatchType,
@@ -35,17 +35,12 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
       Target_Groups: 'All'
     };
     try {
-      if (editId) {
-        await onUpdate(editId, form);
-        toast(t('toast_responder_updated'), 'success');
-      } else {
-        await onAdd(form);
-        toast(t('toast_responder_added'), 'success');
-      }
+      await onAdd(form);
+      toast(t('toast_responder_added'), 'success');
+      
       setNewKeyword('');
       setNewMatchType('Exact');
       setNewResponse('');
-      setEditId(null);
       setShowAdd(false);
     } catch (e) {
       toast(t('toast_responder_failed'), 'error');

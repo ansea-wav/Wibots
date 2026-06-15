@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import type { AutoResponder, ClientRegistry } from '@/lib/api';
 import { useToast } from '@/hooks/useToast';
+import { useLanguage } from '@/lib/LanguageContext';
 
 interface ResponderStudioProps {
   client: ClientRegistry;
@@ -32,8 +33,10 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
     Payload_Data: '',
     Target_Groups: 'All',
   });
+  const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { showToast, toastElement } = useToast();
+  const { t } = useLanguage();
 
   const resetForm = () => {
     setForm({ Keyword: '', Match_Type: 'Exact', Response_Type: 'Text', Payload_Data: '', Target_Groups: 'All' });

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { BotConfig, ClientRegistry } from '@/lib/api';
 import { QRCodeSVG } from 'qrcode.react';
 import { toast } from '@/components/DynamicIsland';
+import { useLanguage } from '@/lib/LanguageContext';
 
 interface ControlCenterProps {
   client: ClientRegistry;
@@ -28,6 +29,9 @@ export default function ControlCenterApp({
   const safeConfig = config || {} as BotConfig;
   const [welcomeText, setWelcomeText] = useState(safeConfig.Custom_Welcome_Text || '');
   const [savedWelcome, setSavedWelcome] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [savingStates, setSavingStates] = useState<Record<string, boolean>>({});
+  const { t } = useLanguage();
 
   const toggleItems: { key: keyof BotConfig | string; label: string; desc: string; icon: string }[] = [
     {
