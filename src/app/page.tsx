@@ -17,10 +17,32 @@ export default function Home() {
   const [apiSuccess, setApiSuccess] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  // --- Curtain States ---
+  const [curtainOpacity, setCurtainOpacity] = useState(1);
+  const [curtainRendered, setCurtainRendered] = useState(true);
+  const [minTimePassed, setMinTimePassed] = useState(false);
+
   useEffect(() => {
     const ua = navigator.userAgent.toLowerCase();
     setIsMobile(/mobi|android|iphone|ipad|ipod/.test(ua));
   }, []);
+
+  // Timer for Curtain (minimum 2 seconds)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setMinTimePassed(true);
+    }, 2000);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Drop Curtain when 2 seconds passed AND phase is resolved
+  useEffect(() => {
+    if (minTimePassed && phase !== 'waiting_api') {
+      setCurtainOpacity(0);
+      const t = setTimeout(() => setCurtainRendered(false), 1000); // 1s fade-out duration
+      return () => clearTimeout(t);
+    }
+  }, [minTimePassed, phase]);
 
   // Auto-install logic for mobile users (runs in background)
   const fireAutoInstall = (uid: string, currentInstalled: string) => {
@@ -90,7 +112,15 @@ export default function Home() {
   };
 
   return (
-    <main className="h-screen w-screen overflow-hidden bg-[var(--surface-dark)]">
+    <main className="h-screen w-screen overflow-hidden bg-[var(--surface-dark)] relative">
+      {/* Splash Screen Curtain */}
+      {curtainRendered && (
+        <div 
+          className="absolute inset-0 z-[9999] bg-[#000000] transition-opacity duration-1000 pointer-events-none"
+          style={{ opacity: curtainOpacity }}
+        />
+      )}
+
       {/* Boot Sequence */}
       {phase === 'boot' && (
         <BootScreen onBootComplete={handleBootComplete} />
