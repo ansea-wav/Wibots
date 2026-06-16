@@ -1,9 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
-import BootScreen from '@/components/BootScreen';
-import LoginGate from '@/components/LoginGate';
-import DesktopEnvironment from '@/components/DesktopEnvironment';
-import MobileEnvironment from '@/components/MobileEnvironment';
+import dynamic from 'next/dynamic';
+
+const BootScreen = dynamic(() => import('@/components/BootScreen'));
+const LoginGate = dynamic(() => import('@/components/LoginGate'));
+const DesktopEnvironment = dynamic(() => import('@/components/DesktopEnvironment'));
+const MobileEnvironment = dynamic(() => import('@/components/MobileEnvironment'));
 import { apiLogin, apiInstallApp, type UserMasterData } from '@/lib/api';
 
 type AppPhase = 'boot' | 'login' | 'desktop' | 'waiting_api';
@@ -20,29 +22,22 @@ export default function Home() {
   // --- Curtain States ---
   const [curtainOpacity, setCurtainOpacity] = useState(1);
   const [curtainRendered, setCurtainRendered] = useState(true);
-  const [minTimePassed, setMinTimePassed] = useState(false);
 
   useEffect(() => {
     const ua = navigator.userAgent.toLowerCase();
     setIsMobile(/mobi|android|iphone|ipad|ipod/.test(ua));
   }, []);
-
-  // Timer for Curtain (minimum 2 seconds)
+  // Drop Curtain immediately when phase is resolved (no forced minimum time)
   useEffect(() => {
-    const t = setTimeout(() => {
-      setMinTimePassed(true);
-    }, 2000);
-    return () => clearTimeout(t);
-  }, []);
-
-  // Drop Curtain when 2 seconds passed AND phase is resolved
-  useEffect(() => {
-    if (minTimePassed && phase !== 'waiting_api') {
-      setCurtainOpacity(0);
-      const t = setTimeout(() => setCurtainRendered(false), 1000); // 1s fade-out duration
-      return () => clearTimeout(t);
+    if (phase !== 'waiting_api') {
+      // Small 50ms buffer to ensure React has fully committed the component behind the curtain
+      const dropTimer = setTimeout(() => {
+        setCurtainOpacity(0);
+        setTimeout(() => setCurtainRendered(false), 1000); // 1s fade-out duration
+      }, 50);
+      return () => clearTimeout(dropTimer);
     }
-  }, [minTimePassed, phase]);
+  }, [phase]);
 
   // Auto-install logic for mobile users (runs in background)
   const fireAutoInstall = (uid: string, currentInstalled: string) => {
