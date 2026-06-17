@@ -462,6 +462,8 @@ export default function DesktopEnvironment({ userData, userId }: DesktopProps) {
           <ResponderStudioApp
             client={clientRegistry}
             responders={responders}
+            files={files}
+            apiBase={API_BASE}
             onAdd={handleAddResponder}
             onDelete={handleDeleteResponder}
             onUpdate={handleUpdateResponder}

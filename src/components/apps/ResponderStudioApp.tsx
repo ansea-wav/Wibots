@@ -1,12 +1,14 @@
 'use client';
 import { useState } from 'react';
-import type { AutoResponder, ClientRegistry } from '@/lib/api';
+import type { AutoResponder, ClientRegistry, FileEntry } from '@/lib/api';
 import { useToast } from '@/hooks/useToast';
 import { useLanguage } from '@/lib/LanguageContext';
 
 interface ResponderStudioProps {
   client: ClientRegistry;
   responders: AutoResponder[];
+  files: FileEntry[];
+  apiBase: string;
   onAdd: (data: Partial<AutoResponder>) => void;
   onDelete: (responseId: string) => void;
   onUpdate: (responseId: string, data: Partial<AutoResponder>) => void;
@@ -23,7 +25,7 @@ const parseTargetGroups = (tg: any): string[] | 'All' => {
   return 'All';
 };
 
-export default function ResponderStudioApp({ client, responders, onAdd, onDelete, onUpdate }: ResponderStudioProps) {
+export default function ResponderStudioApp({ client, responders, files, apiBase, onAdd, onDelete, onUpdate }: ResponderStudioProps) {
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<Partial<AutoResponder>>({
@@ -37,6 +39,37 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
   const [searchQuery, setSearchQuery] = useState('');
   const { showToast, toastElement } = useToast();
   const { t } = useLanguage();
+
+  const [showMentionMenu, setShowMentionMenu] = useState(false);
+  const [mentionQuery, setMentionQuery] = useState('');
+
+  const handlePayloadChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setForm({ ...form, Payload_Data: val });
+    
+    const lastAtPos = val.lastIndexOf('@');
+    if (lastAtPos !== -1) {
+      const query = val.slice(lastAtPos + 1);
+      if (!query.includes(' ') && !query.includes('\n')) {
+        setShowMentionMenu(true);
+        setMentionQuery(query.toLowerCase());
+        return;
+      }
+    }
+    setShowMentionMenu(false);
+  };
+
+  const handleSelectImage = (f: FileEntry) => {
+    const lastAtPos = (form.Payload_Data || '').lastIndexOf('@');
+    if (lastAtPos !== -1) {
+      const fullUrl = f.id ? `https://drive.google.com/uc?export=view&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
+      const updated = (form.Payload_Data || '').slice(0, lastAtPos) + fullUrl + ' ';
+      setForm({ ...form, Payload_Data: updated });
+    }
+    setShowMentionMenu(false);
+  };
+
+  const filteredFiles = files?.filter(f => f.filename?.toLowerCase().includes(mentionQuery) && ['jpg','jpeg','png','gif','webp'].includes(f.filename?.split('.').pop()?.toLowerCase() || '')) || [];
 
   const resetForm = () => {
     setForm({ Keyword: '', Match_Type: 'Exact', Response_Type: 'Text', Payload_Data: '', Target_Groups: 'All' });
@@ -202,13 +235,37 @@ export default function ResponderStudioApp({ client, responders, onAdd, onDelete
             <label className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mb-1 block">
               {form.Response_Type === 'Text' ? 'Response Text' : 'File URL / Path'}
             </label>
-            <textarea
-              value={form.Payload_Data || ''}
-              onChange={e => setForm({ ...form, Payload_Data: e.target.value })}
-              rows={3}
-              className="w-full bg-[var(--surface-input)] border border-[var(--border-medium)] rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-[var(--neon-green)] transition-all resize-none"
-              placeholder={form.Response_Type === 'Text' ? 'Bot response message...' : 'https://example.com/file.jpg'}
-            />
+            <div className="relative">
+              <textarea
+                value={form.Payload_Data || ''}
+                onChange={handlePayloadChange}
+                rows={3}
+                className="w-full bg-[var(--surface-input)] border border-[var(--border-medium)] rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-[var(--neon-green)] transition-all resize-none relative z-10"
+                placeholder={form.Response_Type === 'Text' ? 'Bot response message...' : 'https://example.com/file.jpg'}
+              />
+              {showMentionMenu && files?.length > 0 && (
+                <div className="absolute left-0 right-0 bottom-[calc(100%+8px)] bg-[var(--surface-input)] rounded-lg border border-[var(--neon-green)] shadow-lg z-50 max-h-40 overflow-y-auto">
+                  {filteredFiles.length === 0 ? (
+                    <div className="p-2 text-[10px] text-[var(--text-tertiary)] text-center">No matching images</div>
+                  ) : (
+                    filteredFiles.map(f => (
+                      <div 
+                        key={f.filename} 
+                        onClick={() => handleSelectImage(f)}
+                        className="flex items-center gap-2 p-2 border-b border-[var(--border-subtle)] hover:bg-[var(--neon-green)]/10 cursor-pointer"
+                      >
+                        <span className="text-[var(--neon-green)] text-xs">🖼️</span>
+                        <div className="text-[10px] text-white truncate flex-1">{f.filename}</div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="text-[9px] text-[var(--text-tertiary)] mt-1 flex items-center gap-1">
+              <span className="text-[10px]">ℹ️</span>
+              {t('mention_hint') || 'Gunakan @ untuk menggunakan gambar'}
+            </div>
           </div>
 
           {showTargetSelection && (

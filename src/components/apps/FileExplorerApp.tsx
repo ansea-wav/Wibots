@@ -44,7 +44,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
   };
 
   const isImage = (filename: string) => {
-    const ext = filename.split('.').pop()?.toLowerCase();
+    const ext = filename?.split('.').pop()?.toLowerCase();
     return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '');
   };
 
@@ -174,11 +174,22 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                   {/* Actions Overlay */}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <button
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        const fullUrl = f.id ? `https://drive.google.com/uc?export=download&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
+                        window.open(fullUrl, '_blank');
+                      }}
+                      className="p-2 rounded-full bg-blue-500/20 hover:bg-blue-500/40 text-blue-400 transition-colors"
+                      title="Download"
+                    >
+                      <span className="material-symbols-outlined text-sm">download</span>
+                    </button>
+                    <button
                       onClick={(e) => { e.stopPropagation(); handleCopy(f.url); }}
-                      className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                      className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors flex items-center justify-center"
                       title="Copy URL"
                     >
-                      {copiedUrl === f.url ? '✓' : '📋'}
+                      {copiedUrl === f.url ? <span className="material-symbols-outlined text-sm">check</span> : <span className="material-symbols-outlined text-sm">content_copy</span>}
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); doDelete(f.filename); }}
@@ -209,6 +220,16 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                   <div className="text-[10px] text-[var(--text-tertiary)]">{formatSize(f.size)}</div>
                 </div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      const fullUrl = f.id ? `https://drive.google.com/uc?export=download&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
+                      window.open(fullUrl, '_blank');
+                    }}
+                    className="px-2 py-1 rounded text-[10px] text-blue-400 hover:bg-blue-400/10 cursor-pointer transition-colors"
+                  >
+                    Down
+                  </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); handleCopy(f.url); }}
                     className="px-2 py-1 rounded text-[10px] text-[var(--neon-cyan)] hover:bg-[var(--neon-cyan)]/10 cursor-pointer transition-colors"

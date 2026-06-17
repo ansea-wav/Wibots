@@ -30,7 +30,7 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
   const percentUsed = Math.min(100, (usedBytes / quotaBytes) * 100);
 
   const isImage = (filename: string) => {
-    const ext = filename.split('.').pop()?.toLowerCase();
+    const ext = filename?.split('.').pop()?.toLowerCase();
     return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '');
   };
 
@@ -108,6 +108,14 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
                 
                 {/* Actions */}
                 <div className="flex gap-2 shrink-0">
+                  <button onClick={() => {
+                      const fullUrl = f.id ? `https://drive.google.com/uc?export=download&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
+                      window.open(fullUrl, '_blank');
+                    }}
+                    className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 active:bg-blue-500/20 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">download</span>
+                  </button>
                   <button onClick={() => {
                       const fullUrl = `${apiBase}${f.url}`;
                       navigator.clipboard.writeText(fullUrl);

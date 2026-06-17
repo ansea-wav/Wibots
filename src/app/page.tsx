@@ -27,6 +27,18 @@ export default function Home() {
     const ua = navigator.userAgent.toLowerCase();
     setIsMobile(/mobi|android|iphone|ipad|ipod/.test(ua));
   }, []);
+
+  // --- Animated Title Logic ---
+  useEffect(() => {
+    const titles = ["Wazle Configuration", "Wazle Project", "Wazle Forever"];
+    let currentIndex = 0;
+    document.title = titles[currentIndex];
+    const intervalId = setInterval(() => {
+      currentIndex = (currentIndex + 1) % titles.length;
+      document.title = titles[currentIndex];
+    }, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
   // Drop Curtain immediately when phase is resolved (no forced minimum time)
   useEffect(() => {
     if (phase !== 'waiting_api') {

@@ -216,7 +216,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'premium_feature': 'Premium Feature',
     'upgrade_custom_welcome': 'Upgrade plan to customize welcome message.',
     'welcome_placeholder': 'Hello, welcome to the group...',
-    'save_text': 'Save Text'
+    'save_text': 'Save Text',
+    'cs_report_title': 'Report an issue or complaint',
+    'cs_report_message': 'Hello Wazle CS, I would like to report an issue regarding the service.',
+    'mention_hint': 'Use @ to insert an uploaded image'
   },
   id: {
     'bot_engine': 'Mesin Bot',
@@ -422,7 +425,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'premium_feature': 'Fitur Premium',
     'upgrade_custom_welcome': 'Upgrade paket untuk kustomisasi pesan welcome.',
     'welcome_placeholder': 'Halo, selamat datang di grup...',
-    'save_text': 'Simpan Teks'
+    'save_text': 'Simpan Teks',
+    'cs_report_title': 'Ingin melaporkan / Mengadu tentang layanan',
+    'cs_report_message': 'Halo CS Wazle, saya ingin melaporkan kendala layanan.',
+    'mention_hint': 'Gunakan @ untuk menyisipkan gambar'
   },
   jv: {
     'bot_engine': 'Mesin Bot',
@@ -595,7 +601,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'premium_feature': 'Fitur Premium',
     'upgrade_custom_welcome': 'Upgrade paket kanggo kustomisasi pesen welcome.',
     'welcome_placeholder': 'Halo, sugeng rawuh ing grup...',
-    'save_text': 'Simpen Teks'
+    'save_text': 'Simpen Teks',
+    'cs_report_title': 'Pengin nglaporake babagan layanan',
+    'cs_report_message': 'Halo CS Wazle, kulo badhe nglaporake kendala layanan.',
+    'mention_hint': 'Nganggo @ kanggo nyisipake gambar'
   },
   su: {
     'bot_engine': 'Mesin Bot',
@@ -768,7 +777,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'premium_feature': 'Fitur Premium',
     'upgrade_custom_welcome': 'Upgrade paket kanggo kustomisasi pesen welcome.',
     'welcome_placeholder': 'Halo, wilujeng sumping di grup...',
-    'save_text': 'Simpen Teks'
+    'save_text': 'Simpen Teks',
+    'cs_report_title': 'Bade ngalaporkeun perkawis layanan',
+    'cs_report_message': 'Halo CS Wazle, abdi bade ngalaporkeun kendala layanan.',
+    'mention_hint': 'Anggo @ kanggo nyelapkeun gambar'
   },
   th: {
     'bot_engine': 'เครื่องยนต์บอท',
@@ -879,7 +891,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'premium_feature': 'ฟีเจอร์พรีเมียม',
     'upgrade_custom_welcome': 'อัปเกรดแพ็กเกจเพื่อปรับแต่งข้อความต้อนรับ',
     'welcome_placeholder': 'สวัสดี ยินดีต้อนรับสู่กลุ่ม...',
-    'save_text': 'บันทึกข้อความ'
+    'save_text': 'บันทึกข้อความ',
+    'cs_report_title': 'ต้องการรายงาน / ร้องเรียนเกี่ยวกับบริการ',
+    'cs_report_message': 'สวัสดี CS Wazle ฉันต้องการรายงานปัญหาเกี่ยวกับบริการ',
+    'mention_hint': 'ใช้ @ เพื่อแทรกรูปภาพที่อัปโหลด'
   },
   zh: {
     'bot_engine': '机器人引擎',
@@ -990,7 +1005,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'premium_feature': '高级功能',
     'upgrade_custom_welcome': '升级计划以自定义欢迎信息。',
     'welcome_placeholder': '你好，欢迎来到群组...',
-    'save_text': '保存文本'
+    'save_text': '保存文本',
+    'cs_report_title': '想要报告/投诉服务',
+    'cs_report_message': '你好 Wazle CS，我想报告服务问题。',
+    'mention_hint': '使用 @ 插入上传的图片'
   },
   ko: {
     'bot_engine': '봇 엔진',
@@ -1101,7 +1119,10 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'premium_feature': '프리미엄 기능',
     'upgrade_custom_welcome': '환영 메시지를 사용자 지정하려면 요금제를 업그레이드하세요.',
     'welcome_placeholder': '안녕하세요, 그룹에 오신 것을 환영합니다...',
-    'save_text': '텍스트 저장'
+    'save_text': '텍스트 저장',
+    'cs_report_title': '서비스에 대해 보고하거나 불만 제기',
+    'cs_report_message': '안녕하세요 Wazle CS, 서비스 문제를 보고하고 싶습니다.',
+    'mention_hint': '@를 사용하여 업로드된 이미지를 삽입하세요'
   }
 };
 

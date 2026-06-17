@@ -11,7 +11,12 @@ export const toast = (message: string, type: 'success' | 'error' | 'info' = 'inf
 
 const playSound = (type: 'success' | 'error' | 'info') => {
   try {
+    // Suppress AudioContext warning if user hasn't interacted yet
+    if (typeof navigator !== 'undefined' && 'userActivation' in navigator) {
+      if (!(navigator as any).userActivation.hasBeenActive) return;
+    }
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return;
     const ctx = new AudioContext();
     const osc = ctx.createOscillator();
     const gainNode = ctx.createGain();

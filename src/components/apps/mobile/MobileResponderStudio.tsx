@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef } from 'react';
-import type { AutoResponder, ClientRegistry } from '@/lib/api';
+import type { AutoResponder, ClientRegistry, FileEntry } from '@/lib/api';
 import { useLanguage } from '@/lib/LanguageContext';
 import { toast } from '@/components/DynamicIsland';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,12 +8,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface ResponderStudioProps {
   client: ClientRegistry;
   responders: AutoResponder[];
+  files: FileEntry[];
+  apiBase: string;
   onAdd: (data: Partial<AutoResponder>) => void;
   onDelete: (id: string) => void;
   onUpdate: (id: string, data: Partial<AutoResponder>) => void;
 }
 
-export default function MobileResponderStudio({ client, responders, onAdd, onDelete }: ResponderStudioProps) {
+export default function MobileResponderStudio({ client, responders, files, apiBase, onAdd, onDelete }: ResponderStudioProps) {
   const { t } = useLanguage();
   const [newKeyword, setNewKeyword] = useState('');
   const [newMatchType, setNewMatchType] = useState<'Exact' | 'Contains'>('Exact');
@@ -21,6 +23,37 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
   const [newResponse, setNewResponse] = useState('');
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
+  
+  const [showMentionMenu, setShowMentionMenu] = useState(false);
+  const [mentionQuery, setMentionQuery] = useState('');
+
+  const handleResponseChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setNewResponse(val);
+    
+    const lastAtPos = val.lastIndexOf('@');
+    if (lastAtPos !== -1) {
+      const query = val.slice(lastAtPos + 1);
+      if (!query.includes(' ') && !query.includes('\n')) {
+        setShowMentionMenu(true);
+        setMentionQuery(query.toLowerCase());
+        return;
+      }
+    }
+    setShowMentionMenu(false);
+  };
+
+  const handleSelectImage = (f: FileEntry) => {
+    const lastAtPos = newResponse.lastIndexOf('@');
+    if (lastAtPos !== -1) {
+      const fullUrl = f.id ? `https://drive.google.com/uc?export=view&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
+      const updated = newResponse.slice(0, lastAtPos) + fullUrl + ' ';
+      setNewResponse(updated);
+    }
+    setShowMentionMenu(false);
+  };
+  
+  const filteredFiles = files?.filter(f => f.filename?.toLowerCase().includes(mentionQuery) && ['jpg','jpeg','png','gif','webp'].includes(f.filename?.split('.').pop()?.toLowerCase() || '')) || [];
 
   const tier = client.Package_Tier;
   const maxResponders = (tier === 'God' || tier === 'Premium') ? 100 : (tier === 'Standard' || tier === 'Standart') ? 25 : 5;
@@ -236,12 +269,36 @@ export default function MobileResponderStudio({ client, responders, onAdd, onDel
 
               <div>
                 <label className="text-xs font-bold text-white/50 uppercase tracking-wider block mb-2">{t('bot_reply_label')}</label>
-                <textarea 
-                  value={newResponse} 
-                  onChange={e => setNewResponse(e.target.value)} 
-                  placeholder={t('example_pong')} 
-                  className="w-full h-24 p-4 bg-black/40 border border-white/10 rounded-2xl text-white outline-none focus:border-purple-500 transition-colors resize-none" 
-                />
+                <div className="relative">
+                  <textarea 
+                    value={newResponse} 
+                    onChange={handleResponseChange} 
+                    placeholder={t('example_pong')} 
+                    className="w-full h-24 p-4 bg-black/40 border border-white/10 rounded-2xl text-white outline-none focus:border-purple-500 transition-colors resize-none relative z-10" 
+                  />
+                  {showMentionMenu && files?.length > 0 && (
+                    <div className="absolute left-0 right-0 bottom-[calc(100%+8px)] bg-[#1a1a1c] rounded-xl border border-purple-500/50 shadow-[0_10px_40px_rgba(168,85,247,0.2)] z-50 max-h-48 overflow-y-auto">
+                      {filteredFiles.length === 0 ? (
+                        <div className="p-3 text-xs text-white/50 text-center">No matching images</div>
+                      ) : (
+                        filteredFiles.map(f => (
+                          <div 
+                            key={f.filename} 
+                            onClick={() => handleSelectImage(f)}
+                            className="flex items-center gap-3 p-3 border-b border-white/5 hover:bg-white/5 active:bg-white/10 cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-purple-400 text-xl">image</span>
+                            <div className="text-sm text-white truncate flex-1">{f.filename}</div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className="text-[10px] text-purple-400/70 mt-2 flex items-center gap-1 font-medium bg-purple-500/10 inline-flex px-2 py-1 rounded-md">
+                  <span className="material-symbols-outlined text-[14px]">info</span>
+                  {t('mention_hint') || 'Gunakan @ untuk menggunakan gambar'}
+                </div>
               </div>
               <button 
                 onClick={handleAdd} 

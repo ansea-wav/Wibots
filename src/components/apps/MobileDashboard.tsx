@@ -168,6 +168,25 @@ export default function MobileDashboard({ userData }: { userData: UserMasterData
         </div>
       </motion.div>
 
+      {/* CS Report Button */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="w-full max-w-[320px] mt-6 bg-[#87ceeb]/10 border border-[#87ceeb]/20 rounded-3xl p-5 shadow-lg flex flex-col items-center justify-center cursor-pointer hover:bg-[#87ceeb]/20 active:scale-[0.98] transition-all"
+        onClick={() => {
+          const message = encodeURIComponent(t('cs_report_message') || 'Halo CS Wazle, saya ingin melaporkan kendala layanan.');
+          window.open(`https://wa.me/62882008677172?text=${message}`, '_blank');
+        }}
+      >
+        <div className="w-14 h-14 rounded-full bg-[#87ceeb]/20 flex items-center justify-center text-[#87ceeb] mb-3">
+          <span className="material-symbols-outlined text-3xl">support_agent</span>
+        </div>
+        <div className="text-[#87ceeb] text-sm font-bold tracking-wide text-center px-2">
+          {t('cs_report_title')}
+        </div>
+      </motion.div>
+
       {/* Version Info */}
       <motion.div
         initial={{ opacity: 0 }}

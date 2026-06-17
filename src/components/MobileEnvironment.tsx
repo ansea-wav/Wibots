@@ -236,7 +236,7 @@ export default function MobileEnvironment({ userData, userId }: MobileProps) {
         {activeTab === 'dashboard' && <MobileDashboard userData={{...userData, registry: clientRegistry}} />}
         {activeTab === 'protocols' && renderProtocolContent()}
         {activeTab === 'responder' && renderAppWrapper(
-          <MobileResponderStudio client={clientRegistry} responders={responders} onAdd={handleAddResponder} onDelete={handleDeleteResponder} onUpdate={handleUpdateResponder} />,
+          <MobileResponderStudio client={clientRegistry} responders={responders} files={files} apiBase={API_BASE} onAdd={handleAddResponder} onDelete={handleDeleteResponder} onUpdate={handleUpdateResponder} />,
           'Responder Studio'
         )}
         {activeTab === 'earn' && renderAppWrapper(
