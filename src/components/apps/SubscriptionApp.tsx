@@ -12,7 +12,7 @@ const getPlans = (t: (k: string) => string) => [
     id: 'free',
     name: t('plan_free_name'),
     price: 'Rp 0',
-    features: [t('feat_1_resp'), t('feat_no_upload'), t('feat_few_services'), t('feat_1_group')],
+    features: [t('feat_5_resp'), t('feat_no_upload'), t('feat_few_services'), t('feat_1_group')],
     color: '#9ca3af',
     icon: '🌱',
   },
