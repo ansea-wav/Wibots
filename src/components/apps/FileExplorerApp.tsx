@@ -34,8 +34,9 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
   const usedBytes = files.reduce((sum, f) => sum + (Number(f.size) || 0), 0);
   const percentUsed = Math.min(100, (usedBytes / quotaBytes) * 100);
 
-  const getFileIcon = (filename: string) => {
-    const ext = filename.split('.').pop()?.toLowerCase();
+  const getFileIcon = (f: FileEntry) => {
+    const nameToCheck = f.filename || (f as any).name || f.url || '';
+    const ext = nameToCheck.split('.').pop()?.toLowerCase();
     if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '')) return '🖼️';
     if (['pdf'].includes(ext || '')) return '📄';
     if (['doc', 'docx'].includes(ext || '')) return '📝';
@@ -44,8 +45,9 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
     return '📁';
   };
 
-  const isImage = (filename: string) => {
-    const ext = filename?.split('.').pop()?.toLowerCase();
+  const isImage = (f: FileEntry) => {
+    const nameToCheck = f.filename || (f as any).name || f.url || '';
+    const ext = nameToCheck?.split('.').pop()?.toLowerCase();
     return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '');
   };
 
@@ -167,10 +169,10 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                 {/* Preview */}
                 <div className="w-full aspect-square rounded-lg overflow-hidden mb-2 flex items-center justify-center relative"
                   style={{ background: 'rgba(0,0,0,0.3)' }}>
-                  {isImage(f.filename) ? (
-                    <img src={f.id ? `https://drive.google.com/uc?export=view&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`} alt={f.filename} className="w-full h-full object-cover" />
+                  {isImage(f) ? (
+                    <img src={f.id ? `https://drive.google.com/uc?export=view&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`} alt={f.filename || 'image'} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-3xl">{getFileIcon(f.filename)}</span>
+                    <span className="text-3xl">{getFileIcon(f)}</span>
                   )}
                   {/* Actions Overlay */}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -201,7 +203,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                     </button>
                   </div>
                 </div>
-                <div className="text-[11px] text-white truncate font-medium">{f.filename}</div>
+                <div className="text-[11px] text-white truncate font-medium">{f.filename || (f as any).name || 'Unknown File'}</div>
                 <div className="text-[10px] text-[var(--text-tertiary)]">{formatSize(f.size)}</div>
               </div>
             ))}
@@ -215,9 +217,9 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                 className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.03] transition-colors group cursor-pointer border border-transparent hover:border-white/5"
                 onClick={() => setSelectedFile(f)}
               >
-                <span className="text-lg">{getFileIcon(f.filename)}</span>
+                <span className="text-lg">{getFileIcon(f)}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs text-white truncate">{f.filename}</div>
+                  <div className="text-xs text-white truncate">{f.filename || (f as any).name || 'Unknown File'}</div>
                   <div className="text-[10px] text-[var(--text-tertiary)]">{formatSize(f.size)}</div>
                 </div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

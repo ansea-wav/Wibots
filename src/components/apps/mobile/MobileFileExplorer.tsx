@@ -30,8 +30,9 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
   const usedBytes = files.reduce((sum, f) => sum + (Number(f.size) || 0), 0);
   const percentUsed = Math.min(100, (usedBytes / quotaBytes) * 100);
 
-  const isImage = (filename: string) => {
-    const ext = filename?.split('.').pop()?.toLowerCase();
+  const isImage = (f: FileEntry) => {
+    const nameToCheck = f.filename || (f as any).name || f.url || '';
+    const ext = nameToCheck?.split('.').pop()?.toLowerCase();
     return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '');
   };
 
@@ -94,8 +95,8 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
               <div key={f.filename} className="p-4 rounded-2xl border border-white/5 bg-[#1a1a1c] flex items-center gap-4">
                 {/* File Preview/Icon */}
                 <div className="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden shrink-0">
-                  {isImage(f.filename) ? (
-                    <img src={f.id ? `https://drive.google.com/uc?export=view&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`} alt={f.filename} className="w-full h-full object-cover" />
+                  {isImage(f) ? (
+                    <img src={f.id ? `https://drive.google.com/uc?export=view&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`} alt={f.filename || 'image'} className="w-full h-full object-cover" />
                   ) : (
                     <span className="material-symbols-outlined text-2xl text-white/50">description</span>
                   )}
@@ -103,7 +104,7 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
                 
                 {/* File Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="text-base font-bold text-white truncate">{f.filename || 'Unknown File'}</div>
+                  <div className="text-base font-bold text-white truncate">{f.filename || (f as any).name || 'Unknown File'}</div>
                   <div className="text-xs text-white/50 mt-1">{formatSize(f.size)}</div>
                 </div>
                 
