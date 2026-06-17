@@ -18,6 +18,7 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
   const [loading, setLoading] = useState(false);
 
   const formatSize = (bytes: number) => {
+    if (!bytes || isNaN(bytes)) return '0 B';
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
@@ -26,7 +27,7 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
   const tier = client?.Package_Tier || 'Basic';
   const quotaMB = (tier === 'Premium' || tier === 'God') ? 1000 : (tier === 'Standard' || tier === 'Standart') ? 400 : 40;
   const quotaBytes = quotaMB * 1024 * 1024;
-  const usedBytes = files.reduce((sum, f) => sum + f.size, 0);
+  const usedBytes = files.reduce((sum, f) => sum + (Number(f.size) || 0), 0);
   const percentUsed = Math.min(100, (usedBytes / quotaBytes) * 100);
 
   const isImage = (filename: string) => {
@@ -102,7 +103,7 @@ export default function MobileFileExplorer({ client, files, onUpload, onDelete, 
                 
                 {/* File Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="text-base font-bold text-white truncate">{f.filename}</div>
+                  <div className="text-base font-bold text-white truncate">{f.filename || 'Unknown File'}</div>
                   <div className="text-xs text-white/50 mt-1">{formatSize(f.size)}</div>
                 </div>
                 

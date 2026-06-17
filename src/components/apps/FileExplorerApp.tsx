@@ -22,6 +22,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
   const { showToast, toastElement } = useToast();
 
   const formatSize = (bytes: number) => {
+    if (!bytes || isNaN(bytes)) return '0 B';
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
@@ -30,7 +31,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
   const tier = client?.Package_Tier || 'Basic';
   const quotaMB = (tier === 'Premium' || tier === 'God') ? 1000 : (tier === 'Standard' || tier === 'Standart') ? 400 : 40;
   const quotaBytes = quotaMB * 1024 * 1024;
-  const usedBytes = files.reduce((sum, f) => sum + f.size, 0);
+  const usedBytes = files.reduce((sum, f) => sum + (Number(f.size) || 0), 0);
   const percentUsed = Math.min(100, (usedBytes / quotaBytes) * 100);
 
   const getFileIcon = (filename: string) => {
