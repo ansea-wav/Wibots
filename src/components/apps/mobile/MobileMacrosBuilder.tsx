@@ -78,10 +78,15 @@ export default function MobileMacrosBuilder({ userId, client, macros, setMacros 
           onClick={handleToggleEnable}
         >
           <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <span className="material-symbols-outlined text-indigo-400">auto_fix_high</span>
-              {t('macros_builder')}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <span className="material-symbols-outlined text-indigo-400">auto_fix_high</span>
+                {t('macros_builder')}
+              </h2>
+              <span className="px-2 py-0.5 rounded-full bg-orange-500/20 border border-orange-500/30 text-orange-400 text-[10px] font-bold tracking-wider uppercase">
+                {t('limited_feature')}
+              </span>
+            </div>
             <p className="text-xs text-white/50 mt-1">Status: {isEnabled ? t('status_active') : t('status_disabled')}</p>
           </div>
           <div className={`w-14 h-8 rounded-full p-1 transition-colors duration-300 ${isEnabled ? 'bg-indigo-500' : 'bg-white/10'}`}>
