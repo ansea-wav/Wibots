@@ -59,6 +59,8 @@ export interface BotConfig {
   Anti_Link_Group: boolean;
   Welcome_Message_Status: boolean;
   Custom_Welcome_Text: string;
+  Cmd_SetDel_Status?: boolean;
+  Cmd_Hidetag_Status?: boolean;
 }
 
 export interface AutoResponder {

@@ -44,6 +44,8 @@ export default function MobileControlCenter({
   const TOGGLES = [
     { key: 'Anti_Link_Group', label: t('anti_link'), desc: t('anti_link_desc'), icon: 'gpp_maybe' },
     { key: 'Welcome_Message_Status', label: t('welcome_msg'), desc: t('welcome_msg_desc'), icon: 'waving_hand' },
+    { key: 'Cmd_SetDel_Status', label: t('cmd_setdel') || 'Menggunakan !setcmd dan !delcmd', desc: t('cmd_setdel_desc') || 'Admin dapat mengatur Auto-Responder dari dalam grup.', icon: 'add_comment' },
+    { key: 'Cmd_Hidetag_Status', label: t('cmd_hidetag') || 'Menggunakan !hidetag', desc: t('cmd_hidetag_desc') || 'Admin dapat melakukan pengumuman yang men-tag seluruh anggota.', icon: 'campaign' },
   ];
 
   return (
