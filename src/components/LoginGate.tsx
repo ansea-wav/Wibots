@@ -12,6 +12,7 @@ import MobileLogin from './MobileLogin';
 export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) {
   const [phone, setPhone] = useState('');
   const [licenseKey, setLicenseKey] = useState('');
+  const [showLicense, setShowLicense] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
@@ -113,15 +114,26 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
               <label className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-[0.2em] font-semibold mb-2 block">
                 License Key
               </label>
-              <input
-                id="login-license"
-                type="password"
-                placeholder="NTLS-XXXX-XXXX-XXXX"
-                value={licenseKey}
-                onChange={e => setLicenseKey(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3.5 text-white text-sm outline-none focus:border-white/30 focus:bg-white/5 transition-all placeholder:text-white/20 font-mono backdrop-blur-md shadow-inner"
-              />
+              <div className="relative flex items-center">
+                <input
+                  id="login-license"
+                  type={showLicense ? "text" : "password"}
+                  placeholder="NTLS-XXXX-XXXX-XXXX"
+                  value={licenseKey}
+                  onChange={e => setLicenseKey(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleLogin()}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3.5 pr-12 text-white text-sm outline-none focus:border-white/30 focus:bg-white/5 transition-all placeholder:text-white/20 font-mono backdrop-blur-md shadow-inner"
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowLicense(!showLicense)}
+                  className="absolute right-4 text-white/40 hover:text-white focus:outline-none flex items-center justify-center"
+                >
+                  <span className="material-symbols-outlined text-[18px]">
+                    {showLicense ? 'visibility_off' : 'visibility'}
+                  </span>
+                </button>
+              </div>
             </div>
 
             {error && (

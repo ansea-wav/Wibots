@@ -10,6 +10,7 @@ interface MobileLoginProps {
 export default function MobileLogin({ onLoginSuccess }: MobileLoginProps) {
   const [phone, setPhone] = useState('');
   const [licenseKey, setLicenseKey] = useState('');
+  const [showLicense, setShowLicense] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
@@ -97,14 +98,23 @@ export default function MobileLogin({ onLoginSuccess }: MobileLoginProps) {
             />
           </div>
 
-          <div className="relative">
+          <div className="relative flex items-center">
             <input 
-              type="password"
+              type={showLicense ? "text" : "password"}
               placeholder="License Key"
               value={licenseKey}
               onChange={e => setLicenseKey(e.target.value)}
-              className="w-full bg-white/5 border-none rounded-2xl px-5 py-4 text-white text-base outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-white/30"
+              className="w-full bg-white/5 border-none rounded-2xl px-5 py-4 pr-12 text-white text-base outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-white/30"
             />
+            <button 
+              type="button"
+              onClick={() => setShowLicense(!showLicense)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white focus:outline-none"
+            >
+              <span className="material-symbols-outlined">
+                {showLicense ? 'visibility_off' : 'visibility'}
+              </span>
+            </button>
           </div>
 
           {error && (
