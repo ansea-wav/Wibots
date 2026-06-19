@@ -219,8 +219,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'welcome_placeholder': 'Hello, welcome to the group...',
     'save_text': 'Save Text',
     'cs_report_title': 'Report an issue or complaint',
-    'cs_report_message': 'Hello Wazle CS, I would like to report an issue regarding the service.',
-    'mention_hint': 'Use @ to insert an uploaded image'
+    'cs_report_message': 'Hello Wazle CS, I want to report an issue with the service.',
+    'mention_hint': 'Use @ to insert uploaded images',
+    'cmd_setdel': 'Use !setcmd and !delcmd',
+    'cmd_setdel_desc': 'Admins can manage Auto-Responder from within groups.',
+    'cmd_hidetag': 'Use !hidetag',
+    'cmd_hidetag_desc': 'Admins can make announcements that tag all members.'
   },
   id: {
     'bot_engine': 'Mesin Bot',
@@ -429,8 +433,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'welcome_placeholder': 'Halo, selamat datang di grup...',
     'save_text': 'Simpan Teks',
     'cs_report_title': 'Ingin melaporkan / Mengadu tentang layanan',
-    'cs_report_message': 'Halo CS Wazle, saya ingin melaporkan kendala layanan.',
-    'mention_hint': 'Gunakan @ untuk menyisipkan gambar'
+    'cs_report_message': 'Halo CS Wazle, saya ingin melaporkan masalah layanan.',
+    'mention_hint': 'Gunakan @ untuk menyisipkan gambar yang diunggah',
+    'cmd_setdel': 'Menggunakan !setcmd dan !delcmd',
+    'cmd_setdel_desc': 'Admin dapat mengatur Auto-Responder dari dalam grup.',
+    'cmd_hidetag': 'Menggunakan !hidetag',
+    'cmd_hidetag_desc': 'Admin dapat melakukan pengumuman yang men-tag seluruh anggota.'
   },
   jv: {
     'bot_engine': 'Mesin Bot',
@@ -606,8 +614,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'welcome_placeholder': 'Halo, sugeng rawuh ing grup...',
     'save_text': 'Simpen Teks',
     'cs_report_title': 'Pengin nglaporake babagan layanan',
-    'cs_report_message': 'Halo CS Wazle, kulo badhe nglaporake kendala layanan.',
-    'mention_hint': 'Nganggo @ kanggo nyisipake gambar'
+    'cs_report_message': 'Halo CS Wazle, kulo badhe nglaporake masalah layanan.',
+    'mention_hint': 'Gunakake @ kanggo nyisipake gambar sing diunggah',
+    'cmd_setdel': 'Nganggo !setcmd lan !delcmd',
+    'cmd_setdel_desc': 'Admin iso ngatur Auto-Responder seko njero grup.',
+    'cmd_hidetag': 'Nganggo !hidetag',
+    'cmd_hidetag_desc': 'Admin iso nggawe woro-woro sing ngetag kabeh anggota.'
   },
   su: {
     'bot_engine': 'Mesin Bot',
@@ -783,8 +795,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'welcome_placeholder': 'Halo, wilujeng sumping di grup...',
     'save_text': 'Simpen Teks',
     'cs_report_title': 'Bade ngalaporkeun perkawis layanan',
-    'cs_report_message': 'Halo CS Wazle, abdi bade ngalaporkeun kendala layanan.',
-    'mention_hint': 'Anggo @ kanggo nyelapkeun gambar'
+    'cs_report_message': 'Halo CS Wazle, abdi hoyong ngalaporkeun masalah layanan.',
+    'mention_hint': 'Anggo @ pikeun nyelapkeun gambar anu diunggah',
+    'cmd_setdel': 'Ngagunakeun !setcmd sareng !delcmd',
+    'cmd_setdel_desc': 'Admin tiasa ngatur Auto-Responder ti lebet grup.',
+    'cmd_hidetag': 'Ngagunakeun !hidetag',
+    'cmd_hidetag_desc': 'Admin tiasa ngadamel pengumuman anu ngetag sadaya anggota.'
   },
   th: {
     'bot_engine': 'เครื่องยนต์บอท',
@@ -898,8 +914,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'welcome_placeholder': 'สวัสดี ยินดีต้อนรับสู่กลุ่ม...',
     'save_text': 'บันทึกข้อความ',
     'cs_report_title': 'ต้องการรายงาน / ร้องเรียนเกี่ยวกับบริการ',
-    'cs_report_message': 'สวัสดี CS Wazle ฉันต้องการรายงานปัญหาเกี่ยวกับบริการ',
-    'mention_hint': 'ใช้ @ เพื่อแทรกรูปภาพที่อัปโหลด'
+    'cs_report_message': 'สวัสดี Wazle CS ฉันต้องการรายงานปัญหาเกี่ยวกับบริการ',
+    'mention_hint': 'ใช้ @ เพื่อแทรกรูปภาพที่อัปโหลด',
+    'cmd_setdel': 'ใช้ !setcmd และ !delcmd',
+    'cmd_setdel_desc': 'ผู้ดูแลระบบสามารถจัดการ Auto-Responder จากภายในกลุ่มได้',
+    'cmd_hidetag': 'ใช้ !hidetag',
+    'cmd_hidetag_desc': 'ผู้ดูแลระบบสามารถประกาศโดยแท็กสมาชิกทั้งหมดได้'
   },
   zh: {
     'bot_engine': '机器人引擎',
@@ -1013,8 +1033,12 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'welcome_placeholder': '你好，欢迎来到群组...',
     'save_text': '保存文本',
     'cs_report_title': '想要报告/投诉服务',
-    'cs_report_message': '你好 Wazle CS，我想报告服务问题。',
-    'mention_hint': '使用 @ 插入上传的图片'
+    'cs_report_message': '你好 Wazle CS，我想报告一个服务问题。',
+    'mention_hint': '使用 @ 插入上传的图片',
+    'cmd_setdel': '使用 !setcmd 和 !delcmd',
+    'cmd_setdel_desc': '管理员可以在群组内管理自动回复。',
+    'cmd_hidetag': '使用 !hidetag',
+    'cmd_hidetag_desc': '管理员可以发布@所有成员的公告。'
   },
   ko: {
     'bot_engine': '봇 엔진',
@@ -1129,7 +1153,11 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'save_text': '텍스트 저장',
     'cs_report_title': '서비스에 대해 보고하거나 불만 제기',
     'cs_report_message': '안녕하세요 Wazle CS, 서비스 문제를 보고하고 싶습니다.',
-    'mention_hint': '@를 사용하여 업로드된 이미지를 삽입하세요'
+    'mention_hint': '@를 사용하여 업로드된 이미지를 삽입하세요',
+    'cmd_setdel': '!setcmd 및 !delcmd 사용',
+    'cmd_setdel_desc': '관리자는 그룹 내에서 자동 응답을 관리할 수 있습니다.',
+    'cmd_hidetag': '!hidetag 사용',
+    'cmd_hidetag_desc': '관리자는 모든 멤버를 태그하여 공지할 수 있습니다.'
   }
 };
 
