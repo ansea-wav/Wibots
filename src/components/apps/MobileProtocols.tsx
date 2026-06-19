@@ -17,7 +17,7 @@ export default function MobileProtocols({ onOpenApp }: MobileProtocolsProps) {
     { id: 'fileexplorer', name: t('file_explorer'), icon: 'folder', color: 'from-orange-500 to-yellow-500', desc: t('desc_file_explorer') },
     { id: 'taskmanager', name: t('task_manager'), icon: 'analytics', color: 'from-green-500 to-emerald-500', desc: t('desc_task_manager') },
     { id: 'groupmanager', name: t('group_manager'), icon: 'groups', color: 'from-purple-500 to-pink-500', desc: t('desc_group_manager') },
-    { id: 'macros', name: t('macros_builder'), icon: 'auto_fix_high', color: 'from-indigo-500 to-purple-500', desc: t('desc_macros_builder') },
+    { id: 'macros', name: t('macros_builder'), icon: 'auto_fix_high', color: 'from-indigo-500 to-purple-500', desc: t('desc_macros_builder'), limitedFeature: true },
     { id: 'minigames', name: t('minigames'), icon: 'sports_esports', color: 'from-rose-500 to-red-500', desc: t('desc_minigames'), comingSoon: true },
     { id: 'ai_persona', name: t('ai_persona'), icon: 'face', color: 'from-emerald-400 to-teal-500', desc: t('desc_ai_persona'), comingSoon: true },
     { id: 'broadcast', name: t('broadcast_manager'), icon: 'campaign', color: 'from-amber-400 to-orange-500', desc: t('desc_broadcast_manager'), comingSoon: true },
@@ -69,6 +69,11 @@ export default function MobileProtocols({ onOpenApp }: MobileProtocolsProps) {
               {app.comingSoon && (
                 <div className="mt-3 inline-block px-2 py-0.5 bg-white/10 text-white/70 rounded-full text-[9px] font-bold uppercase tracking-widest border border-white/10">
                   Coming Soon
+                </div>
+              )}
+              {app.limitedFeature && (
+                <div className="mt-3 inline-block px-2 py-0.5 bg-orange-500/20 text-orange-400 rounded-full text-[9px] font-bold uppercase tracking-widest border border-orange-500/30">
+                  {t('limited_feature')}
                 </div>
               )}
             </div>
