@@ -18,24 +18,26 @@ export default function PricingPage() {
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-5"></div>
       </div>
 
-      {/* HEADER NAVIGATION */}
       <header className="relative z-10 pt-16 md:pt-8 pb-4 px-4 md:px-6 max-w-7xl mx-auto flex justify-center items-center">
-        <nav className="flex items-center gap-5 md:gap-8 bg-white/5 border border-white/10 px-6 md:px-8 py-3 rounded-full backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
-          <Link href="/" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm font-medium">{t('nav_home')}</Link>
-          <Link href="/pricing" className="text-white font-semibold text-xs md:text-sm relative">
-            {t('nav_pricing')}
-            <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-white rounded-full shadow-[0_0_8px_white]"></span>
-          </Link>
-          <Link href="/download" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm font-medium">{t('nav_download')}</Link>
-        </nav>
-        {/* Language Switcher */}
-        <div className="absolute top-4 right-4 md:top-8 md:right-6">
-          <div className="relative flex items-center bg-white/10 hover:bg-white/20 transition border border-white/20 rounded-full backdrop-blur-md shadow-lg pr-2">
-            <span className="material-symbols-outlined text-[14px] text-white pl-3 pointer-events-none absolute">language</span>
+        <div className="flex items-center bg-white/5 border border-white/10 p-1.5 rounded-full backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
+          <nav className="flex items-center gap-4 md:gap-6 px-4 md:px-6 py-1.5">
+            <Link href="/" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm font-medium">{t('nav_home')}</Link>
+            <Link href="/pricing" className="text-white font-semibold text-xs md:text-sm relative">
+              {t('nav_pricing')}
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-white rounded-full shadow-[0_0_8px_white]"></span>
+            </Link>
+            <Link href="/download" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm font-medium">{t('nav_download')}</Link>
+          </nav>
+
+          <div className="w-[1px] h-4 bg-white/20 mx-1"></div>
+
+          {/* Language Switcher */}
+          <div className="relative flex items-center bg-white/5 hover:bg-white/10 transition-colors rounded-full pr-2">
+            <span className="material-symbols-outlined text-[14px] text-white/80 pl-3 pointer-events-none absolute">language</span>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as any)}
-              className="appearance-none bg-transparent text-white text-xs font-bold py-1.5 pl-8 pr-4 outline-none cursor-pointer"
+              className="appearance-none bg-transparent text-white/90 hover:text-white text-xs font-bold py-1.5 pl-8 pr-4 outline-none cursor-pointer"
             >
               <option value="en" className="text-black">EN</option>
               <option value="id" className="text-black">ID</option>
@@ -45,7 +47,7 @@ export default function PricingPage() {
               <option value="zh" className="text-black">中文</option>
               <option value="ko" className="text-black">한국어</option>
             </select>
-            <span className="material-symbols-outlined text-[12px] text-white pointer-events-none absolute right-2">expand_more</span>
+            <span className="material-symbols-outlined text-[12px] text-white/80 pointer-events-none absolute right-2">expand_more</span>
           </div>
         </div>
       </header>
