@@ -46,6 +46,7 @@ export default function MobileControlCenter({
     { key: 'Welcome_Message_Status', label: t('welcome_msg'), desc: t('welcome_msg_desc'), icon: 'waving_hand' },
     { key: 'Cmd_SetDel_Status', label: t('cmd_setdel') || 'Menggunakan !setcmd dan !delcmd', desc: t('cmd_setdel_desc') || 'Admin dapat mengatur Auto-Responder dari dalam grup.', icon: 'add_comment' },
     { key: 'Cmd_Hidetag_Status', label: t('cmd_hidetag') || 'Menggunakan !hidetag', desc: t('cmd_hidetag_desc') || 'Admin dapat melakukan pengumuman yang men-tag seluruh anggota.', icon: 'campaign' },
+    { key: 'Cmd_Stiker_Status', label: t('cmd_stiker') || 'Menggunakan !stiker', desc: t('cmd_stiker_desc') || 'Izinkan anggota membuat stiker teks secara otomatis.', icon: 'image' },
   ];
 
   return (

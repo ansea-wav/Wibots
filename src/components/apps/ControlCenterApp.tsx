@@ -36,15 +36,33 @@ export default function ControlCenterApp({
   const toggleItems: { key: keyof BotConfig | string; label: string; desc: string; icon: string }[] = [
     {
       key: 'Anti_Link_Group',
-      label: 'Anti-Link Protection',
-      desc: 'Otomatis hapus tautan di grup',
+      label: t('anti_link'),
+      desc: t('anti_link_desc'),
       icon: '🛡️',
     },
     {
       key: 'Welcome_Message_Status',
-      label: 'Welcome Message',
-      desc: 'Kirim sambutan otomatis untuk member baru',
+      label: t('welcome_msg'),
+      desc: t('welcome_msg_desc'),
       icon: '👋',
+    },
+    {
+      key: 'Cmd_SetDel_Status',
+      label: t('cmd_setdel'),
+      desc: t('cmd_setdel_desc'),
+      icon: '⚙️',
+    },
+    {
+      key: 'Cmd_Hidetag_Status',
+      label: t('cmd_hidetag'),
+      desc: t('cmd_hidetag_desc'),
+      icon: '📢',
+    },
+    {
+      key: 'Cmd_Stiker_Status',
+      label: t('cmd_stiker'),
+      desc: t('cmd_stiker_desc'),
+      icon: '🖼️',
     },
   ];
 

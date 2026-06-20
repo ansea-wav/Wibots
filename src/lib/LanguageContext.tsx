@@ -224,7 +224,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'cmd_setdel': 'Use !setcmd and !delcmd',
     'cmd_setdel_desc': 'Admins can manage Auto-Responder from within groups.',
     'cmd_hidetag': 'Use !hidetag',
-    'cmd_hidetag_desc': 'Admins can make announcements that tag all members.'
+    'cmd_hidetag_desc': 'Admins can make announcements that tag all members.',
+    'cmd_stiker': 'Use !stiker',
+    'cmd_stiker_desc': 'Allow members to generate text stickers.'
   },
   id: {
     'bot_engine': 'Mesin Bot',
@@ -438,7 +440,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'cmd_setdel': 'Menggunakan !setcmd dan !delcmd',
     'cmd_setdel_desc': 'Admin dapat mengatur Auto-Responder dari dalam grup.',
     'cmd_hidetag': 'Menggunakan !hidetag',
-    'cmd_hidetag_desc': 'Admin dapat melakukan pengumuman yang men-tag seluruh anggota.'
+    'cmd_hidetag_desc': 'Admin dapat melakukan pengumuman yang men-tag seluruh anggota.',
+    'cmd_stiker': 'Gunakan !stiker',
+    'cmd_stiker_desc': 'Izinkan anggota membuat stiker teks secara otomatis.'
   },
   jv: {
     'bot_engine': 'Mesin Bot',
@@ -619,7 +623,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'cmd_setdel': 'Nganggo !setcmd lan !delcmd',
     'cmd_setdel_desc': 'Admin iso ngatur Auto-Responder seko njero grup.',
     'cmd_hidetag': 'Nganggo !hidetag',
-    'cmd_hidetag_desc': 'Admin iso nggawe woro-woro sing ngetag kabeh anggota.'
+    'cmd_hidetag_desc': 'Admin iso nggawe woro-woro sing ngetag kabeh anggota.',
+    'cmd_stiker': 'Nganggo !stiker',
+    'cmd_stiker_desc': 'Ngidini anggota gawe stiker teks otomatis.'
   },
   su: {
     'bot_engine': 'Mesin Bot',
@@ -800,7 +806,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'cmd_setdel': 'Ngagunakeun !setcmd sareng !delcmd',
     'cmd_setdel_desc': 'Admin tiasa ngatur Auto-Responder ti lebet grup.',
     'cmd_hidetag': 'Ngagunakeun !hidetag',
-    'cmd_hidetag_desc': 'Admin tiasa ngadamel pengumuman anu ngetag sadaya anggota.'
+    'cmd_hidetag_desc': 'Admin tiasa ngadamel pengumuman anu ngetag sadaya anggota.',
+    'cmd_stiker': 'Anggo !stiker',
+    'cmd_stiker_desc': 'Ngidinan anggota ngadamel stiker teks otomatis.'
   },
   th: {
     'bot_engine': 'เครื่องยนต์บอท',
@@ -919,7 +927,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'cmd_setdel': 'ใช้ !setcmd และ !delcmd',
     'cmd_setdel_desc': 'ผู้ดูแลระบบสามารถจัดการ Auto-Responder จากภายในกลุ่มได้',
     'cmd_hidetag': 'ใช้ !hidetag',
-    'cmd_hidetag_desc': 'ผู้ดูแลระบบสามารถประกาศโดยแท็กสมาชิกทั้งหมดได้'
+    'cmd_hidetag_desc': 'ผู้ดูแลระบบสามารถประกาศโดยแท็กสมาชิกทั้งหมดได้',
+    'cmd_stiker': 'ใช้ !stiker',
+    'cmd_stiker_desc': 'อนุญาตให้สมาชิกสร้างสติกเกอร์ข้อความ'
   },
   zh: {
     'bot_engine': '机器人引擎',
@@ -1038,7 +1048,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'cmd_setdel': '使用 !setcmd 和 !delcmd',
     'cmd_setdel_desc': '管理员可以在群组内管理自动回复。',
     'cmd_hidetag': '使用 !hidetag',
-    'cmd_hidetag_desc': '管理员可以发布@所有成员的公告。'
+    'cmd_hidetag_desc': '管理员可以发布@所有成员的公告。',
+    'cmd_stiker': '使用 !stiker',
+    'cmd_stiker_desc': '允许成员自动生成文本贴纸。'
   },
   ko: {
     'bot_engine': '봇 엔진',
@@ -1157,7 +1169,9 @@ const dictionaries: Record<LanguageCode, Record<string, string>> = {
     'cmd_setdel': '!setcmd 및 !delcmd 사용',
     'cmd_setdel_desc': '관리자는 그룹 내에서 자동 응답을 관리할 수 있습니다.',
     'cmd_hidetag': '!hidetag 사용',
-    'cmd_hidetag_desc': '관리자는 모든 멤버를 태그하여 공지할 수 있습니다.'
+    'cmd_hidetag_desc': '관리자는 모든 멤버를 태그하여 공지할 수 있습니다.',
+    'cmd_stiker': '!stiker 사용',
+    'cmd_stiker_desc': '멤버들이 자동으로 텍스트 스티커를 만들 수 있도록 허용합니다.'
   }
 };
 
