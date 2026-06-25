@@ -1,23 +1,12 @@
-# ✨ YAY by Netals — Premium Virtual Desktop OS for WhatsApp Bot Management
+# 🌌 YAY by Netals (NetalsOS V2 / Wibots) — Premium WhatsApp Bot SaaS Platform
 
-> **YAY** (juga dikenal sebagai **NetalsOS V2** / **Wibots**) adalah platform SaaS manajemen bot WhatsApp revolusioner berbentuk **Virtual Desktop Environment (Web OS)**. Dibangun dengan teknologi mutakhir untuk memberikan pengalaman mengelola bot WhatsApp premium secara visual layaknya sistem operasi desktop sungguhan di dalam browser Anda.
-
----
-
-## 🌟 Kenapa YAY Dibuat?
-
-Mengelola bot WhatsApp biasanya memerlukan interaksi dengan antarmuka baris perintah (CLI) yang rumit, konfigurasi server manual, atau panel admin kaku yang membosankan. 
-
-**YAY hadir untuk mendefinisikan ulang cara Anda berinteraksi dengan bot WhatsApp:**
-1. **Interactive & Alive**: Menghadirkan antarmuka berbasis desktop virtual interaktif (lengkap dengan Dock, Start Menu, Status Bar, Window Manager, dan drag-and-drop window) yang sangat memukau dan premium.
-2. **No-Code Management**: Siapa pun dapat mengaktifkan bot, mengatur kata kunci balasan, memoderasi grup, hingga mengunggah file media tanpa menyentuh satu baris kode pun.
-3. **Multi-Session & Isolated Architecture**: Arsitektur handal yang memisahkan data sensitif pengguna, server engine bot, dan antarmuka web secara terisolasi demi skalabilitas tinggi dan keamanan maksimal.
+> **YAY** adalah platform SaaS manajemen bot WhatsApp revolusioner berbasis **Virtual Desktop OS (Web OS)**. Proyek ini menghadirkan ekosistem manajemen bot visual super premium, interaktif, dan modern langsung dari browser Anda, diiringi arsitektur tangguh tiga lapis (*Three-Tier Isolated*).
 
 ---
 
-## 🏗️ Arsitektur Sistem (Three-Tier Isolated)
+## 🏗️ Arsitektur Tiga Lapis Terisolasi (Three-Tier Isolated)
 
-YAY dirancang dengan arsitektur tiga lapis terisolasi demi menjamin efisiensi **0ms cache response time** dan keandalan tingkat tinggi:
+Platform ini memisahkan lapisan presentasi, komputasi, dan penyimpanan secara mutlak demi performa responsif **0ms cache** dan keamanan maksimal:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -41,78 +30,87 @@ YAY dirancang dengan arsitektur tiga lapis terisolasi demi menjamin efisiensi **
 
 ---
 
-## 📱 Fitur Utama & Aplikasi Native (Virtual Apps)
+## 📁 Struktur Direktori & Komponen Utama
 
-Di dalam desktop virtual YAY, Anda akan disuguhkan dengan berbagai aplikasi native (`.exe`, `.app`, `.sys`, `.lnk`) yang berfungsi secara real-time:
+```
+Bot Wa/
+├── .env                          # Environment variables & api keys
+├── bot-engine/                   # VPS Backend (Express, Socket.IO, Multi-session Baileys)
+│   ├── index.js                  # Entrypoint server backend
+│   ├── gasbridge.js              # Jembatan API menuju Google Apps Script
+│   ├── datacache.js              # Cache memori respons instan 0ms
+│   ├── sessionmanager.js         # Pengelola sesi WhatsApp multi-tenant
+│   └── package.json
+├── gas-script/                   # Google Apps Script (GAS Database)
+│   └── main.gs                   # Logika database & API Google Sheets
+├── web-panel/                    # Frontend OS (Next.js + React virtual desktop)
+│   ├── src/
+│   │   ├── app/                  # Boot, Login, & Global style
+│   │   ├── lib/                  # Context, API types & Context Provider
+│   │   └── components/           # Virtual desktop UI, Window frames, Dock, & Widgets
+│   │       ├── apps/             # Virtual Native Apps (.exe / .app / .sys)
+│   │       └── eduverse/         # Modul integrasi edukasi virtual
+│   └── README.md                 # Dokumentasi rinci web panel
+└── README.md                     # Dokumentasi utama proyek
+```
 
-### 💳 1. Account.exe
-- **Billing & Subscription Tracker**: Menampilkan masa aktif lisensi sewa bot Anda dalam bentuk grafik donat interaktif.
-- **Tier Feature List**: Menunjukkan daftar limitasi dan fitur berdasarkan jenis paket akun Anda.
+---
 
-### ⚙️ 2. ControlCenter.app
-- **WhatsApp Engine Controller**: Menyalakan, mematikan, atau menghubungkan ulang sesi WhatsApp bot Anda secara instan.
-- **QR Code Pairing**: Menampilkan QR Code secara dinamis untuk mempermudah proses pairing via WhatsApp Web.
-- **Toggles Core**: Mengatur respon grup, respon privat, fitur anti-link otomatis di dalam grup, dan teks pesan sambutan kustom (*Custom Welcome Message*).
+## 📱 Aplikasi Native Virtual (Web-Desktop Suite)
 
-### 🤖 3. ResponderStudio.lnk
-- **Aturan Balasan Otomatis (Auto-Responder)**: CRUD (Create, Read, Update, Delete) kata kunci respons otomatis secara instan.
-- **Advanced Match Type**: Dukungan pencocokan kata kunci bertipe **Exact Match** (sama persis) atau **Contains** (mengandung kata).
-- **Multi-Format Response**: Mengirim pesan balasan berupa teks biasa, gambar, maupun dokumen berkas.
-- **Target Group Selector**: Membatasi balasan otomatis hanya pada grup-grup tertentu berdasarkan tier pelanggan (*Standard / Premium / God*).
+Di dalam desktop virtual YAY, pengguna dapat mengoperasikan aplikasi native premium berikut:
 
-### 📁 4. FileExplorer.sys
-- **Cloud File Manager**: Mengunggah file media (gambar/dokumen) secara drag-and-drop ke VPS.
-- **Instant Media Copy**: Mendapatkan URL berkas secara instan untuk digunakan sebagai *payload* gambar atau dokumen di *ResponderStudio*.
-
-### 💻 5. TaskManager.exe
-- **System Metrics Monitoring**: Menampilkan beban CPU, sisa RAM VPS, dan total uptime sistem operasi.
-- **Virtual Kernel Monitor**: Menampilkan daftar kernel virtual `yay-kernel.sys` yang sedang aktif berjalan serta opsi untuk menutup aplikasi yang macet.
-
-### 👥 6. GroupManager.app & Subscription.app
-- Mengelola grup-grup yang diotorisasi oleh bot dan melihat detail paket aktif secara komprehensif.
+| Aplikasi | Nama Berkas | Fungsi & Kegunaan |
+|----------|-------------|-------------------|
+| 💳 **Account Center** | `Account.exe` | Memantau masa aktif sewa bot dengan donut chart dinamis, detail lisensi, dan limitasi tier. |
+| ⚙️ **Control Center** | `ControlCenter.app` | Pengendali bot real-time (Start/Stop engine), QR Code pairing pairing, toggle respon grup/privat, anti-link, & kustom teks sambutan. |
+| 🤖 **Responder Studio** | `ResponderStudio.lnk` | Antarmuka CRUD visual lengkap untuk keyword auto-responder (Exact/Contains, Text/Image/Document) serta penargetan grup spesifik. |
+| 📁 **File Explorer** | `FileExplorer.sys` | Mengunggah, menjelajahi, dan menyalin tautan (URL) berkas media VPS secara instan untuk kebutuhan balasan bot. |
+| 💻 **Task Manager** | `TaskManager.exe` | Memantau beban CPU server, pemakaian memori VPS, uptime server, dan mematikan tugas kernel virtual (`yay-kernel.sys`). |
+| 💎 **Subscription Store** | `Subscription.app` | Detail tier lisensi aktif (Basic, Standard, Premium, God) dan integrasi peningkatan layanan. |
 
 ---
 
 ## ✨ YAY Core Engine (Built-In Bot Modules)
 
-Dengan menekan aplikasi **YAY.app** (Core Engine), Anda dapat mengaktifkan berbagai modul bot WhatsApp bawaan:
+Dengan membuka **YAY.app** di desktop virtual Anda, Anda dapat mengaktifkan modul internal bot WhatsApp yang sangat serbaguna:
 
-*   **🛡️ Group Moderation Module**: Mengaktifkan sistem pengamanan grup interaktif seperti perintah `!kick`, `!warn`, `!mute`, dan `!tagall` secara aman.
-*   **🪄 Fun & Utility Module**: Menghadirkan alat bantu harian (`!say`, `!tts` text-to-speech, dan pembuat `!sticker` otomatis).
-*   **🧠 Gemini AI Integration (Bawaan!)**: Terintegrasi langsung dengan teknologi cerdas **Google Gemini AI**. Anggota grup dapat berdiskusi pintar dengan bot hanya dengan mengetik `!ai [pertanyaan]` atau langsung me-reply pesan dari bot.
-*   **🎯 Gamification & Minigames Hub (Coming Soon)**: Sistem Leveling, XP, Daily Rewards, Tebak Gambar, Werewolf, TicTacToe, dan RPG di dalam obrolan grup Anda.
-
----
-
-## 🔒 Keamanan & Perlindungan Lapis Ganda
-
-*   **Token-Based AppScript Authentication**: Mencegah akses database ilegal; setiap komunikasi dengan Google Apps Script dilindungi token rahasia berkekuatan tinggi.
-*   **Tenant Session Isolation**: Setiap sesi koneksi WhatsApp di VPS terisolasi sepenuhnya dan aman dari kebocoran data antar-pengguna.
-*   **Lock Screen Expiry**: Layar panel virtual akan terkunci secara otomatis jika masa sewa lisensi berakhir, disertai formulir pengajuan lisensi baru untuk kemudahan reaktivasi.
+1.  **🛡️ Group Moderation Module**: Pengamanan grup WhatsApp komprehensif menggunakan perintah penegak disiplin (`!kick`, `!warn`, `!mute`, dan pengumuman massal `!tagall`).
+2.  **🪄 Fun & Utility Module**: Penyedia kebutuhan harian anggota seperti perintah `!say`, `!tts` (Text-to-Speech) suara Google, dan pembuatan stiker instan otomatis via perintah `!sticker`.
+3.  **🧠 Gemini AI Terintegrasi (Bawaan!)**: Bot obrolan super cerdas yang ditenagai oleh **Google Gemini AI**. Anggota grup dapat mengajukan pertanyaan ilmiah, meminta saran, atau sekadar berbincang cerdas dengan perintah `!ai [pertanyaan]` atau hanya dengan me-reply pesan dari bot tersebut.
+4.  **🎯 Sistem Gamifikasi & Hiburan (Coming Soon)**: Sistem perolehan EXP, Leveling, Daily Rewards, serta modul game petualangan (Werewolf, RPG, Tebak Gambar) di dalam obrolan grup WhatsApp.
 
 ---
 
-## 🚀 Panduan Memulai Cepat
+## 🔒 Lapis Keamanan Tingkat Tinggi
 
-### Persiapan Web Panel (Frontend)
+-   **Token-Based API Authorization**: Setiap pertukaran data dari VPS ke Google Apps Script dienkripsi dan diotorisasi menggunakan secure token `auth_token` untuk mencegah pembobolan database pihak ketiga.
+-   **Multi-Session Sandboxing**: Menjamin privasi dan keamanan penuh; sesi koneksi WhatsApp tiap pelanggan diisolasi secara penuh dalam container memori VPS yang berbeda.
+-   **Blur-Locked Expiry Screen**: Ketika masa aktif lisensi habis, panel virtual akan menampilkan layar penguncian interaktif (*Lock Screen*) yang elegan guna memfasilitasi reaktivasi lisensi baru tanpa merusak data konfigurasi.
+
+---
+
+## 🚀 Panduan Memulai Cepat (Quick Start)
+
+### 1. Panel Web (Frontend OS)
 ```bash
 cd web-panel
 npm install
-npm run dev        # Berjalan pada http://localhost:3000
+npm run dev        # Akses melalui http://localhost:3000
 ```
 
-### Persiapan Bot Engine (Backend VPS)
+### 2. Mesin Utama (Backend Engine VPS)
 ```bash
 cd bot-engine
 npm install
-node index.js      # Berjalan pada http://localhost:3001
+node index.js      # Akses melalui http://localhost:3001
 # Mode Produksi: pm2 start index.js --name yay-engine
 ```
 
-### Konfigurasi Database (Google Apps Script)
-1. Buat Google Sheets baru dengan 3 tab: `Client_Registry`, `Bot_Core_Configuration`, dan `Auto_Responder_Dictionary`.
-2. Masuk ke menu Ekstensi -> Apps Script, tempelkan skrip dari file `gas-script/main.gs`.
-3. Terapkan sebagai Aplikasi Web (Deploy as Web App) dengan akses "Siapa Saja" (Anyone), lalu salin URL yang dihasilkan ke file `.env` di server Anda.
+### 3. Database Cloud (Google Apps Script)
+- Buat Google Sheets dengan 3 tab: `Client_Registry`, `Bot_Core_Configuration`, dan `Auto_Responder_Dictionary`.
+- Buka Apps Script, tempel kode dari file `gas-script/main.gs`.
+- Terapkan sebagai Aplikasi Web (Deploy as Web App) ke publik ("Anyone"), salin URL webapp tersebut lalu masukkan sebagai variabel lingkungan di VPS Anda.
 
 ---
 

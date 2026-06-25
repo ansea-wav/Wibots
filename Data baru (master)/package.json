@@ -1,0 +1,40 @@
+{
+  "name": "yay-bot-engine",
+  "version": "2.0.0",
+  "description": "YAY by netals — WhatsApp Bot Engine (Pterodactyl PM2)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "pm2": "pm2 start index.js --name yay-engine"
+  },
+  "dependencies": {
+    "@bochilteam/scraper": "^5.0.1",
+    "@distube/ytdl-core": "^4.16.12",
+    "@google/generative-ai": "^0.24.1",
+    "@tobyg74/tiktok-api-dl": "^1.3.7",
+    "@vreden/youtube_scraper": "^1.2.9",
+    "@whiskeysockets/baileys": "^6.7.16",
+    "@ybd-project/ytdl-core": "^6.0.8",
+    "axios": "^1.18.1",
+    "btch-downloader": "^6.0.35",
+    "canvas": "^3.2.3",
+    "cheerio": "^1.2.0",
+    "cloudflared": "^0.7.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "form-data": "^4.0.6",
+    "generate-passphrase-id": "^1.2.0",
+    "google-tts-api": "^2.0.2",
+    "instagram-url-direct": "^2.0.7",
+    "link-preview-js": "^3.0.5",
+    "localtunnel": "^2.0.2",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "pino": "^9.2.0",
+    "ruhend-scraper": "^10.0.3",
+    "sharp": "^0.35.2",
+    "snapsave-media-downloader": "^2.4.0",
+    "socket.io": "^4.7.5"
+  }
+}

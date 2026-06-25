@@ -1,0 +1,1330 @@
+// ============================================================
+// NetalsOS V2 — Google Apps Script (Standalone Database API)
+// ============================================================
+// Spreadsheet Tabs:
+//   1) Client_Registry         — Accounts & Billing
+//   2) Bot_Core_Configuration  — Feature Toggles
+//   3) Auto_Responder_Dictionary — Keyword → Response rules
+//   4) Tunnel                  — URL tunnel aktif (baris 1)
+// ============================================================
+
+var MASTER_SECURE_TOKEN = "NETALS_SECURE_SECRET_2026_XYZ";
+
+// Batas grup per tier
+var TIER_GROUP_LIMITS = {
+  "Basic": 1,
+  "Standard": 3,
+  "Premium": 5,
+  "God": 999
+};
+
+// ---- Spreadsheet helpers ----
+
+function getSheet(name) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    try {
+      sheet = ss.insertSheet(name);
+    } catch (e) {
+      sheet = ss.getSheetByName(name);
+    }
+  }
+  return sheet;
+}
+
+function sheetToObjects(sheet) {
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 2) return [];
+  var headers = data[0];
+  var rows = [];
+  for (var i = 1; i < data.length; i++) {
+    var obj = {};
+    for (var j = 0; j < headers.length; j++) {
+      obj[headers[j]] = data[i][j];
+    }
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function findRowIndex(sheet, colIndex, value) {
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][colIndex]) === String(value)) return i + 1; // 1-based
+  }
+  return -1;
+}
+
+function getHeaderIndex(sheet, headerName) {
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  for (var i = 0; i < headers.length; i++) {
+    if (headers[i] === headerName) return i;
+  }
+  return -1;
+}
+
+// ---- Entry point ----
+
+function doPost(e) {
+  try {
+    var jsonPayload = JSON.parse(e.postData.contents);
+
+    // Token gate
+    if (jsonPayload.auth_token !== MASTER_SECURE_TOKEN) {
+      return jsonResponse({ status: "error", code: 403, message: "Unauthorized Access! Invalid System Token." });
+    }
+
+    var action = jsonPayload.action;
+    return router(action, jsonPayload);
+  } catch (err) {
+    return jsonResponse({ status: "error", message: err.toString() });
+  }
+}
+
+function doGet(e) {
+  return jsonResponse({ status: "ok", message: "NetalsOS GAS API v2.0 is running." });
+}
+
+// ---- Router ----
+
+function router(action, payload) {
+  switch (action) {
+
+    // === Authentication ===
+    case "authenticate_user":
+      return authenticateUser(payload);
+
+    // === Client Registry ===
+    case "get_all_clients":
+      return getAllClients();
+    case "get_client_by_id":
+      return getClientById(payload);
+    case "add_client":
+      return addClient(payload);
+    case "delete_client":
+      return deleteClient(payload);
+    case "update_client_status":
+      return updateClientStatus(payload);
+    case "update_client_registry":
+      return updateClientRegistry(payload);
+    case "register_client":
+      return registerClient(payload);
+
+    // === Bot Configuration ===
+    case "get_bot_config":
+      return getBotConfig(payload);
+    case "update_bot_config":
+      return updateBotConfig(payload);
+
+    // === Auto Responder ===
+    case "get_auto_responder":
+      return getAutoResponder(payload);
+    case "add_auto_responder":
+      return addAutoResponder(payload);
+    case "update_auto_responder":
+      return updateAutoResponder(payload);
+    case "delete_auto_responder":
+      return deleteAutoResponder(payload);
+
+    // === Macros ===
+    case "get_macros":
+      return getMacros(payload);
+    case "add_macro":
+      return addMacro(payload);
+    case "update_macro":
+      return updateMacro(payload);
+    case "delete_macro":
+      return deleteMacro(payload);
+
+    // === Economy / Profile ===
+    case "get_profile":
+      return getProfile(payload);
+    case "update_profile":
+      return updateProfile(payload);
+    case "get_leaderboard":
+      return getLeaderboard(payload);
+
+    // === Tips State ===
+    case "get_tips_state":
+      return getTipsState(payload);
+    case "update_tips_state":
+      return updateTipsState(payload);
+    case "get_chat_leaderboard":
+      return getChatLeaderboard(payload);
+
+    // === Spammer ===
+    case "get_spammer_tasks":
+      return getSpammerTasks();
+    case "update_spammer_task":
+      return updateSpammerTask(payload);
+
+    // === Billing Cron ===
+    case "daily_decrement":
+      return dailyDecrement();
+
+    // === Master Fetch (all data for one user) ===
+    case "fetch_user_master":
+      return fetchUserMaster(payload);
+
+    // === Fetch all data for cache ===
+    case "fetch_all_master":
+      return fetchAllMaster();
+
+    // === Tunnel URL (disimpan di Sheet "Tunnel" baris 1) ===
+    case "save_tunnel_url":
+      return saveTunnelUrl(payload);
+    case "get_tunnel_url":
+      return getTunnelUrl();
+
+    // === Drive Files ===
+    case "upload_file":
+      return uploadDriveFile(payload);
+    case "get_files":
+      return getDriveFiles(payload);
+    case "delete_file":
+      return deleteDriveFile(payload);
+
+    // === App Store ===
+    case "get_app_store_list":
+      return getAppStoreList();
+    case "install_app":
+      return installApp(payload);
+    
+    // === Onboarding ===
+    case "update_group_link":
+      return updateGroupLink(payload);
+
+    // === AI Engine ===
+    case "add_chat_history":
+      return addChatHistory(payload);
+    case "get_chat_history":
+      return getChatHistory(payload);
+    case "check_ai_limit":
+      return checkAiLimit(payload);
+    case "increment_ai_limit":
+      return incrementAiLimit(payload);
+
+    // === Blacklist ===
+    case "add_blacklist":
+      return addBlacklist(payload);
+    case "get_blacklist":
+      return getBlacklist();
+
+    // === Tickets ===
+    case "create_ticket":
+      return createTicket(payload);
+
+    default:
+      return jsonResponse({ status: "error", message: "Unknown action: " + action });
+  }
+}
+
+// ============================================================
+// ACTION HANDLERS
+// ============================================================
+
+// --- Tunnel URL — disimpan di Sheet "Tunnel" A1 ---
+// PropertiesService tidak dipakai karena hilang saat server restart.
+// Sheet Tunnel lebih aman dan persistent permanen.
+function saveTunnelUrl(p) {
+  try {
+    var sheet = getSheet("Tunnel");
+    // Pastikan header ada
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Tunnel_URL", "Updated_At"]);
+    }
+    // Baris 1 = header, baris 2 = data URL
+    if (sheet.getLastRow() < 2) {
+      sheet.appendRow([p.tunnel_url, new Date().toISOString()]);
+    } else {
+      sheet.getRange(2, 1).setValue(p.tunnel_url);
+      sheet.getRange(2, 2).setValue(new Date().toISOString());
+    }
+    return jsonResponse({ status: "success", message: "Tunnel URL saved to Sheet." });
+  } catch(e) {
+    return jsonResponse({ status: "error", message: e.toString() });
+  }
+}
+
+function getTunnelUrl() {
+  try {
+    var sheet = getSheet("Tunnel");
+    if (sheet.getLastRow() < 2) return jsonResponse({ status: "success", url: null });
+    var url = sheet.getRange(2, 1).getValue();
+    return jsonResponse({ status: "success", url: url || null });
+  } catch(e) {
+    return jsonResponse({ status: "error", message: e.toString() });
+  }
+}
+
+// --- Authenticate user by WhatsApp_Owner + License_Key ---
+function authenticateUser(p) {
+  var sheet = getSheet("Client_Registry");
+  var rows = sheetToObjects(sheet);
+  for (var i = 0; i < rows.length; i++) {
+    if (String(rows[i].WhatsApp_Owner) === String(p.whatsapp) &&
+        String(rows[i].License_Key) === String(p.license_key)) {
+      return jsonResponse({
+        status: "success",
+        data: rows[i]
+      });
+    }
+  }
+  return jsonResponse({ status: "error", message: "Invalid credentials." });
+}
+
+// --- Get all clients ---
+function getAllClients() {
+  var sheet = getSheet("Client_Registry");
+  var rows = sheetToObjects(sheet);
+  return jsonResponse({ status: "success", data: rows });
+}
+
+// --- Get client by ID ---
+function getClientById(p) {
+  var sheet = getSheet("Client_Registry");
+  var rows = sheetToObjects(sheet);
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i].User_ID === p.user_id) {
+      return jsonResponse({ status: "success", data: rows[i] });
+    }
+  }
+  return jsonResponse({ status: "error", message: "Client not found." });
+}
+
+// --- Add Client ---
+function addClient(p) {
+  var sheet = getSheet("Client_Registry");
+  var rows = sheetToObjects(sheet);
+
+  // Generate User_ID
+  var count = rows.length + 1;
+  var uid = "NTLS-" + String(count).padStart(3, "0");
+
+  // Generate License Key
+  var license = "NETALS-" + Math.random().toString(36).substr(2, 5).toUpperCase() +
+                "-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+
+  var rDate = new Date().toISOString();
+  var days = parseInt(p.days) || 30;
+  var eDate = new Date(Date.now() + days * 86400000).toISOString();
+
+  // Kolom: User_ID, WhatsApp_Owner, License_Key, Package_Tier,
+  //        Registration_Date, Expiry_Date, Days_Left, Account_Status,
+  //        Group_1..5, GroupJID_1..5, Aplikasi_terpasang
+  sheet.appendRow([
+    uid,
+    p.whatsapp,
+    license,
+    p.tier || "Basic",
+    rDate,
+    eDate,
+    days,
+    "Active",
+    "", "", "", "", "",   // Group_1..5 (invite links)
+    "", "", "", "", "",   // GroupJID_1..5
+    ""                    // Aplikasi_terpasang
+  ]);
+
+  // Buat row di Bot Config
+  var confSheet = getSheet("Bot_Core_Configuration");
+  confSheet.appendRow([uid, true, true, false, true, "Selamat datang {member} di {group}! 🎉", true, true, true]);
+
+  return jsonResponse({ status: "success", data: { User_ID: uid, License_Key: license } });
+}
+
+// --- Delete Client ---
+function deleteClient(p) {
+  var sheet = getSheet("Client_Registry");
+  var rowIdx = findRowIndex(sheet, 0, p.user_id);
+  if (rowIdx !== -1) sheet.deleteRow(rowIdx);
+
+  var confSheet = getSheet("Bot_Core_Configuration");
+  var confIdx = findRowIndex(confSheet, 0, p.user_id);
+  if (confIdx !== -1) confSheet.deleteRow(confIdx);
+
+  var respSheet = getSheet("Auto_Responder_Dictionary");
+  var respData = respSheet.getDataRange().getValues();
+  for (var i = respData.length - 1; i >= 1; i--) {
+    if (respData[i][1] === p.user_id) {
+      respSheet.deleteRow(i + 1);
+    }
+  }
+
+  return jsonResponse({ status: "success", message: "Client deleted." });
+}
+
+// --- Update client status ---
+function updateClientStatus(p) {
+  var sheet = getSheet("Client_Registry");
+  var colIdx = getHeaderIndex(sheet, "Account_Status");
+  var rowIdx = findRowIndex(sheet, 0, p.user_id);
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "User not found." });
+  sheet.getRange(rowIdx, colIdx + 1).setValue(p.new_status);
+  return jsonResponse({ status: "success", message: "Status updated to " + p.new_status });
+}
+
+// --- Update client registry (Groups, JIDs, etc.) ---
+// Juga validasi batas grup berdasarkan tier
+function updateClientRegistry(p) {
+  var sheet = getSheet("Client_Registry");
+  var rowIdx = findRowIndex(sheet, 0, p.user_id);
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "Client row not found." });
+
+  // Pastikan kolom Group_1..5 dan GroupJID_1..5 ada
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var requiredColumns = [
+    "Group_1", "Group_2", "Group_3", "Group_4", "Group_5",
+    "GroupJID_1", "GroupJID_2", "GroupJID_3", "GroupJID_4", "GroupJID_5",
+    "Tutorial", "Username"
+  ];
+  for (var i = 0; i < requiredColumns.length; i++) {
+    if (headers.indexOf(requiredColumns[i]) === -1) {
+      sheet.getRange(1, headers.length + 1).setValue(requiredColumns[i]);
+      headers.push(requiredColumns[i]); // Update in-memory supaya tidak perlu refetch
+    }
+  }
+  SpreadsheetApp.flush(); // Paksa simpan ke Google Sheet sekarang juga
+
+
+  // Cek tier untuk validasi batas grup
+  var rowData = sheet.getRange(rowIdx, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var tierIdx = headers.indexOf("Package_Tier");
+  var tier = tierIdx !== -1 ? rowData[tierIdx] : "Basic";
+  var limit = TIER_GROUP_LIMITS[tier] || 1;
+
+  // Validasi: hitung berapa group link yang di-set di fields ini
+  var fields = p.fields;
+  var groupCount = 0;
+  for (var gi = 1; gi <= 5; gi++) {
+    var gKey = "Group_" + gi;
+    var val = fields[gKey] !== undefined ? fields[gKey] : rowData[headers.indexOf(gKey)];
+    if (val && String(val).trim() !== "") groupCount++;
+  }
+
+  if (groupCount > limit) {
+    return jsonResponse({
+      status: "error",
+      message: "Batas grup untuk tier " + tier + " adalah " + limit + " grup. Upgrade untuk menambah lebih banyak."
+    });
+  }
+
+  // Simpan semua field
+  for (var key in fields) {
+    var ci = headers.indexOf(key);
+    if (ci !== -1) {
+      sheet.getRange(rowIdx, ci + 1).setValue(fields[key]);
+    }
+  }
+  return jsonResponse({ status: "success", message: "Client registry updated." });
+}
+
+// --- Register Client ---
+function registerClient(p) {
+  var sheet = getSheet("Client_Registry");
+  var rows = sheetToObjects(sheet);
+  
+  var targetRowIdx = -1;
+  for (var i = 0; i < rows.length; i++) {
+    if (String(rows[i].License_Key) === String(p.license_key)) {
+      targetRowIdx = i + 2; // +1 for 0-index, +1 for header
+      
+      // Jika WhatsApp sudah terisi dan BUKAN whatsapp yg dikirim, berarti sudah diklaim
+      var existingWa = String(rows[i].WhatsApp_Owner || "").trim();
+      if (existingWa !== "" && existingWa !== String(p.whatsapp)) {
+        return jsonResponse({ status: "error", message: "Token ini sudah diklaim oleh nomor WhatsApp lain." });
+      }
+      break;
+    }
+  }
+  
+  if (targetRowIdx === -1) {
+    return jsonResponse({ status: "error", message: "Token tidak valid atau tidak ditemukan." });
+  }
+
+  // Update Username dan WhatsApp
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  
+  // Pastikan kolom Username ada
+  var userIdx = headers.indexOf("Username");
+  if (userIdx === -1) {
+    sheet.getRange(1, headers.length + 1).setValue("Username");
+    headers.push("Username");
+    userIdx = headers.length - 1;
+  }
+  
+  var waIdx = headers.indexOf("WhatsApp_Owner");
+  
+  // Update
+  if (waIdx !== -1) sheet.getRange(targetRowIdx, waIdx + 1).setValue(p.whatsapp);
+  if (userIdx !== -1) sheet.getRange(targetRowIdx, userIdx + 1).setValue(p.username);
+
+  // Return full row
+  var rowData = sheet.getRange(targetRowIdx, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var userObj = {};
+  for(var j=0; j<headers.length; j++){
+    userObj[headers[j]] = rowData[j];
+  }
+  
+  return jsonResponse({ status: "success", message: "Registrasi berhasil.", data: userObj });
+}
+
+// --- Bot Configuration ---
+// Sheet kolom: User_ID, Allow_Group_Response, Allow_Private_Response, Anti_Link_Group, Welcome_Message_Status, Custom_Welcome_Text, Cmd_SetDel_Status, Cmd_Hidetag_Status
+function getBotConfig(p) {
+  var sheet = getSheet("Bot_Core_Configuration");
+  var rows = sheetToObjects(sheet);
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i].User_ID === p.user_id) {
+      return jsonResponse({ status: "success", data: rows[i] });
+    }
+  }
+  return jsonResponse({ status: "error", message: "Config not found." });
+}
+
+function updateBotConfig(p) {
+  var sheet = getSheet("Bot_Core_Configuration");
+  
+  // Pastikan header lengkap
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["User_ID", "Allow_Group_Response", "Allow_Private_Response", "Anti_Link_Group", "Welcome_Message_Status", "Custom_Welcome_Text", "Cmd_SetDel_Status", "Cmd_Hidetag_Status"]);
+  } else {
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    if (headers.indexOf("Cmd_SetDel_Status") === -1) sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Cmd_SetDel_Status");
+    if (headers.indexOf("Cmd_Hidetag_Status") === -1) sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Cmd_Hidetag_Status");
+  }
+
+  var rowIdx = findRowIndex(sheet, 0, p.user_id);
+  
+  // Jika belum ada row config, buatkan dulu
+  if (rowIdx === -1) {
+    // Default value saat buat baru
+    sheet.appendRow([p.user_id, true, true, false, true, "Selamat datang {member} di {group}! 🎉", false, false]);
+    rowIdx = sheet.getLastRow();
+  }
+
+  var headers = sheet.getRange(1, 1, 1, Math.max(1, sheet.getLastColumn())).getValues()[0] || [];
+  var fields = p.fields;
+  
+  // Auto-create missing headers
+  for (var key in fields) {
+    if (headers.indexOf(key) === -1) {
+      sheet.getRange(1, headers.length + 1).setValue(key);
+      headers.push(key);
+    }
+  }
+  
+  // Save values
+  for (var key in fields) {
+    var ci = headers.indexOf(key);
+    if (ci !== -1) {
+      sheet.getRange(rowIdx, ci + 1).setValue(fields[key]);
+    }
+  }
+  return jsonResponse({ status: "success", message: "Bot config updated." });
+}
+
+// --- Auto Responder ---
+// Sheet kolom: Response_ID, User_ID, Keyword, Match_Type, Response_Type, Payload_Data, Target_Groups
+// Target_Groups: "Semua" atau nomor grup dipisah koma, misal "1,2"
+function getAutoResponder(p) {
+  var sheet = getSheet("Auto_Responder_Dictionary");
+  var rows = sheetToObjects(sheet);
+  var filtered = rows.filter(function(r) { return String(r.User_ID) === String(p.user_id); });
+  return jsonResponse({ status: "success", data: filtered });
+}
+
+function addAutoResponder(p) {
+  var sheet = getSheet("Auto_Responder_Dictionary");
+  // Pastikan header lengkap
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Response_ID", "User_ID", "Keyword", "Match_Type", "Response_Type", "Payload_Data", "Target_Groups"]);
+  } else {
+    // Cek apakah kolom Target_Groups sudah ada, kalau belum tambah
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    if (headers.indexOf("Target_Groups") === -1) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Target_Groups");
+    }
+  }
+  var id = "RES-" + Date.now().toString(36).toUpperCase();
+  sheet.appendRow([
+    id,
+    p.user_id,
+    p.keyword,
+    p.match_type || "Exact",
+    p.response_type || "Text",
+    p.payload_data || "",
+    p.target_groups || "Semua"  // "Semua" = balas di semua grup, atau "1" / "1,2" untuk grup tertentu
+  ]);
+  return jsonResponse({ status: "success", response_id: id, message: "Auto responder added." });
+}
+
+function updateAutoResponder(p) {
+  var sheet = getSheet("Auto_Responder_Dictionary");
+  var rowIdx = findRowIndex(sheet, 0, p.response_id);
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "Response ID not found." });
+
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  if (p.keyword !== undefined)       sheet.getRange(rowIdx, headers.indexOf("Keyword") + 1).setValue(p.keyword);
+  if (p.match_type !== undefined)    sheet.getRange(rowIdx, headers.indexOf("Match_Type") + 1).setValue(p.match_type);
+  if (p.response_type !== undefined) sheet.getRange(rowIdx, headers.indexOf("Response_Type") + 1).setValue(p.response_type);
+  if (p.payload_data !== undefined)  sheet.getRange(rowIdx, headers.indexOf("Payload_Data") + 1).setValue(p.payload_data);
+  if (p.target_groups !== undefined) sheet.getRange(rowIdx, headers.indexOf("Target_Groups") + 1).setValue(p.target_groups);
+
+  return jsonResponse({ status: "success", message: "Auto responder updated." });
+}
+
+function deleteAutoResponder(p) {
+  var sheet = getSheet("Auto_Responder_Dictionary");
+  var rowIdx = findRowIndex(sheet, 0, p.response_id);
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "Response ID not found." });
+  sheet.deleteRow(rowIdx);
+  return jsonResponse({ status: "success", message: "Auto responder deleted." });
+}
+
+// --- Macros ---
+// Sheet kolom: Macro_ID, User_ID, Trigger_Syntax, Action_Type, Selected_Groups, Status
+function getMacros(p) {
+  var sheet = getSheet("Macros_Dictionary");
+  var rows = sheetToObjects(sheet);
+  var filtered = rows.filter(function(r) { return String(r.User_ID) === String(p.user_id); });
+  // Map "Selected_Groups" from comma separated string to array if needed, but it's simpler to just send as array/string
+  return jsonResponse({ status: "success", data: filtered });
+}
+
+function addMacro(p) {
+  var sheet = getSheet("Macros_Dictionary");
+  // Cek apakah header sudah ada, jika tidak tambahkan
+  var firstCell = sheet.getRange(1, 1).getValue();
+  if (firstCell !== "Macro_ID") {
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Macro_ID", "User_ID", "Trigger_Syntax", "Action_Type", "Selected_Groups", "Status"]);
+    } else {
+      sheet.insertRowBefore(1);
+      sheet.getRange(1, 1, 1, 6).setValues([["Macro_ID", "User_ID", "Trigger_Syntax", "Action_Type", "Selected_Groups", "Status"]]);
+    }
+  }
+
+  var id = "MAC-" + Date.now().toString(36).toUpperCase();
+  var selectedGroupsStr = Array.isArray(p.selected_groups) ? p.selected_groups.join(",") : (p.selected_groups || "");
+  
+  sheet.appendRow([
+    id,
+    p.user_id,
+    p.trigger_syntax || "",
+    p.action_type || "",
+    selectedGroupsStr,
+    "Active"
+  ]);
+  return jsonResponse({ status: "success", macro_id: id, message: "Macro added." });
+}
+
+function updateMacro(p) {
+  var sheet = getSheet("Macros_Dictionary");
+  var rowIdx = findRowIndex(sheet, 0, p.macro_id);
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "Macro ID not found." });
+
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  if (p.trigger_syntax !== undefined) sheet.getRange(rowIdx, headers.indexOf("Trigger_Syntax") + 1).setValue(p.trigger_syntax);
+  if (p.action_type !== undefined)    sheet.getRange(rowIdx, headers.indexOf("Action_Type") + 1).setValue(p.action_type);
+  if (p.selected_groups !== undefined) {
+    var groupsStr = Array.isArray(p.selected_groups) ? p.selected_groups.join(",") : p.selected_groups;
+    sheet.getRange(rowIdx, headers.indexOf("Selected_Groups") + 1).setValue(groupsStr);
+  }
+  if (p.status !== undefined)         sheet.getRange(rowIdx, headers.indexOf("Status") + 1).setValue(p.status);
+
+  return jsonResponse({ status: "success", message: "Macro updated." });
+}
+
+function deleteMacro(p) {
+  var sheet = getSheet("Macros_Dictionary");
+  var rowIdx = findRowIndex(sheet, 0, p.macro_id);
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "Macro ID not found." });
+  sheet.deleteRow(rowIdx);
+  return jsonResponse({ status: "success", message: "Macro deleted." });
+}
+
+// === Spammer Tasks ===
+function getSpammerTasks() {
+  var sheet = getSheet("Spammer_Tasks");
+  var rows = sheetToObjects(sheet);
+  return jsonResponse({ status: "success", data: rows });
+}
+
+function updateSpammerTask(p) {
+  var sheet = getSheet("Spammer_Tasks");
+  var rowIdx = findRowIndex(sheet, 0, p.task_id); // Assuming Task_ID is col 0
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "Task ID not found." });
+
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  if (p.status !== undefined) {
+    sheet.getRange(rowIdx, headers.indexOf("Status") + 1).setValue(p.status);
+  }
+  return jsonResponse({ status: "success", message: "Spammer task updated." });
+}
+
+// --- Daily Decrement Cron ---
+function dailyDecrement() {
+  var sheet = getSheet("Client_Registry");
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var ciDaysLeft = headers.indexOf("Days_Left");
+  var ciStatus   = headers.indexOf("Account_Status");
+  var ciUserId   = headers.indexOf("User_ID");
+
+  var expiredUsers = [];
+  var warningUsers = [];
+
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][ciStatus] === "Active") {
+      var newDays = Math.max(0, Number(data[i][ciDaysLeft]) - 1);
+      sheet.getRange(i + 1, ciDaysLeft + 1).setValue(newDays);
+
+      if (newDays === 0) {
+        sheet.getRange(i + 1, ciStatus + 1).setValue("Expired");
+        expiredUsers.push(String(data[i][ciUserId]));
+      } else if (newDays === 3) {
+        warningUsers.push(String(data[i][ciUserId]));
+      }
+    }
+  }
+
+  return jsonResponse({
+    status: "success",
+    expired_users: expiredUsers,
+    warning_users: warningUsers,
+    message: "Daily decrement executed."
+  });
+}
+
+// --- Master Fetch for single user (login sync) ---
+function fetchUserMaster(p) {
+  var registry = sheetToObjects(getSheet("Client_Registry"));
+  var config   = sheetToObjects(getSheet("Bot_Core_Configuration"));
+  var responder = sheetToObjects(getSheet("Auto_Responder_Dictionary"));
+  var macro    = sheetToObjects(getSheet("Macros_Dictionary"));
+
+  var user = null;
+  for (var i = 0; i < registry.length; i++) {
+    if (registry[i].User_ID === p.user_id) { user = registry[i]; break; }
+  }
+  if (!user) return jsonResponse({ status: "error", message: "User not found." });
+
+  var userConfig = null;
+  for (var j = 0; j < config.length; j++) {
+    if (config[j].User_ID === p.user_id) { userConfig = config[j]; break; }
+  }
+
+  var userResponders = responder.filter(function(r) { return String(r.User_ID) === String(p.user_id); });
+  var userMacros     = macro.filter(function(m) { return String(m.User_ID) === String(p.user_id); });
+
+  // Info tier limit
+  var tier = user.Package_Tier || "Basic";
+  var groupLimit = TIER_GROUP_LIMITS[tier] || 1;
+
+  return jsonResponse({
+    status: "success",
+    data: {
+      registry: user,
+      config: userConfig,
+      responders: userResponders,
+      macros: userMacros,
+      group_limit: groupLimit
+    }
+  });
+}
+
+// --- Fetch ALL data for VPS startup cache ---
+function fetchAllMaster() {
+  var clientsSheet = getSheet("Client_Registry");
+  var configsSheet = getSheet("Bot_Core_Configuration");
+  var responderSheet = getSheet("Auto_Responder_Dictionary");
+  var macrosSheet = getSheet("Macros_Dictionary");
+  var blacklistSheet = getSheet("Blacklist");
+  
+  var clientsData = sheetToObjects(clientsSheet);
+  var configsData = sheetToObjects(configsSheet);
+  var responderData = sheetToObjects(responderSheet);
+  var macrosData = sheetToObjects(macrosSheet);
+  var blacklistData = sheetToObjects(blacklistSheet).map(function(r) { return String(r.Phone_Number); });
+  
+  return jsonResponse({
+    status: "success",
+    data: {
+      clients: clientsData,
+      configs: configsData,
+      responders: responderData,
+      macros: macrosData,
+      blacklist: blacklistData
+    }
+  });
+}
+
+// ---- Response helper ----
+
+function jsonResponse(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ============================================================
+// FILE STORAGE (DRIVE API)
+// ============================================================
+function initFileSheet() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("File");
+  if (!sheet) {
+    sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("File");
+    sheet.appendRow(["User_ID", "Upload_Date", "Filename", "MimeType", "Size", "Drive_URL", "Drive_File_ID"]);
+  }
+  return sheet;
+}
+
+function getDriveFiles(p) {
+  var sheet = initFileSheet();
+  var rows = sheetToObjects(sheet);
+  var userFiles = [];
+  var totalSize = 0;
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i].User_ID === p.user_id) {
+      userFiles.push(rows[i]);
+      totalSize += Number(rows[i].Size) || 0;
+    }
+  }
+  return jsonResponse({ status: "success", data: userFiles, total_size: totalSize });
+}
+
+function uploadDriveFile(p) {
+  // 1. Dapatkan info user
+  var registrySheet = getSheet("Client_Registry");
+  var userRow = -1;
+  var data = registrySheet.getDataRange().getValues();
+  var headers = data[0];
+  var ciUserId = headers.indexOf("User_ID");
+  var ciTier = headers.indexOf("Package_Tier");
+  
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][ciUserId] === p.user_id) {
+      userRow = i;
+      break;
+    }
+  }
+  if (userRow === -1) return jsonResponse({ status: "error", message: "User not found." });
+  
+  var tier = String(data[userRow][ciTier]);
+  
+  // 2. Tentukan max file size (MB) per tier
+  var maxFileSizeMB = tier === "Premium" || tier === "God" ? 25 : tier === "Standard" ? 15 : 10;
+  var maxFileSizeBytes = maxFileSizeMB * 1024 * 1024;
+  
+  // 3. Tentukan quota storage (MB) per tier
+  var quotaMB = tier === "Premium" || tier === "God" ? 1000 : tier === "Standard" ? 400 : 40;
+  var quotaBytes = quotaMB * 1024 * 1024;
+  
+  var fileSize = Number(p.size);
+  if (fileSize > maxFileSizeBytes) {
+    return jsonResponse({ status: "error", message: "Maksimal file berukuran " + maxFileSizeMB + "MB. Upgrade Layanan atau kompres file." });
+  }
+  
+  // 4. Hitung total penggunaan saat ini
+  var sheet = initFileSheet();
+  var rows = sheetToObjects(sheet);
+  var totalUsed = 0;
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i].User_ID === p.user_id) {
+      totalUsed += Number(rows[i].Size) || 0;
+    }
+  }
+  
+  if (totalUsed + fileSize > quotaBytes) {
+    return jsonResponse({ status: "error", message: "Storage Penuh! Limit tier " + tier + " adalah " + quotaMB + "MB." });
+  }
+  
+  // 5. Upload ke Google Drive
+  try {
+    var folder = DriveApp.getFolderById("1GL3qdlKDPJFPFu190sdrLaa-cZfD--aY");
+    var blob = Utilities.newBlob(Utilities.base64Decode(p.base64), p.mimeType, p.filename);
+    var file = folder.createFile(blob);
+    
+    // Set permission to anyone with link (read)
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    
+    var fileUrl = file.getDownloadUrl() || file.getUrl();
+    var fileId = file.getId();
+    
+    // 6. Catat ke sheet
+    sheet.appendRow([
+      p.user_id,
+      new Date().toISOString(),
+      p.filename,
+      p.mimeType,
+      fileSize,
+      fileUrl,
+      fileId
+    ]);
+    
+    return jsonResponse({ 
+      status: "success", 
+      message: "File berhasil diupload!",
+      data: {
+        Filename: p.filename,
+        Size: fileSize,
+        Drive_URL: fileUrl
+      }
+    });
+  } catch (e) {
+    return jsonResponse({ status: "error", message: "Upload Google Drive gagal: " + e.toString() });
+  }
+}
+
+function deleteDriveFile(p) {
+  var sheet = initFileSheet();
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var ciUserId = headers.indexOf("User_ID");
+  var ciFilename = headers.indexOf("Filename");
+  var ciFileId = headers.indexOf("Drive_File_ID");
+  
+  var targetRow = -1;
+  var fileId = "";
+  
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][ciUserId]) === String(p.user_id) && String(data[i][ciFilename]) === String(p.filename)) {
+      targetRow = i + 1;
+      fileId = data[i][ciFileId];
+      break;
+    }
+  }
+  
+  if (targetRow === -1) return jsonResponse({ status: "error", message: "File not found in registry." });
+  
+  try {
+    if (fileId) {
+      DriveApp.getFileById(fileId).setTrashed(true);
+    }
+    sheet.deleteRow(targetRow);
+    return jsonResponse({ status: "success", message: "File berhasil dihapus!" });
+  } catch (e) {
+    return jsonResponse({ status: "error", message: "Gagal menghapus file: " + e.toString() });
+  }
+}
+
+// ============================================================
+// FUNGSI INI WAJIB DI-RUN SEKALI SAJA UNTUK MEMANCING IZIN FULL GOOGLE DRIVE!
+// Jangan dihapus! Google Apps Script butuh ini agar tahu kita butuh izin 'createFile'.
+// ============================================================
+function pancingIzinDrive() {
+  try {
+    DriveApp.createFile("pancingan.txt", "Pancingan sukses!");
+  } catch (e) {}
+}
+
+// ============================================================
+// APP STORE & ONBOARDING
+// ============================================================
+
+function initAppSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("App");
+  if (!sheet) {
+    sheet = ss.insertSheet("App");
+    sheet.appendRow(["Nama App", "Tanggal Rilis", "Versi", "Bio"]);
+    // Populate default apps
+    sheet.appendRow(["controlcenter", new Date().toISOString(), "beta v0.1", "Control Panel & Settings"]);
+    sheet.appendRow(["responderstudio", new Date().toISOString(), "beta v0.1", "Auto Responder Studio"]);
+    sheet.appendRow(["groupmanager", new Date().toISOString(), "beta v0.1", "Group Management"]);
+    sheet.appendRow(["account", new Date().toISOString(), "beta v0.1", "Billing & Account"]);
+    sheet.appendRow(["user-manager", new Date().toISOString(), "beta v0.1", "God-tier Account Manager"]);
+  }
+  return sheet;
+}
+
+function getAppStoreList() {
+  var sheet = initAppSheet();
+  var rows = sheetToObjects(sheet);
+  return jsonResponse({ status: "success", data: rows });
+}
+
+function installApp(p) {
+  var sheet = getSheet("Client_Registry");
+  var rowIdx = findRowIndex(sheet, 0, p.user_id);
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "User not found." });
+  
+  var colIdx = getHeaderIndex(sheet, "Aplikasi_terpasang");
+  if (colIdx === -1) {
+    // If column doesn't exist, append it
+    sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Aplikasi_terpasang");
+    colIdx = sheet.getLastColumn() - 1;
+  }
+  
+  var currentApps = sheet.getRange(rowIdx, colIdx + 1).getValue() || "";
+  var appArray = currentApps ? String(currentApps).split(",") : [];
+  
+  if (!appArray.includes(p.app_id)) {
+    appArray.push(p.app_id);
+    sheet.getRange(rowIdx, colIdx + 1).setValue(appArray.join(","));
+  }
+  
+  return jsonResponse({ status: "success", message: "App installed successfully." });
+}
+
+function updateGroupLink(p) {
+  var sheet = getSheet("Client_Registry");
+  var rowIdx = findRowIndex(sheet, 0, p.user_id);
+  if (rowIdx === -1) return jsonResponse({ status: "error", message: "User not found." });
+  
+  var colIdx = getHeaderIndex(sheet, "Group_1");
+  if (colIdx === -1) return jsonResponse({ status: "error", message: "Column Group_1 not found." });
+  
+  sheet.getRange(rowIdx, colIdx + 1).setValue(p.group_link);
+  return jsonResponse({ status: "success", message: "Group link updated." });
+}
+
+// ============================================================
+// AI Chat History & Limits
+// ============================================================
+
+function addChatHistory(p) {
+  var memoryId = p.group_id; // Di versi terbaru, ini berisi Nomor WA User
+  var sheetName = 'AI_Mem_' + memoryId;
+  var sheet = getSheet(sheetName);
+  
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Timestamp", "Role", "Message"]);
+  }
+  
+  var timestamp = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+  sheet.appendRow([timestamp, p.role, p.message]);
+  
+  // Batasi maksimal 50 baris agar GAS tidak lemot
+  var lastRow = sheet.getLastRow();
+  if (lastRow > 50) {
+    sheet.deleteRows(2, lastRow - 50);
+  }
+  
+  return jsonResponse({ status: "success", message: "Chat saved." });
+}
+
+function getChatHistory(p) {
+  var memoryId = p.group_id;
+  var sheetName = 'AI_Mem_' + memoryId;
+  var doc = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = doc.getSheetByName(sheetName);
+  
+  if (!sheet) return jsonResponse({ status: "success", data: [] });
+  
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return jsonResponse({ status: "success", data: [] });
+  
+  var dataValues = sheet.getRange(2, 2, lastRow - 1, 2).getValues();
+  var history = [];
+  
+  for (var i = 0; i < dataValues.length; i++) {
+    var role = dataValues[i][0];
+    var text = dataValues[i][1];
+    if (role && text) {
+      history.push({
+        role: role === 'user' ? 'user' : 'model',
+        parts: [{ text: String(text) }]
+      });
+    }
+  }
+  
+  return jsonResponse({ status: "success", data: history });
+}
+
+function checkAiLimit(p) {
+  var sheet = getSheet("AI_Limits");
+  if (sheet.getLastRow() === 0) return jsonResponse({ status: "success", usage: 0 });
+  
+  var today = new Date();
+  var dateStr = Utilities.formatDate(today, "Asia/Jakarta", "yyyy-MM-dd");
+  
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    var cellDate = data[i][2];
+    var sheetDateStr = (cellDate instanceof Date) ? Utilities.formatDate(cellDate, "Asia/Jakarta", "yyyy-MM-dd") : String(cellDate);
+    
+    if (String(data[i][0]) === String(p.user_id) && 
+        String(data[i][1]) === String(p.group_id) &&
+        sheetDateStr === dateStr) {
+      return jsonResponse({ status: "success", usage: parseInt(data[i][3]) || 0 });
+    }
+  }
+  return jsonResponse({ status: "success", usage: 0 });
+}
+
+function incrementAiLimit(p) {
+  var sheet = getSheet("AI_Limits");
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["User_ID", "Group_ID", "Date", "Usage_Count"]);
+  }
+  
+  var today = new Date();
+  var dateStr = Utilities.formatDate(today, "Asia/Jakarta", "yyyy-MM-dd");
+  
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    var cellDate = data[i][2];
+    var sheetDateStr = (cellDate instanceof Date) ? Utilities.formatDate(cellDate, "Asia/Jakarta", "yyyy-MM-dd") : String(cellDate);
+
+    if (String(data[i][0]) === String(p.user_id) && 
+        String(data[i][1]) === String(p.group_id) &&
+        sheetDateStr === dateStr) {
+      var current = parseInt(data[i][3]) || 0;
+      sheet.getRange(i + 1, 4).setValue(current + 1);
+      return jsonResponse({ status: "success", usage: current + 1 });
+    }
+  }
+  
+  sheet.appendRow([p.user_id, p.group_id, dateStr, 1]);
+  return jsonResponse({ status: "success", usage: 1 });
+}
+
+// ============================================================
+// Blacklist Engine
+// ============================================================
+
+function addBlacklist(p) {
+  var sheet = getSheet("Blacklist");
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Phone_Number", "Date", "Reason"]);
+  }
+  
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === String(p.phone_number)) {
+      return jsonResponse({ status: "success", message: "Already blacklisted." });
+    }
+  }
+  
+  sheet.appendRow([p.phone_number, new Date().toISOString(), p.reason || "RC Spam"]);
+  return jsonResponse({ status: "success", message: "User blacklisted." });
+}
+
+function getBlacklist() {
+  var sheet = getSheet("Blacklist");
+  var rows = sheetToObjects(sheet);
+  var list = rows.map(function(r) { return String(r.Phone_Number); });
+  return jsonResponse({ status: "success", data: list });
+}
+
+// ============================================================
+// Economy / Profile System
+// ============================================================
+
+function getProfile(payload) {
+  var phone = payload.phone_number;
+  if (!phone) return jsonResponse({ status: "error", message: "Missing phone_number" });
+
+  var sheet = getSheet("Economy");
+  
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Phone", "WP", "WM", "Permata", "Julukan", "Tas", "TotalChat", "Ultah", "Title", "Badge", "Achievement"]);
+  }
+
+  var rowIndex = findRowIndex(sheet, 0, phone);
+  
+  if (rowIndex === -1) {
+    sheet.appendRow([phone, 0, 100, 0, "(Lebih Aktif lagi Fitur ini otomatis)", "", 0, "", "", "", ""]);
+    return jsonResponse({
+      status: "success",
+      profile: {
+        phone: phone,
+        wp: 0,
+        wm: 100,
+        permata: 0,
+        julukan: "(Lebih Aktif lagi Fitur ini otomatis)",
+        tas: "",
+        totalchat: 0,
+        ultah: "",
+        title: "",
+        badge: "",
+        achievement: ""
+      }
+    });
+  }
+
+  // Cek jumlah kolom di sheet, minimal ambil 11 kolom
+  var numCols = Math.max(11, sheet.getLastColumn());
+  var data = sheet.getRange(rowIndex, 1, 1, numCols).getValues()[0];
+  return jsonResponse({
+    status: "success",
+    profile: {
+      phone: String(data[0]),
+      wp: Number(data[1]) || 0,
+      wm: Number(data[2]) || 0,
+      permata: Number(data[3]) || 0,
+      julukan: String(data[4] || "(Lebih Aktif lagi Fitur ini otomatis)"),
+      tas: String(data[5] || ""),
+      totalchat: Number(data[6]) || 0,
+      ultah: String(data[7] || ""),
+      title: String(data[8] || ""),
+      badge: String(data[9] || ""),
+      achievement: String(data[10] || "")
+    }
+  });
+}
+
+function updateProfile(payload) {
+  var phone = payload.phone_number;
+  var fields = payload.fields;
+  if (!phone || !fields) return jsonResponse({ status: "error", message: "Missing phone or fields" });
+
+  var sheet = getSheet("Economy");
+  var rowIndex = findRowIndex(sheet, 0, phone);
+
+  if (rowIndex === -1) {
+    var wp = fields.wp !== undefined ? fields.wp : 0;
+    var wm = fields.wm !== undefined ? fields.wm : 100;
+    var permata = fields.permata !== undefined ? fields.permata : 0;
+    var julukan = fields.julukan !== undefined ? fields.julukan : "(Lebih Aktif lagi Fitur ini otomatis)";
+    var tas = fields.tas !== undefined ? fields.tas : "";
+    var totalchat = fields.totalchat !== undefined ? fields.totalchat : 0;
+    var ultah = fields.ultah !== undefined ? fields.ultah : "";
+    var title = fields.title !== undefined ? fields.title : "";
+    var badge = fields.badge !== undefined ? fields.badge : "";
+    var achievement = fields.achievement !== undefined ? fields.achievement : "";
+    sheet.appendRow([phone, wp, wm, permata, julukan, tas, totalchat, ultah, title, badge, achievement]);
+    return jsonResponse({ status: "success", message: "Profile created and updated" });
+  }
+
+  var numCols = Math.max(11, sheet.getLastColumn());
+  var data = sheet.getRange(rowIndex, 1, 1, numCols).getValues()[0];
+  var currentWp = Number(data[1]) || 0;
+  var currentWm = Number(data[2]) || 0;
+  var currentPermata = Number(data[3]) || 0;
+  var currentJulukan = String(data[4] || "(Lebih Aktif lagi Fitur ini otomatis)");
+  var currentTas = String(data[5] || "");
+  var currentTotalChat = Number(data[6]) || 0;
+  var currentUltah = String(data[7] || "");
+  var currentTitle = String(data[8] || "");
+  var currentBadge = String(data[9] || "");
+  var currentAchievement = String(data[10] || "");
+
+  var newWp = fields.wp !== undefined ? fields.wp : currentWp;
+  var newWm = fields.wm !== undefined ? fields.wm : currentWm;
+  var newPermata = fields.permata !== undefined ? fields.permata : currentPermata;
+  var newJulukan = fields.julukan !== undefined ? fields.julukan : currentJulukan;
+  var newTas = fields.tas !== undefined ? fields.tas : currentTas;
+  var newTotalChat = fields.totalchat !== undefined ? fields.totalchat : currentTotalChat;
+  var newUltah = fields.ultah !== undefined ? fields.ultah : currentUltah;
+  var newTitle = fields.title !== undefined ? fields.title : currentTitle;
+  var newBadge = fields.badge !== undefined ? fields.badge : currentBadge;
+  var newAchievement = fields.achievement !== undefined ? fields.achievement : currentAchievement;
+
+  sheet.getRange(rowIndex, 1, 1, 11).setValues([[phone, newWp, newWm, newPermata, newJulukan, newTas, newTotalChat, newUltah, newTitle, newBadge, newAchievement]]);
+  
+  return jsonResponse({ status: "success", message: "Profile updated successfully" });
+}
+
+function getLeaderboard(payload) {
+  var sheet = getSheet("Economy");
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 2) return jsonResponse({ status: "success", leaderboard: [] });
+  
+  var users = [];
+  for (var i = 1; i < data.length; i++) {
+    users.push({
+      phone: String(data[i][0]),
+      wp: Number(data[i][1]) || 0,
+      wm: Number(data[i][2]) || 0,
+      permata: Number(data[i][3]) || 0,
+      julukan: String(data[i][4])
+    });
+  }
+  
+  // Sort by WM descending
+  users.sort(function(a, b) {
+    return b.wm - a.wm;
+  });
+  
+  // Return top 5
+  return jsonResponse({ status: "success", leaderboard: users.slice(0, 5) });
+}
+
+function getChatLeaderboard(payload) {
+  var sheet = getSheet("Economy");
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 2) return jsonResponse({ status: "success", leaderboard: [] });
+  
+  var users = [];
+  for (var i = 1; i < data.length; i++) {
+    users.push({
+      phone: String(data[i][0]),
+      julukan: String(data[i][4] || "Tanpa Julukan"),
+      totalchat: Number(data[i][6]) || 0
+    });
+  }
+  
+  users.sort(function(a, b) {
+    return b.totalchat - a.totalchat;
+  });
+  
+  return jsonResponse({ status: "success", leaderboard: users });
+}
+
+// ============================================================
+// TIPS STATE
+// ============================================================
+function getTipsState(payload) {
+  var sheet = getSheet("Tips_State");
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 2) {
+    // Initialize if empty
+    sheet.appendRow(["lastSentAt", "currentIndex"]);
+    sheet.appendRow([0, 0]);
+    return jsonResponse({ status: "success", data: { lastSentAt: 0, currentIndex: 0 } });
+  }
+  return jsonResponse({
+    status: "success",
+    data: {
+      lastSentAt: Number(data[1][0]) || 0,
+      currentIndex: Number(data[1][1]) || 0
+    }
+  });
+}
+
+function updateTipsState(payload) {
+  var sheet = getSheet("Tips_State");
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 2) {
+    sheet.appendRow(["lastSentAt", "currentIndex"]);
+    sheet.appendRow([payload.lastSentAt || 0, payload.currentIndex || 0]);
+  } else {
+    sheet.getRange(2, 1).setValue(payload.lastSentAt || 0);
+    sheet.getRange(2, 2).setValue(payload.currentIndex || 0);
+  }
+  return jsonResponse({ status: "success", message: "Tips state updated" });
+}
+
+// ============================================================
+// TICKETS
+// ============================================================
+function createTicket(payload) {
+  try {
+    var sheet = getSheet("Tickets");
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Ticket_ID", "WhatsApp", "Name", "Subject", "Message", "Status", "Created_At"]);
+    }
+    
+    var ticketId = "TCK-" + Math.floor(1000 + Math.random() * 9000);
+    var dateStr = new Date().toISOString();
+    
+    sheet.appendRow([
+      ticketId,
+      payload.whatsapp || "Unknown",
+      payload.name || "Unknown",
+      payload.subject || "General",
+      payload.message || "",
+      "OPEN",
+      dateStr
+    ]);
+    
+    return jsonResponse({ status: "success", ticket_id: ticketId, message: "Ticket created successfully" });
+  } catch(e) {
+    return jsonResponse({ status: "error", message: e.toString() });
+  }
+}
+
