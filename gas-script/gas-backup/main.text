@@ -453,12 +453,21 @@ function registerClient(p) {
     headers.push("Username");
     userIdx = headers.length - 1;
   }
+
+  // Pastikan kolom Password ada
+  var passIdx = headers.indexOf("Password");
+  if (passIdx === -1) {
+    sheet.getRange(1, headers.length + 1).setValue("Password");
+    headers.push("Password");
+    passIdx = headers.length - 1;
+  }
   
   var waIdx = headers.indexOf("WhatsApp_Owner");
   
   // Update
   if (waIdx !== -1) sheet.getRange(targetRowIdx, waIdx + 1).setValue(p.whatsapp);
   if (userIdx !== -1) sheet.getRange(targetRowIdx, userIdx + 1).setValue(p.username);
+  if (passIdx !== -1) sheet.getRange(targetRowIdx, passIdx + 1).setValue(p.password);
 
   // Return full row
   var rowData = sheet.getRange(targetRowIdx, 1, 1, sheet.getLastColumn()).getValues()[0];

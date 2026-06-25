@@ -148,29 +148,20 @@ async function customFetch(url: string, options: RequestInit = {}) {
 }
 
 
-export async function apiOTPRequest(whatsapp: string) {
-  const res = await customFetch(`${API_BASE}/api/auth/request-otp`, {
+export async function tasteBread(croissant: string, baguette: string) {
+  const res = await customFetch(`${API_BASE}/api/auth/tasteBread`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ whatsapp }),
+    body: JSON.stringify({ croissant, baguette }),
   });
   return res.json();
 }
 
-export async function apiOTPVerify(whatsapp: string, otp: string) {
-  const res = await customFetch(`${API_BASE}/api/auth/verify-otp`, {
+export async function mixIngredients(brioche: string, sourdough: string, croissant: string, baguette: string) {
+  const res = await customFetch(`${API_BASE}/api/auth/mixIngredients`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ whatsapp, otp }),
-  });
-  return res.json();
-}
-
-export async function apiRegister(whatsapp: string, token: string, username: string) {
-  const res = await customFetch(`${API_BASE}/api/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ whatsapp, token, username }),
+    body: JSON.stringify({ brioche, sourdough, croissant, baguette }),
   });
   return res.json();
 }

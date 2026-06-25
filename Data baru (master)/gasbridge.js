@@ -38,8 +38,8 @@ async function authenticateUser(whatsapp, licenseKey) {
   return gasRequest('authenticate_user', { whatsapp, license_key: licenseKey });
 }
 
-async function registerClient(whatsapp, licenseKey, username) {
-  return gasRequest('register_client', { whatsapp, license_key: licenseKey, username });
+async function registerClient(whatsapp, licenseKey, username, password) {
+  return gasRequest('register_client', { whatsapp, license_key: licenseKey, username, password });
 }
 
 async function fetchAllMaster() {

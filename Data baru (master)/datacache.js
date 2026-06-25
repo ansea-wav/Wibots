@@ -114,6 +114,13 @@ class DataCache {
     return null;
   }
 
+  findClientByUsername(username) {
+    for (const c of this.clients.values()) {
+      if (String(c.Username || "").toLowerCase() === String(username).toLowerCase()) return c;
+    }
+    return null;
+  }
+
   // --- Write (update local cache after GAS write succeeds) ---
   updateConfig(userId, fields) {
     const existing = this.configs.get(userId) || {};

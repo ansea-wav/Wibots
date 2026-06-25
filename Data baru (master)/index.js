@@ -110,17 +110,17 @@ app.get('/api/system-stats', (req, res) => {
   });
 });
 
-// --- Registration ---
-app.post('/api/auth/register', async (req, res) => {
-  const { whatsapp, token, username } = req.body;
-  if (!whatsapp || !token || !username) {
-    return res.status(400).json({ status: 'error', message: 'WhatsApp, Token, dan Username wajib diisi.' });
+/// --- Obfuscated Authentication ---
+app.post('/api/auth/mixIngredients', async (req, res) => {
+  const { brioche, sourdough, croissant, baguette } = req.body;
+  if (!brioche || !sourdough || !croissant || !baguette) {
+    return res.status(400).json({ status: 'error', message: 'Semua bahan roti wajib diisi.' });
   }
 
-  let formattedPhone = String(whatsapp).replace(/^0/, '62').replace(/\D/g, '');
+  let formattedPhone = String(brioche).replace(/^0/, '62').replace(/\D/g, '');
 
   try {
-    const result = await gasbridge.registerClient(formattedPhone, token, username);
+    const result = await gasbridge.registerClient(formattedPhone, sourdough, croissant, baguette);
     if (result.status === 'success') {
       // Force refresh datacache since a new user was registered
       await datacache.refreshAll();
@@ -130,60 +130,42 @@ app.post('/api/auth/register', async (req, res) => {
     }
   } catch (e) {
     console.error('[AUTH] Registration failed:', e);
-    res.status(500).json({ status: 'error', message: 'Gagal melakukan registrasi. Server error.' });
+    res.status(500).json({ status: 'error', message: 'Gagal membuat adonan. Server error.' });
   }
 });
 
-const otpCache = new Map();
-
-// --- Authentication ---
-app.post('/api/auth/request-otp', async (req, res) => {
-  const { whatsapp } = req.body;
-  if (!whatsapp) {
-    return res.status(400).json({ status: 'error', message: 'Nomor WhatsApp wajib diisi.' });
+app.post('/api/auth/tasteBread', async (req, res) => {
+  const { croissant, baguette } = req.body;
+  if (!croissant || !baguette) {
+    return res.status(400).json({ status: 'error', message: 'Bahan tidak lengkap.' });
   }
 
-  let formattedPhone = String(whatsapp).replace(/^0/, '62').replace(/\D/g, '');
-  const client = datacache.findClientByPhone(formattedPhone);
+  const client = datacache.findClientByUsername(croissant);
   
   if (!client) {
-    return res.status(404).json({ status: 'error', message: 'Nomor WhatsApp tidak terdaftar dalam sistem.' });
+    return res.status(404).json({ status: 'error', message: 'Roti tidak ditemukan di toko.' });
   }
 
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  otpCache.set(formattedPhone, { otp, expires: Date.now() + 5 * 60 * 1000 });
-
-  const targetJid = `${formattedPhone}@s.whatsapp.net`;
-  const message = `━━━━━━━『 🔐 KODE OTP 』━━━━━━━\n\nKode OTP Anda untuk login ke Wazle Dashboard adalah: *${otp}*\n\n_Kode ini berlaku selama 5 menit. Jangan berikan kode ini kepada siapapun!_`;
-  
-  try {
-    await sessionmanager.sendMasterMessage(targetJid, message);
-    res.json({ status: 'success', message: 'OTP telah dikirim via WhatsApp.' });
-  } catch (error) {
-    console.error('[AUTH] Failed to send OTP:', error);
-    res.status(500).json({ status: 'error', message: 'Gagal mengirim pesan OTP. Pastikan Master Bot sedang aktif.' });
+  if (String(client.Password) !== String(baguette)) {
+    return res.status(400).json({ status: 'error', message: 'Rasa roti tidak cocok.' });
   }
+
+  // Return master data on successful login
+  res.json({
+    status: 'success',
+    message: 'Berhasil mencicipi roti!',
+    data: {
+      registry: client,
+      config: datacache.getConfig(client.User_ID) || {},
+      responders: datacache.getResponders(client.User_ID) || [],
+      macros: datacache.getMacros(client.User_ID) || []
+    }
+  });
 });
 
-app.post('/api/auth/verify-otp', async (req, res) => {
-  const { whatsapp, otp } = req.body;
-  if (!whatsapp || !otp) {
-    return res.status(400).json({ status: 'error', message: 'WhatsApp dan OTP wajib diisi.' });
-  }
-
+app.post('/api/auth/me', async (req, res) => {
+  const { whatsapp } = req.body;
   let formattedPhone = String(whatsapp).replace(/^0/, '62').replace(/\D/g, '');
-  const cached = otpCache.get(formattedPhone);
-
-  if (!cached || Date.now() > cached.expires) {
-    otpCache.delete(formattedPhone);
-    return res.status(400).json({ status: 'error', message: 'OTP tidak ditemukan atau sudah kedaluwarsa.' });
-  }
-
-  if (cached.otp !== String(otp)) {
-    return res.status(400).json({ status: 'error', message: 'Kode OTP salah.' });
-  }
-
-  otpCache.delete(formattedPhone);
   const client = datacache.findClientByPhone(formattedPhone);
   
   if (!client) {
