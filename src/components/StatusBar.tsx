@@ -54,7 +54,7 @@ export default function StatusBar({ botStatus, packageTier, userId }: StatusBarP
       {/* Left: System Info */}
       <div className="flex items-center gap-4">
         <div className="flex items-center py-0.5">
-          <img src="/logo-color.png" alt="Logo" style={{ height: '16px', width: 'auto' }} />
+          <img src="/icons.png" alt="Logo" className="w-4 h-4 rounded-md" />
         </div>
         <span className="hidden sm:inline text-[var(--text-tertiary)]">|</span>
         <span className="hidden md:inline text-[var(--text-secondary)] text-[10px]">

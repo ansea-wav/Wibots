@@ -2,7 +2,7 @@
 // YAY by netals — API Configuration & Types (UTF-8 Fixed)
 // ============================================================
 
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxAlOco5h-pleUg5mQnptCt4qf_HUf6d6lahnmJZv6DmPojiUtPveArecBTHi_1ZebbXA/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbw7cqYO8gCuXH4vFfsRd0-ALXXz2MPzOAmy7oV_4nIznkC0mNToXWuEim-ZzEWVpxoS/exec';
 const GAS_TOKEN = 'NETALS_SECURE_SECRET_2026_XYZ';
 
 // Cache URL tunnel di memori browser (tidak perlu fetch ulang tiap request)
@@ -148,11 +148,38 @@ async function customFetch(url: string, options: RequestInit = {}) {
 }
 
 
-export async function apiLogin(whatsapp: string, licenseKey: string) {
-  const res = await customFetch(`${API_BASE}/api/auth/login`, {
+export async function apiOTPRequest(whatsapp: string) {
+  const res = await customFetch(`${API_BASE}/api/auth/request-otp`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ whatsapp, license_key: licenseKey }),
+    body: JSON.stringify({ whatsapp }),
+  });
+  return res.json();
+}
+
+export async function apiOTPVerify(whatsapp: string, otp: string) {
+  const res = await customFetch(`${API_BASE}/api/auth/verify-otp`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ whatsapp, otp }),
+  });
+  return res.json();
+}
+
+export async function apiRegister(whatsapp: string, token: string, username: string) {
+  const res = await customFetch(`${API_BASE}/api/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ whatsapp, token, username }),
+  });
+  return res.json();
+}
+
+export async function apiMe(whatsapp: string) {
+  const res = await customFetch(`${API_BASE}/api/auth/me`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ whatsapp }),
   });
   return res.json();
 }

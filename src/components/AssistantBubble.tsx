@@ -270,7 +270,7 @@ export default function AssistantBubble({
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <img src="/logo-color.png" alt="Logo" style={{ height: '14px', width: 'auto' }} />
+                <img src="/icons.png" alt="Logo" className="w-4 h-4 rounded-md" />
                 <span className="text-xs text-[var(--neon-green)] uppercase tracking-[0.15em] font-black">Assistant</span>
               </div>
               <div className="text-[10px] text-[var(--text-tertiary)]">Interactive Onboarding</div>
@@ -379,7 +379,7 @@ export default function AssistantBubble({
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <img src="/logo-color.png" alt="Logo" style={{ height: '13px', width: 'auto' }} />
+                  <img src="/icons.png" alt="Logo" className="w-3.5 h-3.5 rounded-sm" />
                   <span className="text-[11px] text-[var(--neon-green)] uppercase tracking-[0.15em] font-black">Assistant</span>
                 </div>
                 <div className="text-[9px] text-[var(--text-tertiary)]">Pencarian & Informasi Fitur</div>

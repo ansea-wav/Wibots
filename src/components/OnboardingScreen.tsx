@@ -41,7 +41,7 @@ export default function OnboardingScreen({ userId, onComplete }: OnboardingScree
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--accent-primary)]/10 to-transparent pointer-events-none" />
         
         <div className="relative z-10 text-center mb-6">
-          <img src="/logo-white.png" alt="Logo" className="h-16 w-auto mx-auto mb-4 opacity-95" />
+          <img src="/icons.png" alt="Logo" className="h-16 w-16 mx-auto mb-4 rounded-2xl opacity-95" />
           <h2 className="text-2xl font-bold text-white mb-2">Welcome</h2>
           <p className="text-sm text-[var(--text-tertiary)]">
             To get started, please paste your WhatsApp Group invite link below. The bot will use this as your primary group.
