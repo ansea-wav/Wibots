@@ -6,8 +6,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import https from 'https';
 
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbw7cqYO8gCuXH4vFfsRd0-ALXXz2MPzOAmy7oV_4nIznkC0mNToXWuEim-ZzEWVpxoS/exec';
-const GAS_TOKEN = 'NETALS_SECURE_SECRET_2026_XYZ';
+const GAS_URL = process.env.GAS_URL || 'https://script.google.com/macros/s/AKfycbxAlOco5h-pleUg5mQnptCt4qf_HUf6d6lahnmJZv6DmPojiUtPveArecBTHi_1ZebbXA/exec';
+const GAS_TOKEN = process.env.GAS_AUTH_TOKEN || 'NETALS_SECURE_SECRET_2026_XYZ';
 const CF_IP = '104.16.231.132';
 
 let cachedVpsUrl = process.env.NEXT_PUBLIC_API_URL || '';
