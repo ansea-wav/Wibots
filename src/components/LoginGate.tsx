@@ -339,14 +339,25 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                     </div>
                     <div className="flex-1">
                       <label className="text-[11px] text-white/50 uppercase tracking-widest font-semibold mb-2 block ml-1">Password</label>
-                      <input 
-                        type="password"
-                        placeholder="••••••••"
-                        value={baguette}
-                        onChange={e => setBaguette(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && prepareDough()}
-                        className="w-full bg-white/[0.05] border border-white/[0.05] rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all placeholder:text-white/20"
-                      />
+                      <div className="relative">
+                        <input 
+                          type={showBaguette ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={baguette}
+                          onChange={e => setBaguette(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && prepareDough()}
+                          className="w-full bg-white/[0.05] border border-white/[0.05] rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all placeholder:text-white/20"
+                        />
+                        <button 
+                          type="button"
+                          onClick={() => setShowBaguette(!showBaguette)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">
+                            {showBaguette ? 'visibility_off' : 'visibility'}
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </div>
 
