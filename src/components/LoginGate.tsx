@@ -151,36 +151,36 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 180, damping: 15 }}
-          className={`relative z-10 w-full max-w-md auth-card backdrop-blur-2xl rounded-3xl p-8 border shadow-2xl ${shake ? 'animate-shake' : ''}`}
+          className={`relative z-10 w-full max-w-sm auth-card backdrop-blur-2xl rounded-3xl p-6 border shadow-2xl ${shake ? 'animate-shake' : ''}`}
         >
-          {isMobile && <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-8"></div>}
+          {isMobile && <div className="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>}
 
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-black auth-title tracking-tight mb-2 drop-shadow-lg">Wazle Dash</h1>
-            <p className="auth-subtitle text-sm font-medium">Register & Control Panel</p>
+          <div className="text-center mb-5">
+            <h1 className="text-2xl font-black auth-title tracking-tight mb-1.5 drop-shadow-lg">Wazle Dash</h1>
+            <p className="auth-subtitle text-xs font-medium">Register & Control Panel</p>
           </div>
 
           {/* Mode Slider */}
-          <div className="relative flex w-full auth-slider p-1 rounded-2xl mb-8 border">
+          <div className="relative flex w-full auth-slider p-1 rounded-2xl mb-6 border">
             <div 
               className="absolute top-1 bottom-1 w-[calc(50%-4px)] auth-slider-indicator rounded-xl transition-all duration-300 ease-in-out shadow-md border"
               style={{ left: mode === 'login' ? '4px' : 'calc(50%)' }}
             />
             <button 
               onClick={() => switchMode('login')}
-              className={`relative z-10 flex-1 py-2.5 text-sm font-semibold transition-colors duration-300 auth-slider-btn ${mode === 'login' ? 'active' : ''}`}
+              className={`relative z-10 flex-1 py-2 text-xs font-bold transition-colors duration-300 auth-slider-btn ${mode === 'login' ? 'active' : ''}`}
             >
               Login
             </button>
             <button 
               onClick={() => switchMode('register')}
-              className={`relative z-10 flex-1 py-2.5 text-sm font-semibold transition-colors duration-300 auth-slider-btn ${mode === 'register' ? 'active' : ''}`}
+              className={`relative z-10 flex-1 py-2 text-xs font-bold transition-colors duration-300 auth-slider-btn ${mode === 'register' ? 'active' : ''}`}
             >
               Register
             </button>
           </div>
 
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <AnimatePresence mode="wait">
               {/* LOGIN MODE */}
               {mode === 'login' && (
@@ -189,21 +189,21 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="flex flex-col gap-4"
+                  className="flex flex-col gap-3.5"
                 >
                   <div>
-                    <label className="text-[11px] auth-label uppercase tracking-widest font-semibold mb-2 block ml-1">Username</label>
+                    <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">Username</label>
                     <input 
                       type="text"
                       placeholder="e.g. John Doe"
                       value={croissant}
                       onChange={e => setCroissant(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && bakeCroissant()}
-                      className="w-full auth-input border rounded-2xl px-5 py-4 text-base outline-none transition-all placeholder:text-white/20"
+                      className="w-full auth-input border rounded-2xl px-4 py-3 text-sm outline-none transition-all placeholder:text-white/20"
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] auth-label uppercase tracking-widest font-semibold mb-2 block ml-1">Password</label>
+                    <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">Password</label>
                     <div className="relative">
                       <input 
                         type={showBaguette ? "text" : "password"}
@@ -211,14 +211,14 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                         value={baguette}
                         onChange={e => setBaguette(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && bakeCroissant()}
-                        className="w-full auth-input border rounded-2xl px-5 py-4 text-base outline-none transition-all placeholder:text-white/20"
+                        className="w-full auth-input border rounded-2xl px-4 py-3 text-sm outline-none transition-all placeholder:text-white/20"
                       />
                       <button 
                         type="button"
                         onClick={() => setShowBaguette(!showBaguette)}
                         className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80"
                       >
-                        <span className="material-symbols-outlined text-[18px]">
+                        <span className="material-symbols-outlined text-[16px]">
                           {showBaguette ? 'visibility_off' : 'visibility'}
                         </span>
                       </button>
@@ -226,7 +226,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
                   
                   {error && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-sm text-center font-medium">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -234,7 +234,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   <button
                     onClick={bakeCroissant}
                     disabled={!croissant || !baguette || loading}
-                    className="w-full auth-btn-primary font-bold text-base py-4 rounded-full mt-2 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
+                    className="w-full auth-btn-primary font-bold text-xs py-3 rounded-full mt-1.5 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                   >
                     {loading ? 'Authenticating...' : 'Login'}
                   </button>
@@ -248,22 +248,22 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="flex flex-col gap-4"
+                  className="flex flex-col gap-3.5"
                 >
                   <div>
-                    <label className="text-[11px] auth-label uppercase tracking-widest font-semibold mb-2 block ml-1">WhatsApp Number</label>
+                    <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">WhatsApp Number</label>
                     <input 
                       type="tel"
                       placeholder="e.g. 6281234..."
                       value={brioche}
                       onChange={e => setBrioche(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleNextStep1()}
-                      className="w-full auth-input border rounded-2xl px-5 py-4 text-base outline-none transition-all placeholder:text-white/20"
+                      className="w-full auth-input border rounded-2xl px-4 py-3 text-sm outline-none transition-all placeholder:text-white/20"
                     />
                   </div>
                   
                   {error && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-sm text-center font-medium">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -271,7 +271,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   <button
                     onClick={handleNextStep1}
                     disabled={!brioche}
-                    className="w-full auth-btn-primary font-bold text-base py-4 rounded-full mt-2 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
+                    className="w-full auth-btn-primary font-bold text-xs py-3 rounded-full mt-1.5 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                   >
                     Next Step
                   </button>
@@ -284,37 +284,37 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="flex flex-col gap-4"
+                  className="flex flex-col gap-3.5"
                 >
                   <div>
-                    <label className="text-[11px] auth-label uppercase tracking-widest font-semibold mb-2 block ml-1">Registration Token</label>
+                    <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">Registration Token</label>
                     <input 
                       type="text"
                       placeholder="NETALS-XXXXX-XXXXX"
                       value={sourdough}
                       onChange={e => setSourdough(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleNextStep2()}
-                      className="w-full auth-input border rounded-2xl px-5 py-4 text-center text-lg tracking-widest font-mono outline-none transition-all placeholder:text-white/10"
+                      className="w-full auth-input border rounded-2xl px-4 py-3 text-center text-sm tracking-widest font-mono outline-none transition-all placeholder:text-white/10"
                     />
                   </div>
 
                   {error && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-sm text-center font-medium">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
 
-                  <div className="flex gap-3 mt-2">
+                  <div className="flex gap-2.5 mt-1.5">
                     <button
                       onClick={() => { setStep(1); setError(''); }}
-                      className="px-6 py-4 rounded-full auth-btn-secondary border font-medium transition-colors"
+                      className="px-5 py-3 rounded-full auth-btn-secondary border text-xs font-bold transition-colors"
                     >
                       Back
                     </button>
                     <button
                       onClick={handleNextStep2}
                       disabled={!sourdough}
-                      className="flex-1 auth-btn-primary font-bold text-base py-4 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
+                      className="flex-1 auth-btn-primary font-bold text-xs py-3 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                     >
                       Next Step
                     </button>
@@ -328,22 +328,22 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="flex flex-col gap-4"
+                  className="flex flex-col gap-3.5"
                 >
-                  <div className="flex gap-3 flex-col sm:flex-row">
+                  <div className="flex gap-2.5 flex-col sm:flex-row">
                     <div className="flex-1">
-                      <label className="text-[11px] auth-label uppercase tracking-widest font-semibold mb-2 block ml-1">Username</label>
+                      <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">Username</label>
                       <input 
                         type="text"
                         placeholder="John Doe"
                         value={croissant}
                         onChange={e => setCroissant(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && prepareDough()}
-                        className="w-full auth-input border rounded-2xl px-5 py-4 text-base outline-none transition-all placeholder:text-white/20"
+                        className="w-full auth-input border rounded-2xl px-4 py-3 text-sm outline-none transition-all placeholder:text-white/20"
                       />
                     </div>
                     <div className="flex-1">
-                      <label className="text-[11px] auth-label uppercase tracking-widest font-semibold mb-2 block ml-1">Password</label>
+                      <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">Password</label>
                       <div className="relative">
                         <input 
                           type={showBaguette ? "text" : "password"}
@@ -351,14 +351,14 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                           value={baguette}
                           onChange={e => setBaguette(e.target.value)}
                           onKeyDown={e => e.key === 'Enter' && prepareDough()}
-                          className="w-full auth-input border rounded-2xl px-5 py-4 text-base outline-none transition-all placeholder:text-white/20"
+                          className="w-full auth-input border rounded-2xl px-4 py-3 text-sm outline-none transition-all placeholder:text-white/20"
                         />
                         <button 
                           type="button"
                           onClick={() => setShowBaguette(!showBaguette)}
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80"
                         >
-                          <span className="material-symbols-outlined text-[18px]">
+                          <span className="material-symbols-outlined text-[16px]">
                             {showBaguette ? 'visibility_off' : 'visibility'}
                           </span>
                         </button>
@@ -367,23 +367,23 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
 
                   {error && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-sm text-center font-medium">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
 
-                  <div className="flex gap-3 mt-2">
+                  <div className="flex gap-2.5 mt-1.5">
                     <button
                       onClick={() => { setStep(2); setError(''); }}
                       disabled={loading}
-                      className="px-6 py-4 rounded-full auth-btn-secondary border font-medium transition-colors disabled:opacity-50"
+                      className="px-5 py-3 rounded-full auth-btn-secondary border text-xs font-bold transition-colors disabled:opacity-50"
                     >
                       Back
                     </button>
                     <button
                       onClick={prepareDough}
                       disabled={loading || !croissant || !baguette}
-                      className="flex-1 auth-btn-primary font-bold text-base py-4 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
+                      className="flex-1 auth-btn-primary font-bold text-xs py-3 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                     >
                       {loading ? 'Processing...' : 'Register'}
                     </button>
@@ -392,7 +392,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
               )}
             </AnimatePresence>
 
-            <p className="text-white/30 text-xs text-center mt-6 leading-relaxed px-4">
+            <p className="text-white/30 text-[10px] text-center mt-4 leading-relaxed px-4">
               Protected by Wazle Secure Auth.<br/>By continuing you agree to our Terms.
             </p>
 
@@ -400,9 +400,9 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
               href="https://wa.me/62882008677172" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="auth-link text-xs text-center mt-2 font-medium flex items-center justify-center gap-1 transition-colors"
+              className="auth-link text-[10px] text-center mt-1 font-medium flex items-center justify-center gap-1 transition-colors"
             >
-              <span className="material-symbols-outlined text-[14px]">support_agent</span>
+              <span className="material-symbols-outlined text-[12px]">support_agent</span>
               Hubungi Wazle Support Service
             </a>
           </div>
