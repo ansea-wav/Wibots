@@ -48,12 +48,12 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
     <div className="max-w-4xl mx-auto space-y-6 text-left">
       
       {/* Main Settings Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-6">
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-6">
         <div>
           <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-1">
             Group Link Settings
           </div>
-          <p className="text-[11px] text-zinc-500 font-medium">
+          <p className="text-[11px] text-zinc-500 font-semibold">
             Manage your WhatsApp Group Join Links. Your current tier is <span className="font-bold text-zinc-950">{tier}</span> (Max {maxGroups} groups).
           </p>
         </div>
@@ -76,7 +76,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                     value={groups[groupKey]}
                     disabled={isLocked}
                     onChange={(e) => setGroups({ ...groups, [groupKey]: e.target.value })}
-                    className="flex-1 bg-zinc-50 border border-zinc-200/85 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   
                   {tier !== 'Basic' && (
@@ -90,7 +90,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                 </div>
                 
                 {isLocked && (
-                  <p className="text-[10px] text-amber-600 mt-1 block font-medium ml-1">
+                  <p className="text-[10px] text-amber-600 mt-1 block font-semibold ml-1">
                     🔒 Hubungi YAY staff untuk merubah link grup.
                   </p>
                 )}

@@ -97,7 +97,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
     <div className="max-w-6xl mx-auto space-y-6 text-left">
       
       {/* Storage and View Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-6">
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-6">
         
         {/* Storage Info Header */}
         <div>
@@ -112,7 +112,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                 <span>{formatSize(usedBytes)} / {quotaMB} MB used</span>
               </div>
             </div>
-            <span className="text-[9px] font-bold text-white bg-zinc-950 px-2.5 py-0.5 rounded-full uppercase border border-zinc-800">
+            <span className="text-[9px] font-bold text-zinc-50 bg-zinc-950 px-2.5 py-0.5 rounded-full uppercase border border-zinc-800">
               {tier}
             </span>
           </div>
@@ -132,7 +132,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
 
         {/* Toolbar */}
         <div className="flex items-center justify-between border-t border-zinc-200/40 pt-4">
-          <div className="flex rounded-full border border-zinc-200 overflow-hidden p-0.5 bg-zinc-50">
+          <div className="flex rounded-full border border-zinc-250 overflow-hidden p-0.5 bg-zinc-50">
             <button
               onClick={() => setViewMode('grid')}
               className={`px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition-colors ${
@@ -165,8 +165,8 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
         <div
           className={`border-2 border-dashed rounded-2xl p-4 transition-colors ${
             dragOver 
-              ? 'border-zinc-900 bg-zinc-50' 
-              : 'border-zinc-200/80 hover:border-zinc-300'
+              ? 'border-zinc-950 bg-zinc-50' 
+              : 'border-zinc-300 hover:border-zinc-400'
           }`}
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
@@ -180,14 +180,14 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
             </div>
           ) : viewMode === 'grid' ? (
             /* Grid View */
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3.5">
               {files.map((f) => (
                 <div
                   key={f.filename}
                   className={`group p-2.5 rounded-2xl border transition-all cursor-pointer ${
                     selectedFile?.filename === f.filename
-                      ? 'border-zinc-900 bg-zinc-50'
-                      : 'border-zinc-200 bg-white hover:bg-zinc-50/50 shadow-sm'
+                      ? 'border-zinc-950 bg-zinc-100 shadow-[2px_2px_0px_#000000]'
+                      : 'border-zinc-950 bg-white hover:bg-zinc-50/50 shadow-[3px_3px_0px_#09090b]'
                   }`}
                   onClick={() => setSelectedFile(f)}
                 >
@@ -247,7 +247,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
               {files.map((f) => (
                 <div
                   key={f.filename}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-zinc-50 transition-colors group cursor-pointer border border-transparent hover:border-zinc-200"
+                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-zinc-50 transition-colors group cursor-pointer border border-zinc-200/50 hover:border-zinc-400"
                   onClick={() => setSelectedFile(f)}
                 >
                   <span className="text-xl shrink-0">{getFileIcon(f)}</span>
@@ -263,13 +263,13 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                         const fullUrl = f.id ? `https://drive.google.com/uc?export=download&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
                         window.open(fullUrl, '_blank');
                       }}
-                      className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 transition-colors cursor-pointer"
+                      className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 transition-colors cursor-pointer"
                     >
                       Download
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); handleCopy(f.url); }}
-                      className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 transition-colors cursor-pointer"
+                      className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 transition-colors cursor-pointer"
                     >
                       {copiedUrl === f.url ? '✓ Copied' : 'Copy URL'}
                     </button>

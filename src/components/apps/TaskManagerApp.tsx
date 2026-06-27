@@ -39,17 +39,17 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
     <div className="max-w-6xl mx-auto space-y-6 text-left">
       
       {/* Header Stats Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+      <div className="bg-[#fdfcf7] border border-zinc-955 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
         <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
           Engine Overview
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="p-4 rounded-2xl border border-zinc-200 bg-white shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 rounded-2xl border border-zinc-950 bg-white shadow-[2px_2px_0px_#09090b]">
             <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Active Windows</div>
             <div className="text-xl font-black text-zinc-950 mt-0.5">{tasks.length}</div>
           </div>
           
-          <div className="p-4 rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="p-4 rounded-2xl border border-zinc-955 bg-white shadow-[2px_2px_0px_#09090b]">
             <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Bot Engine</div>
             <div className="flex items-center gap-1.5 mt-1.5">
               <div className={`w-1.5 h-1.5 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
@@ -57,7 +57,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
             </div>
           </div>
           
-          <div className="p-4 rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="p-4 rounded-2xl border border-zinc-955 bg-white shadow-[2px_2px_0px_#09090b]">
             <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Uptime</div>
             <div className="text-sm font-mono font-black text-zinc-950 mt-1">{formatUptime(uptime)}</div>
           </div>
@@ -65,7 +65,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
       </div>
 
       {/* Active Windows Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
         <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
           Active Windows ({tasks.length})
         </div>
@@ -75,7 +75,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
           <div className="space-y-1.5">
             {tasks.map((task) => (
               <div key={task.id}
-                className="flex items-center justify-between p-3 rounded-2xl hover:bg-zinc-50 border border-transparent hover:border-zinc-200 transition-all group">
+                className="flex items-center justify-between p-3 rounded-2xl hover:bg-zinc-50 border border-transparent hover:border-zinc-300 transition-all group">
                 <div className="flex items-center gap-2.5 flex-1 min-w-0">
                   <span className="text-sm flex items-center justify-center w-5 h-5">
                     {task.icon}
@@ -92,13 +92,13 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
                 <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => onFocusTask(task.id)}
-                    className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 transition-colors cursor-pointer"
+                    className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 transition-colors cursor-pointer"
                   >
                     Focus
                   </button>
                   <button
                     onClick={() => onCloseTask(task.id)}
-                    className="px-3 py-1 rounded-full text-[10px] font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer"
+                    className="px-3 py-1 rounded-full text-[10px] font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-300 transition-colors cursor-pointer"
                   >
                     End Task
                   </button>
@@ -110,7 +110,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
       </div>
 
       {/* System Processes Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
         <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
           System Processes
         </div>

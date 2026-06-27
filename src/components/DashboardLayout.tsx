@@ -180,26 +180,26 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         
-        {/* Top Navbar (Sleek Dark Theme matching sidebar) */}
-        <header className="h-20 flex items-center justify-between px-6 md:px-8 border-b border-zinc-800/80 bg-[#131317]/80 backdrop-blur-md shrink-0 z-30">
+        {/* Top Navbar (Light Mode matching mock) */}
+        <header className="h-20 flex items-center justify-between px-6 md:px-8 border-b border-zinc-200/60 bg-white/80 backdrop-blur-md shrink-0 z-30">
           <div className="flex items-center gap-3">
             <button 
-              className="md:hidden p-2 -ml-2 text-zinc-400 hover:text-white"
+              className="md:hidden p-2 -ml-2 text-zinc-600 hover:text-zinc-900"
               onClick={() => setIsSidebarOpen(true)}
             >
               <span className="material-symbols-outlined">menu</span>
             </button>
-            <h2 className="text-lg font-black tracking-tight text-white">
+            <h2 className="text-lg font-black tracking-tight text-zinc-900">
               {navItems.find(i => i.id === activeTab)?.label}
             </h2>
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] text-[10px] font-bold text-zinc-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-100 border border-zinc-200/50 text-[10px] font-bold text-zinc-600">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               API Connected
             </div>
-            <button className="text-zinc-500 hover:text-white transition-colors cursor-pointer" onClick={() => {
+            <button className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer" onClick={() => {
               localStorage.removeItem('yay_user_phone');
               eraseSharedCookie('yay_user_phone');
               window.location.reload();
@@ -209,8 +209,8 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
           </div>
         </header>
 
-        {/* Content Viewport (Sleek Dark Sheet Backdrop) */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-8 bg-[#0d0d11]">
+        {/* Content Viewport (Default Light Surface Dark background) */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 bg-[var(--surface-dark)]">
           <div className="max-w-6xl mx-auto h-full">
             {activeTab === 'dashboard' && (
               <DashboardHome 

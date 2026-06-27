@@ -152,13 +152,13 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
     <div className="max-w-6xl mx-auto space-y-6 text-left">
       
       {/* Main Table Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-6">
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-1">
               Keyword Responders
             </div>
-            <p className="text-[11px] text-zinc-500 font-medium">
+            <p className="text-[11px] text-zinc-500 font-semibold">
               {responders.length} keyword rules configured
             </p>
           </div>
@@ -168,7 +168,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
               placeholder="Search keywords..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="bg-zinc-50 border border-zinc-200/80 rounded-full px-4 py-1.5 text-xs text-zinc-950 outline-none focus:border-zinc-500 placeholder:text-zinc-400 transition-all"
+              className="bg-zinc-50 border border-zinc-300 rounded-full px-4 py-1.5 text-xs text-zinc-950 outline-none focus:border-zinc-950 placeholder:text-zinc-400 transition-all"
             />
             <button
               onClick={() => { resetForm(); setShowForm(!showForm); }}
@@ -185,7 +185,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
 
         {/* Add/Edit Form inside Card */}
         {showForm && (
-          <div className="bg-zinc-50 border border-zinc-200/50 rounded-2xl p-5 space-y-4">
+          <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-5 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block mb-1 ml-1">Keyword</label>
@@ -193,7 +193,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                   type="text"
                   value={form.Keyword || ''}
                   onChange={e => setForm({ ...form, Keyword: e.target.value })}
-                  className="w-full bg-white border border-zinc-200/80 rounded-2xl px-4 py-2.5 text-xs text-zinc-950 outline-none focus:border-zinc-500 transition-all"
+                  className="w-full bg-white border border-zinc-300 rounded-2xl px-4 py-2.5 text-xs text-zinc-950 outline-none focus:border-zinc-950 transition-all"
                   placeholder="e.g. /pricelist"
                 />
               </div>
@@ -202,7 +202,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                 <select
                   value={form.Match_Type || 'Exact'}
                   onChange={e => setForm({ ...form, Match_Type: e.target.value as 'Exact' | 'Contains' })}
-                  className="w-full bg-white border border-zinc-200/80 rounded-2xl px-4 py-2.5 text-xs text-zinc-950 outline-none cursor-pointer"
+                  className="w-full bg-white border border-zinc-300 rounded-2xl px-4 py-2.5 text-xs text-zinc-950 outline-none cursor-pointer"
                 >
                   <option value="Exact">Exact Match</option>
                   <option value="Contains">Contains Match</option>
@@ -220,7 +220,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                     className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
                       form.Response_Type === type 
                         ? 'bg-zinc-950 border-zinc-800 text-white' 
-                        : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'
+                        : 'bg-white border-zinc-300 text-zinc-800 hover:bg-zinc-50'
                     }`}
                   >
                     {typeIcon(type)} {type}
@@ -238,11 +238,11 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                   value={form.Payload_Data || ''}
                   onChange={handlePayloadChange}
                   rows={3}
-                  className="w-full bg-white border border-zinc-200/80 rounded-2xl px-4 py-3 text-zinc-950 text-xs outline-none focus:border-zinc-500 transition-all resize-none relative z-10"
+                  className="w-full bg-white border border-zinc-300 rounded-2xl px-4 py-3 text-zinc-950 text-xs outline-none focus:border-zinc-950 transition-all resize-none relative z-10"
                   placeholder={form.Response_Type === 'Text' ? 'Bot response message...' : 'https://example.com/file.jpg'}
                 />
                 {showMentionMenu && files?.length > 0 && (
-                  <div className="absolute left-0 right-0 bottom-[calc(100%+8px)] bg-white rounded-2xl border border-zinc-200 shadow-lg z-50 max-h-40 overflow-y-auto p-2">
+                  <div className="absolute left-0 right-0 bottom-[calc(100%+8px)] bg-white rounded-2xl border border-zinc-300 shadow-lg z-50 max-h-40 overflow-y-auto p-2">
                     {filteredFiles.length === 0 ? (
                       <div className="p-2 text-[10px] text-zinc-400 text-center font-bold">No matching images</div>
                     ) : (
@@ -253,7 +253,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                           className="flex items-center gap-2 p-2.5 border-b border-zinc-100 hover:bg-zinc-50 cursor-pointer"
                         >
                           <span className="text-xs">🖼️</span>
-                          <div className="text-[11px] text-zinc-800 font-bold truncate flex-1">{f.filename}</div>
+                          <div className="text-[11px] text-zinc-850 font-bold truncate flex-1">{f.filename}</div>
                         </div>
                       ))
                     )}
@@ -275,7 +275,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                     className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
                       currentFormTargetGroups === 'All' 
                         ? 'bg-zinc-950 border-zinc-800 text-white' 
-                        : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'
+                        : 'bg-white border-zinc-300 text-zinc-800 hover:bg-zinc-50'
                     }`}
                   >
                     Semua
@@ -289,7 +289,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                         className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
                           isSelected 
                             ? 'bg-zinc-950 border-zinc-800 text-white' 
-                            : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'
+                            : 'bg-white border-zinc-300 text-zinc-800 hover:bg-zinc-50'
                         }`}
                       >
                         Grup {g}
@@ -338,16 +338,16 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                     <td className="px-4 py-3.5">
                       <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border ${
                         r.Match_Type === 'Exact' 
-                          ? 'bg-zinc-100 text-zinc-800 border-zinc-200' 
+                          ? 'bg-zinc-150 text-zinc-800 border-zinc-250' 
                           : 'bg-amber-50 text-amber-700 border-amber-200'
                       }`}>
                         {r.Match_Type}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 font-semibold text-zinc-800">
+                    <td className="px-4 py-3.5 font-bold text-zinc-805">
                       <span>{typeIcon(r.Response_Type)} {r.Response_Type}</span>
                     </td>
-                    <td className="px-4 py-3.5 text-[10px] text-zinc-500 font-bold">
+                    <td className="px-4 py-3.5 text-[10px] text-zinc-500 font-semibold">
                       {(() => {
                         const tg = parseTargetGroups(r.Target_Groups);
                         return tg === 'All' ? 'Semua' : `Grup ${tg.join(', ')}`;
@@ -366,7 +366,7 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
                         </button>
                         <button
                           onClick={() => { onDelete(r.Response_ID); showToast(t('toast_responder_deleted'), 'success'); }}
-                          className="px-2.5 py-1 rounded-full bg-zinc-100 hover:bg-rose-50 hover:text-rose-600 border border-zinc-200 hover:border-rose-200 text-[10px] text-zinc-500 font-bold transition-all cursor-pointer"
+                          className="px-2.5 py-1 rounded-full bg-zinc-105 hover:bg-rose-50 hover:text-rose-600 border border-zinc-200 hover:border-rose-200 text-[10px] text-zinc-500 font-bold transition-all cursor-pointer"
                         >
                           Delete
                         </button>

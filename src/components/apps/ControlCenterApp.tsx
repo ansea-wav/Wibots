@@ -81,7 +81,7 @@ export default function ControlCenterApp({
       
       {/* Bot Power Section - Admin Only */}
       {client.Package_Tier === 'God' ? (
-        <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-5 shadow-sm space-y-4">
+        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-5 shadow-[4px_4px_0px_#09090b] space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl bg-zinc-100 border border-zinc-200/50">
@@ -119,7 +119,7 @@ export default function ControlCenterApp({
           )}
         </div>
       ) : (
-        <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-5 shadow-sm">
+        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-5 shadow-[4px_4px_0px_#09090b]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl bg-zinc-100 border border-zinc-200/50">
               {botStatus === 'ONLINE' ? '⚡' : '🔌'}
@@ -138,7 +138,7 @@ export default function ControlCenterApp({
       )}
 
       {/* Feature Toggles Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
         <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-1">
           Feature Switches
         </div>
@@ -175,7 +175,7 @@ export default function ControlCenterApp({
 
       {/* Custom Welcome Text Card */}
       {safeConfig.Welcome_Message_Status && (
-        <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
           <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
             Welcome Message Template
           </div>
