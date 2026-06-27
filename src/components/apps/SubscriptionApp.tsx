@@ -10,35 +10,35 @@ interface SubscriptionAppProps {
 const getPlans = (t: (k: string) => string) => [
   {
     id: 'free',
-    name: t('plan_free_name'),
+    name: 'Free Starter',
     price: 'Rp 0',
-    features: [t('feat_5_resp'), t('feat_no_upload'), t('feat_few_services'), t('feat_1_group')],
-    color: '#9ca3af',
+    features: ['5 Auto Responders', 'No File Uploads', 'Limited Features', '1 Active Group'],
+    color: '#09090b',
     icon: '🌱',
   },
   {
     id: 'basic',
-    name: t('plan_basic_name'),
+    name: 'Basic Plan',
     price: 'Rp 2.000',
-    features: [t('feat_5_resp'), t('feat_500kb_upload'), t('feat_50mb_storage'), t('feat_1_group'), t('feat_basic_support')],
-    color: '#6b7280',
+    features: ['5 Auto Responders', '500KB Max Upload', '50MB Total Storage', '1 Active Group', 'Basic Support'],
+    color: '#09090b',
     icon: '⭐',
   },
   {
     id: 'standard',
-    name: t('plan_standard_name'),
+    name: 'Standard Pro',
     price: 'Rp 5.000',
-    features: [t('feat_25_resp'), t('feat_5mb_upload'), t('feat_500mb_storage'), t('feat_2_group'), t('feat_247_support')],
-    color: '#3b82f6',
+    features: ['25 Auto Responders', '5MB Max Upload', '500MB Total Storage', '2 Active Groups', '24/7 Priority Support'],
+    color: '#09090b',
     icon: '🌟',
     popular: true,
   },
   {
     id: 'premium',
-    name: t('plan_premium_name'),
+    name: 'Premium Ultra',
     price: 'Rp 20.000',
-    features: [t('feat_100_resp'), t('feat_15mb_upload'), t('feat_1000mb_storage'), t('feat_5_group'), t('feat_247_support')],
-    color: '#a855f7',
+    features: ['100 Auto Responders', '15MB Max Upload', '1000MB Total Storage', '5 Active Groups', '24/7 Priority Support'],
+    color: '#09090b',
     icon: '💎',
   },
 ];
@@ -60,165 +60,189 @@ export default function SubscriptionApp({ client }: SubscriptionAppProps) {
   const totalPrice = calculatePrice();
 
   return (
-    <div className="flex flex-col h-full" style={{ background: 'var(--surface-panel)' }}>
-      {/* Header */}
-      <div className="p-5 border-b border-[var(--border-subtle)] flex-shrink-0">
-        <h2 className="text-lg font-bold text-white">💎 {t('services_pricing')}</h2>
-        <p className="text-[11px] text-[var(--text-tertiary)] mt-0.5">{t('subscription_desc')}</p>
-
-        {/* Current Status */}
-        <div className="mt-3 p-3 rounded-xl border border-[var(--border-subtle)] flex items-center justify-between"
-          style={{ background: 'var(--surface-glass)' }}>
-          <div>
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">{t('current_subscription')}</div>
-            <div className="text-sm font-semibold text-white">{t(client.Package_Tier) || client.Package_Tier}</div>
+    <div className="max-w-4xl mx-auto space-y-6 text-left">
+      
+      {/* Current Status Card */}
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
+        <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
+          Current Subscription Status
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <div className="p-3.5 rounded-2xl border border-zinc-950 bg-white shadow-[2px_2px_0px_#09090b]">
+            <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Package Tier</div>
+            <div className="text-sm font-black text-zinc-950 mt-0.5">{client.Package_Tier}</div>
           </div>
-          <div className="text-right">
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">{t('days_left')}</div>
-            <div className={`text-sm font-bold ${client.Days_Left <= 3 ? 'text-[var(--neon-red)]' : client.Days_Left <= 7 ? 'text-[var(--neon-amber)]' : 'text-[var(--neon-green)]'}`}>
-              {client.Days_Left} {t('days')}
-            </div>
+          <div className="p-3.5 rounded-2xl border border-zinc-950 bg-white shadow-[2px_2px_0px_#09090b]">
+            <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Days Left</div>
+            <div className="text-sm font-black text-zinc-950 mt-0.5">{client.Days_Left} Days</div>
           </div>
-          <div className="text-right">
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">{t('status')}</div>
-            <div className={`text-sm font-semibold ${client.Account_Status === 'Active' ? 'text-[var(--neon-green)]' : 'text-[var(--neon-red)]'}`}>
-              {t(client.Account_Status) || client.Account_Status}
-            </div>
+          <div className="p-3.5 rounded-2xl border border-zinc-950 bg-white shadow-[2px_2px_0px_#09090b]">
+            <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Account Status</div>
+            <div className="text-sm font-black text-zinc-950 mt-0.5">{client.Account_Status}</div>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto p-5">
-        {/* Plan Features */}
-        <div className="space-y-3">
-          {getPlans(t).map((plan) => (
-            <div
-              key={plan.id}
-              className="relative rounded-xl border transition-all"
-              style={{
-                background: 'var(--surface-glass)',
-                borderColor: `${plan.color}30`,
-              }}
-            >
-              {plan.popular && (
-                <div className="absolute -top-2 right-4 px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider text-white"
-                  style={{ background: `linear-gradient(135deg, ${plan.color}, ${plan.color}cc)` }}>
-                  {t('popular')}
+      {/* Plans List */}
+      <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-3">
+        Available Packages
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {getPlans(t).map((plan) => (
+          <div
+            key={plan.id}
+            className="bg-[#fdfcf7] border border-zinc-955 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] flex flex-col justify-between h-72 relative"
+          >
+            {plan.popular && (
+              <div className="absolute -top-3.5 right-6 px-3 py-1 bg-zinc-950 text-zinc-50 border border-zinc-900 rounded-full text-[9px] font-black uppercase tracking-wider">
+                Popular
+              </div>
+            )}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl shrink-0">{plan.icon}</span>
+                  <div className="text-sm font-black text-zinc-955">{plan.name}</div>
                 </div>
-              )}
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-2xl">{plan.icon}</span>
-                    <div>
-                      <div className="text-sm font-bold text-white">{plan.name}</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-white">{plan.price}</div>
-                    <div className="text-[9px] text-[var(--text-tertiary)]">{t('per_month')}</div>
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {plan.features.map((f, i) => (
-                    <span key={i} className="text-[9px] px-2 py-0.5 rounded-full border"
-                      style={{
-                        borderColor: `${plan.color}20`,
-                        color: `${plan.color}`,
-                        background: `${plan.color}08`,
-                      }}>
-                      ✓ {f}
-                    </span>
-                  ))}
+                <div className="text-right">
+                  <div className="text-base font-black text-zinc-955">{plan.price}</div>
+                  <div className="text-[9px] text-zinc-400 uppercase tracking-wider font-bold">/ Month</div>
                 </div>
               </div>
+              
+              <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
+                {plan.features.map((f, i) => (
+                  <span key={i} className="text-[9px] font-bold px-2 py-0.5 rounded-full border border-zinc-200 bg-white text-zinc-800">
+                    ✓ {f}
+                  </span>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-        
-        {/* Footer Contact -> Budget Adjustment */}
-        <div className="mt-8 mb-4 p-4 rounded-xl border border-[var(--border-subtle)]" style={{ background: 'var(--surface-glass)' }}>
-          {!showCalc ? (
-            <div className="text-center">
-              <p className="text-xs font-semibold text-white">{t('budget_adjustment_title')}</p>
+
+            <a
+              href={`https://wa.me/62882008677172?text=Halo admin, saya mau berlangganan paket ${plan.name}.`}
+              target="_blank"
+              className="w-full py-2.5 mt-4 rounded-full text-xs font-bold text-center bg-zinc-955 hover:bg-zinc-900 text-white transition-all shadow-sm block cursor-pointer"
+            >
+              Order Package
+            </a>
+          </div>
+        ))}
+      </div>
+
+      {/* Custom Budget Calculator */}
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
+        {!showCalc ? (
+          <div className="text-center py-2">
+            <p className="text-xs font-bold text-zinc-900">Need a custom plan tailored to your needs?</p>
+            <button 
+              onClick={() => setShowCalc(true)}
+              className="inline-flex items-center gap-2 mt-4 px-6 py-2.5 rounded-full text-xs font-black bg-zinc-955 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer"
+            >
+              ⚙ Custom Calculator
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-5">
+            <div className="flex justify-between items-center pb-2 border-b border-zinc-200/50">
+              <h3 className="font-black text-zinc-955 text-sm">Adjust Custom Package</h3>
               <button 
-                onClick={() => setShowCalc(true)}
-                className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-lg text-xs font-bold bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white transition-all cursor-pointer"
+                onClick={() => setShowCalc(false)} 
+                className="w-6 h-6 rounded-full border border-zinc-200 flex items-center justify-center font-bold text-zinc-500 hover:text-zinc-950 transition-colors cursor-pointer"
               >
-                <i className="fi fi-rr-settings-sliders"></i>
-                {t('budget_adjustment_btn')}
+                ✕
               </button>
             </div>
-          ) : (
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-              <div className="flex justify-between items-center mb-4 pb-2 border-b border-[var(--border-subtle)]">
-                <h3 className="font-bold text-white text-sm">{t('adjust_package')}</h3>
-                <button onClick={() => setShowCalc(false)} className="text-[var(--text-tertiary)] hover:text-white transition-colors">
-                  <i className="fi fi-rr-cross-small"></i>
-                </button>
+
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-xs mb-1.5 font-bold">
+                  <span className="text-zinc-500">Auto Responder Slots</span>
+                  <span className="text-zinc-955">{responSlots} Slots</span>
+                </div>
+                <input 
+                  type="range" 
+                  min="25" 
+                  max="100" 
+                  step="25" 
+                  value={responSlots} 
+                  onChange={(e) => setResponSlots(Number(e.target.value))} 
+                  className="w-full h-1 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-950" 
+                />
+                <div className="flex justify-between text-[9px] text-zinc-400 font-bold mt-1">
+                  <span>25</span>
+                  <span>100</span>
+                </div>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-[var(--text-secondary)]">{t('response_slot')}</span>
-                    <span className="font-bold text-[var(--accent-primary)]">{responSlots}</span>
-                  </div>
-                  <input type="range" min="25" max="100" step="25" value={responSlots} onChange={(e) => setResponSlots(Number(e.target.value))} className="w-full" style={{ accentColor: 'var(--accent-primary)' }} />
-                  <div className="flex justify-between text-[9px] text-[var(--text-tertiary)] mt-1"><span>25</span><span>100</span></div>
+              <div>
+                <div className="flex justify-between text-xs mb-1.5 font-bold">
+                  <span className="text-zinc-500">WhatsApp Group Slots</span>
+                  <span className="text-zinc-955">{groupSlots} Groups</span>
                 </div>
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="5" 
+                  step="1" 
+                  value={groupSlots} 
+                  onChange={(e) => setGroupSlots(Number(e.target.value))} 
+                  className="w-full h-1 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-950" 
+                />
+                <div className="flex justify-between text-[9px] text-zinc-400 font-bold mt-1">
+                  <span>1</span>
+                  <span>5</span>
+                </div>
+              </div>
 
-                <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-[var(--text-secondary)]">{t('whatsapp_group')}</span>
-                    <span className="font-bold text-[var(--accent-primary)]">{groupSlots}</span>
-                  </div>
-                  <input type="range" min="1" max="5" step="1" value={groupSlots} onChange={(e) => setGroupSlots(Number(e.target.value))} className="w-full" style={{ accentColor: 'var(--accent-primary)' }} />
-                  <div className="flex justify-between text-[9px] text-[var(--text-tertiary)] mt-1"><span>1</span><span>5</span></div>
+              <div>
+                <span className="text-zinc-500 text-xs font-bold block mb-1.5">Support & SLA Service</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button 
+                    onClick={() => setServiceType('basic')}
+                    className={`py-2 rounded-full text-[10px] font-bold transition-all cursor-pointer border ${
+                      serviceType === 'basic' 
+                        ? 'bg-zinc-950 border-zinc-800 text-white' 
+                        : 'bg-white border-zinc-300 text-zinc-800 hover:bg-zinc-50'
+                    }`}
+                  >
+                    Basic Support
+                  </button>
+                  <button 
+                    onClick={() => setServiceType('24/7')}
+                    className={`py-2 rounded-full text-[10px] font-bold transition-all cursor-pointer border ${
+                      serviceType === '24/7' 
+                        ? 'bg-zinc-950 border-zinc-800 text-white' 
+                        : 'bg-white border-zinc-300 text-zinc-800 hover:bg-zinc-50'
+                    }`}
+                  >
+                    24/7 Priority Support
+                  </button>
                 </div>
+              </div>
 
+              <div className="pt-4 border-t border-zinc-200/50 flex items-center justify-between">
                 <div>
-                  <span className="text-[var(--text-secondary)] text-xs block mb-1.5">{t('support_service')}</span>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button 
-                      onClick={() => setServiceType('basic')}
-                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all ${serviceType === 'basic' ? 'bg-[var(--accent-primary)] text-white' : 'bg-white/5 text-[var(--text-secondary)] border border-white/10'}`}
-                    >
-                      {t('basic_service')}
-                    </button>
-                    <button 
-                      onClick={() => setServiceType('24/7')}
-                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all ${serviceType === '24/7' ? 'bg-[var(--accent-primary)] text-white' : 'bg-white/5 text-[var(--text-secondary)] border border-white/10'}`}
-                    >
-                      {t('service_247')}
-                    </button>
+                  <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Estimated Price</div>
+                  <div className="text-lg font-black text-zinc-955">
+                    Rp {totalPrice.toLocaleString('id-ID')}{' '}
+                    <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">/ Month</span>
                   </div>
                 </div>
-
-                <div className="pt-3 border-t border-[var(--border-subtle)] mt-2">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider font-bold mb-0.5">{t('total_estimation')}</div>
-                      <div className="text-xl font-bold text-white">Rp {totalPrice.toLocaleString('id-ID')} <span className="text-[10px] font-normal text-[var(--text-tertiary)]">{t('per_month')}</span></div>
-                    </div>
-                    <a 
-                      href={`https://wa.me/62882008677172?text=Halo admin, saya mau pesan custom plan: ${responSlots} Respon, ${groupSlots} Grup, ${serviceType === '24/7' ? '24/7 Support' : 'Basic Support'}. Estimasi Rp ${totalPrice.toLocaleString('id-ID')}/bln.`}
-                      target="_blank"
-                      className="px-4 py-2 rounded-lg bg-[var(--neon-green)] text-black font-bold text-xs flex items-center gap-2 hover:brightness-110 transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)]"
-                    >
-                      <i className="fi fi-rr-comment-alt"></i>
-                      {t('order_via_wa')}
-                    </a>
-                  </div>
-                  <p className="text-[9px] text-[var(--text-tertiary)] text-center mt-3 pt-3 border-t border-[var(--border-subtle)]/50 leading-relaxed max-w-[250px] mx-auto">
-                    {t('storage_note')}
-                  </p>
-                </div>
+                
+                <a 
+                  href={`https://wa.me/62882008677172?text=Halo admin, saya mau pesan custom plan: ${responSlots} Respon, ${groupSlots} Grup, ${serviceType === '24/7' ? '24/7 Support' : 'Basic Support'}. Estimasi Rp ${totalPrice.toLocaleString('id-ID')}/bln.`}
+                  target="_blank"
+                  className="px-5 py-2.5 rounded-full bg-zinc-950 hover:bg-zinc-900 text-white font-bold text-xs flex items-center gap-2 transition-all shadow-sm cursor-pointer"
+                >
+                  Order via WhatsApp
+                </a>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
+
     </div>
   );
 }

@@ -18,6 +18,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
   const [dragOver, setDragOver] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
   const { showToast, toastElement } = useToast();
 
@@ -62,19 +63,6 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
     setLoading(false);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) doUpload(file);
-  };
-
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) doUpload(file);
-    e.target.value = '';
-  };
-
   const doDelete = async (filename: string) => {
     try {
       await onDelete(filename);
@@ -112,7 +100,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                 <span>{formatSize(usedBytes)} / {quotaMB} MB used</span>
               </div>
             </div>
-            <span className="text-[9px] font-bold text-zinc-50 bg-zinc-950 px-2.5 py-0.5 rounded-full uppercase border border-zinc-800">
+            <span className="text-[9px] font-bold text-zinc-55 bg-zinc-950 px-2.5 py-0.5 rounded-full uppercase border border-zinc-800">
               {tier}
             </span>
           </div>
@@ -155,28 +143,21 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
             </button>
           </div>
           
-          <label className={`px-4 py-1.5 rounded-full text-xs font-bold bg-zinc-950 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
-            {loading ? '⏳ Uploading...' : '📤 Upload File'}
-            <input type="file" className="hidden" onChange={handleFileInput} disabled={loading} />
-          </label>
+          <button 
+            onClick={() => setShowUploadModal(true)}
+            className="px-4 py-1.5 rounded-full text-xs font-bold bg-zinc-950 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer"
+          >
+            + New File
+          </button>
         </div>
 
-        {/* Drop Zone / File Grid */}
-        <div
-          className={`border-2 border-dashed rounded-2xl p-4 transition-colors ${
-            dragOver 
-              ? 'border-zinc-950 bg-zinc-50' 
-              : 'border-zinc-300 hover:border-zinc-400'
-          }`}
-          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={handleDrop}
-        >
+        {/* File Grid */}
+        <div className="border border-zinc-200 rounded-2xl p-4 bg-zinc-50/30">
           {files.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="text-5xl mb-4 opacity-20">📂</div>
               <div className="text-sm font-bold text-zinc-400 mb-1">No files uploaded</div>
-              <div className="text-[10px] text-zinc-400">Drag &amp; drop files here or click Upload</div>
+              <div className="text-[10px] text-zinc-400">Click "+ New File" to upload your first file.</div>
             </div>
           ) : viewMode === 'grid' ? (
             /* Grid View */
@@ -186,8 +167,8 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                   key={f.filename}
                   className={`group p-2.5 rounded-2xl border transition-all cursor-pointer ${
                     selectedFile?.filename === f.filename
-                      ? 'border-zinc-950 bg-zinc-100 shadow-[2px_2px_0px_#000000]'
-                      : 'border-zinc-950 bg-white hover:bg-zinc-50/50 shadow-[3px_3px_0px_#09090b]'
+                      ? 'border-zinc-955 bg-zinc-100 shadow-[2px_2px_0px_#000000]'
+                      : 'border-zinc-955 bg-white hover:bg-zinc-50/50 shadow-[3px_3px_0px_#09090b]'
                   }`}
                   onClick={() => setSelectedFile(f)}
                 >
@@ -247,7 +228,7 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
               {files.map((f) => (
                 <div
                   key={f.filename}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-zinc-50 transition-colors group cursor-pointer border border-zinc-200/50 hover:border-zinc-400"
+                  className="flex items-center gap-3 p-3 rounded-2xl bg-white hover:bg-zinc-50 transition-colors group cursor-pointer border border-zinc-200"
                   onClick={() => setSelectedFile(f)}
                 >
                   <span className="text-xl shrink-0">{getFileIcon(f)}</span>
@@ -286,6 +267,68 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
           )}
         </div>
       </div>
+
+      {/* Styled Popup Modal for + New File */}
+      {showUploadModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[8px_8px_0px_#09090b]">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-base font-black text-zinc-950">Add New File</h3>
+              <button 
+                onClick={() => setShowUploadModal(false)}
+                className="w-7 h-7 rounded-full border border-zinc-950 flex items-center justify-center font-bold text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div
+              className={`border border-zinc-950 border-dashed rounded-2xl p-8 bg-zinc-50 text-center transition-colors cursor-pointer ${dragOver ? 'bg-zinc-100' : 'hover:bg-zinc-100/50'}`}
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragOver(false);
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                  doUpload(file);
+                  setShowUploadModal(false);
+                }
+              }}
+              onClick={() => {
+                const fileInput = document.getElementById('modal-file-input');
+                if (fileInput) fileInput.click();
+              }}
+            >
+              <div className="text-4xl mb-3">📤</div>
+              <p className="text-xs font-bold text-zinc-800">Drag & drop your file here</p>
+              <p className="text-[10px] text-zinc-500 font-semibold mt-1">or click to choose a file from your device</p>
+              <input 
+                id="modal-file-input"
+                type="file" 
+                className="hidden" 
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    doUpload(file);
+                    setShowUploadModal(false);
+                  }
+                  e.target.value = '';
+                }} 
+              />
+            </div>
+            
+            <div className="mt-4 flex justify-end">
+              <button 
+                onClick={() => setShowUploadModal(false)}
+                className="px-5 py-2 rounded-full border border-zinc-950 text-xs font-bold text-zinc-800 hover:bg-zinc-100 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {toastElement}
     </div>

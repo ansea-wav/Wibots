@@ -14,6 +14,9 @@ import ResponderStudioApp from './apps/ResponderStudioApp';
 import GroupManagerApp from './apps/GroupManagerApp';
 import TaskManagerApp from './apps/TaskManagerApp';
 import FileExplorerApp from './apps/FileExplorerApp';
+import ApiKeyApp from './apps/ApiKeyApp';
+import AccountingApp from './apps/AccountingApp';
+import SubscriptionApp from './apps/SubscriptionApp';
 import OnboardingScreen from './OnboardingScreen';
 
 interface DashboardProps {
@@ -21,7 +24,7 @@ interface DashboardProps {
   userId: string;
 }
 
-type Tab = 'dashboard' | 'control' | 'responder' | 'group' | 'task' | 'files';
+type Tab = 'dashboard' | 'control' | 'responder' | 'group' | 'task' | 'files' | 'apikey' | 'accounting' | 'pricing';
 
 export default function DashboardLayout({ userData, userId }: DashboardProps) {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
@@ -87,6 +90,9 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
     { id: 'group', label: 'Group Manager', icon: 'group' },
     { id: 'task', label: 'Task Manager', icon: 'analytics' },
     { id: 'files', label: 'File Explorer', icon: 'folder' },
+    { id: 'apikey', label: 'API Key', icon: 'vpn_key' },
+    { id: 'accounting', label: 'Accounting', icon: 'manage_accounts' },
+    { id: 'pricing', label: 'Pricing', icon: 'payments' },
   ];
 
   const handleOnboardingComplete = async () => {
@@ -192,7 +198,7 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
           
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-100 border border-zinc-200/50 text-[10px] font-bold text-zinc-600">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-950"></span>
               API Connected
             </div>
             <button className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer" onClick={() => {
@@ -283,6 +289,15 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
                 }}
                 onCopyUrl={(url) => navigator.clipboard.writeText(url)}
               />
+            )}
+            {activeTab === 'apikey' && (
+              <ApiKeyApp client={clientRegistry} />
+            )}
+            {activeTab === 'accounting' && (
+              <AccountingApp client={clientRegistry} />
+            )}
+            {activeTab === 'pricing' && (
+              <SubscriptionApp client={clientRegistry} />
             )}
           </div>
         </div>

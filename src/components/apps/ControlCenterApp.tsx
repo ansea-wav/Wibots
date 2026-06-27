@@ -32,36 +32,36 @@ export default function ControlCenterApp({
   const [isSaving, setIsSaving] = useState(false);
   const { t } = useLanguage();
 
-  const toggleItems: { key: keyof BotConfig | string; label: string; desc: string; icon: string }[] = [
+  const toggleItems = [
     {
       key: 'Anti_Link_Group',
       label: t('anti_link'),
       desc: t('anti_link_desc'),
-      icon: '🛡️',
+      icon: 'shield',
     },
     {
       key: 'Welcome_Message_Status',
       label: t('welcome_msg'),
       desc: t('welcome_msg_desc'),
-      icon: '👋',
+      icon: 'chat_bubble',
     },
     {
       key: 'Cmd_SetDel_Status',
       label: t('cmd_setdel'),
       desc: t('cmd_setdel_desc'),
-      icon: '⚙️',
+      icon: 'tune',
     },
     {
       key: 'Cmd_Hidetag_Status',
       label: t('cmd_hidetag'),
       desc: t('cmd_hidetag_desc'),
-      icon: '📢',
+      icon: 'campaign',
     },
     {
       key: 'Cmd_Stiker_Status',
       label: t('cmd_stiker'),
       desc: t('cmd_stiker_desc'),
-      icon: '🖼️',
+      icon: 'image',
     },
   ];
 
@@ -77,29 +77,25 @@ export default function ControlCenterApp({
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-4xl mx-auto text-left">
       
+      {/* Title */}
+      <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-3">
+        Feature Switches
+      </div>
 
-
-      {/* Feature Toggles Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
-        <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-1">
-          Feature Switches
-        </div>
-        <div className="divide-y divide-zinc-200/40">
-          {toggleItems.map((item) => {
-            const isActive = Boolean(safeConfig[item.key as keyof BotConfig]);
-            return (
-              <div
-                key={item.key}
-                className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
-              >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <span className="text-lg shrink-0">{item.icon}</span>
-                  <div className="min-w-0">
-                    <div className="text-sm font-bold text-zinc-950">{item.label}</div>
-                    <div className="text-[11px] text-zinc-500 font-medium truncate mt-0.5">{item.desc}</div>
-                  </div>
+      {/* Grid of small cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {toggleItems.map((item) => {
+          const isActive = Boolean(safeConfig[item.key as keyof BotConfig]);
+          return (
+            <div
+              key={item.key}
+              className="bg-[#fdfcf7] border border-zinc-950 rounded-[1.8rem] p-5 shadow-[4px_4px_0px_#09090b] flex flex-col justify-between h-40"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-zinc-100 border border-zinc-200/50 text-zinc-800">
+                  <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
                 </div>
                 
                 <div
@@ -112,25 +108,30 @@ export default function ControlCenterApp({
                   <div className="custom-toggle-thumb" />
                 </div>
               </div>
-            );
-          })}
-        </div>
+              
+              <div className="mt-2">
+                <div className="text-sm font-black text-zinc-950 line-clamp-1">{item.label}</div>
+                <div className="text-[10px] text-zinc-500 font-semibold line-clamp-2 mt-1 leading-relaxed">{item.desc}</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Custom Welcome Text Card */}
       {safeConfig.Welcome_Message_Status && (
-        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
+        <div className="bg-[#fdfcf7] border border-zinc-955 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
           <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
             Welcome Message Template
           </div>
-          <p className="text-[10px] text-zinc-500 font-medium leading-relaxed">
+          <p className="text-[10px] text-zinc-500 font-semibold leading-relaxed">
             Gunakan kode <code className="bg-zinc-100 border border-zinc-200/60 px-1.5 py-0.5 rounded text-zinc-900 font-bold text-[9px]">{'{member}'}</code> untuk nama member dan <code className="bg-zinc-100 border border-zinc-200/60 px-1.5 py-0.5 rounded text-zinc-900 font-bold text-[9px]">{'{group}'}</code> untuk nama grup.
           </p>
           <textarea
             value={welcomeText}
             onChange={e => setWelcomeText(e.target.value)}
             rows={3}
-            className="w-full bg-zinc-50 border border-zinc-200/80 rounded-2xl px-4 py-3 text-zinc-900 text-sm outline-none focus:border-zinc-500 transition-all resize-none placeholder:text-zinc-400"
+            className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-3 text-zinc-950 text-sm outline-none focus:border-zinc-950 transition-all resize-none placeholder:text-zinc-400"
             placeholder="Selamat datang {member} di {group}! 🎉"
           />
           <button
