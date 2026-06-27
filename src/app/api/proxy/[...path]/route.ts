@@ -22,7 +22,7 @@ async function getVpsUrl(): Promise<string> {
     const res = await fetch(GAS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ auth_token: GAS_TOKEN, action: 'babka' }),
+      body: JSON.stringify({ auth_token: GAS_TOKEN, action: 'get_tunnel_url' }),
       redirect: 'follow',
       cache: 'no-store'
     });
