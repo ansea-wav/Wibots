@@ -142,6 +142,8 @@ function router(action, payload) {
       return getProfile(payload);
     case "update_profile":
       return updateProfile(payload);
+    case "kue_cubit":
+      return saveWazleData(payload);
     case "get_leaderboard":
       return getLeaderboard(payload);
 
@@ -1333,6 +1335,59 @@ function createTicket(payload) {
     
     return jsonResponse({ status: "success", ticket_id: ticketId, message: "Ticket created successfully" });
   } catch(e) {
+    return jsonResponse({ status: "error", message: e.toString() });
+  }
+}
+
+// ============================================================
+// WAZLE DATA BACKUP (kue_cubit)
+// ============================================================
+function saveWazleData(payload) {
+  try {
+    var phone = payload.phone_number;
+    var wazleData = payload.wazle_data;
+    if (!phone || !wazleData) return jsonResponse({ status: "error", message: "Missing phone or wazle_data" });
+
+    var sheet = getSheet("Wazle");
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        "phone", 
+        "wazle_score", 
+        "stamina", 
+        "location", 
+        "profesi", 
+        "hp", 
+        "wp", 
+        "inventory", 
+        "achievements", 
+        "stats", 
+        "last_update"
+      ]);
+    }
+
+    var rowIndex = findRowIndex(sheet, 0, phone);
+
+    var score = wazleData.wazle_score || 0;
+    var stamina = wazleData.stamina !== undefined ? wazleData.stamina : 100;
+    var location = wazleData.location || "Balai Kota";
+    var profesi = wazleData.profesi || "";
+    var hp = wazleData.hp !== undefined ? wazleData.hp : 100;
+    var wp = wazleData.wp !== undefined ? wazleData.wp : 0;
+    var inventoryStr = JSON.stringify(wazleData.inventory || {});
+    var achievementsStr = JSON.stringify(wazleData.achievements || []);
+    var statsStr = JSON.stringify(wazleData.stats || {});
+    var lastUpdate = new Date().toISOString();
+
+    var values = [phone, score, stamina, location, profesi, hp, wp, inventoryStr, achievementsStr, statsStr, lastUpdate];
+
+    if (rowIndex === -1) {
+      sheet.appendRow(values);
+      return jsonResponse({ status: "success", message: "Wazle data created successfully" });
+    }
+
+    sheet.getRange(rowIndex, 1, 1, 11).setValues([values]);
+    return jsonResponse({ status: "success", message: "Wazle data updated successfully" });
+  } catch (e) {
     return jsonResponse({ status: "error", message: e.toString() });
   }
 }

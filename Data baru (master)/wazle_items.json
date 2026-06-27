@@ -1,0 +1,4002 @@
+[
+  {
+    "id": "item_1",
+    "name": "Takoyaki Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_2",
+    "name": "Gulali Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_3",
+    "name": "Karamel Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_4",
+    "name": "Roti Tawar Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_5",
+    "name": "Takoyaki Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_6",
+    "name": "Jelly Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_7",
+    "name": "Baguette Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 14,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_8",
+    "name": "Cireng Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 15,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_9",
+    "name": "Takoyaki Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 13,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_10",
+    "name": "Roti Tawar Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 6,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_11",
+    "name": "Jagung Bakar Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_12",
+    "name": "Taiyaki Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_13",
+    "name": "Kacang Rebus Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_14",
+    "name": "Kacang Rebus Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_15",
+    "name": "Marshmallow Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 13,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_16",
+    "name": "Kacang Rebus Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_17",
+    "name": "Croissant Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_18",
+    "name": "Kue Tart Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_19",
+    "name": "Waffle Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 14,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_20",
+    "name": "Pretzel Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_21",
+    "name": "Pretzel Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_22",
+    "name": "Pretzel Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_23",
+    "name": "Cilok Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 15,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_24",
+    "name": "Donat Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_25",
+    "name": "Brownies Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_26",
+    "name": "Biskuit Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_27",
+    "name": "Crepes Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_28",
+    "name": "Cireng Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_29",
+    "name": "Biskuit Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_30",
+    "name": "Sosis Bakar Renyah",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 15,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_31",
+    "name": "Jelly Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_32",
+    "name": "Taiyaki Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 15,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_33",
+    "name": "Croissant Renyah",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_34",
+    "name": "Kacang Rebus Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 13,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_35",
+    "name": "Gulali Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_36",
+    "name": "Waffle Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_37",
+    "name": "Marshmallow Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_38",
+    "name": "Roti Tawar Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_39",
+    "name": "Roti Tawar Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_40",
+    "name": "Crepes Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_41",
+    "name": "Takoyaki Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_42",
+    "name": "Gulali Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 13,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_43",
+    "name": "Taiyaki Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_44",
+    "name": "Marshmallow Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_45",
+    "name": "Kue Cubit Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_46",
+    "name": "Roti Tawar Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 14,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_47",
+    "name": "Karamel Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_48",
+    "name": "Kue Tart Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_49",
+    "name": "Marshmallow Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_50",
+    "name": "Hotdog Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_51",
+    "name": "Pancake Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_52",
+    "name": "Gulali Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_53",
+    "name": "Taiyaki Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_54",
+    "name": "Roti Bakar Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_55",
+    "name": "Marshmallow Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_56",
+    "name": "Waffle Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_57",
+    "name": "Brownies Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_58",
+    "name": "Kue Cubit Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 6,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_59",
+    "name": "Cilok Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_60",
+    "name": "Churros Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_61",
+    "name": "Muffin Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_62",
+    "name": "Kacang Rebus Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_63",
+    "name": "Churros Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_64",
+    "name": "Marshmallow Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_65",
+    "name": "Hotdog Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_66",
+    "name": "Es Krim Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 15,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_67",
+    "name": "Pancake Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 14,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_68",
+    "name": "Batagor Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 15,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_69",
+    "name": "Crepes Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 6,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_70",
+    "name": "Terang Bulan Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_71",
+    "name": "Cilok Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_72",
+    "name": "Takoyaki Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_73",
+    "name": "Cireng Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_74",
+    "name": "Cireng Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_75",
+    "name": "Kebab Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_76",
+    "name": "Pancake Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_77",
+    "name": "Jelly Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_78",
+    "name": "Kue Cubit Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_79",
+    "name": "Donat Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_80",
+    "name": "Burger Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_81",
+    "name": "Burger Renyah",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_82",
+    "name": "Roti Tawar Renyah",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_83",
+    "name": "Cireng Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_84",
+    "name": "Pancake Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_85",
+    "name": "Cilok Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_86",
+    "name": "Popcorn Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 13,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_87",
+    "name": "Baguette Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_88",
+    "name": "Gulali Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_89",
+    "name": "Cireng Renyah",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_90",
+    "name": "Popcorn Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_91",
+    "name": "Kue Tart Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_92",
+    "name": "Waffle Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_93",
+    "name": "Burger Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 14,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_94",
+    "name": "Pancake Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 14,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_95",
+    "name": "Biskuit Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_96",
+    "name": "Kue Tart Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_97",
+    "name": "Sirup Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_98",
+    "name": "Muffin Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_99",
+    "name": "Donat Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 14,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_100",
+    "name": "Cilok Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_101",
+    "name": "Cokelat Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_102",
+    "name": "Es Krim Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 6,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_103",
+    "name": "Terang Bulan Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 13,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_104",
+    "name": "Karamel Manis",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_105",
+    "name": "Permen Kapas Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_106",
+    "name": "Roti Bakar Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_107",
+    "name": "Kentang Goreng Gosong",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_108",
+    "name": "Donat Renyah",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 9,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_109",
+    "name": "Cilok Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 10,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_110",
+    "name": "Pancake Hangat",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 11,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_111",
+    "name": "Batagor Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_112",
+    "name": "Takoyaki Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 6,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_113",
+    "name": "Biskuit Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 6,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_114",
+    "name": "Donat Kering",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_115",
+    "name": "Kacang Rebus Asin",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 8,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_116",
+    "name": "Kentang Goreng Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 12,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_117",
+    "name": "Kebab Biasa",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 5,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_118",
+    "name": "Baguette Pedas",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 14,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_119",
+    "name": "Roti Bakar Lembut",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 6,
+    "price": 10,
+    "type": "food"
+  },
+  {
+    "id": "item_120",
+    "name": "Kebab Gurih",
+    "tier": 1,
+    "tierName": "Common",
+    "icon": "⬜",
+    "stamina": 7,
+    "price": 11,
+    "type": "food"
+  },
+  {
+    "id": "item_121",
+    "name": "Kacang Rebus Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 25,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_122",
+    "name": "Cokelat Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_123",
+    "name": "Jagung Bakar Biasa",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 25,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_124",
+    "name": "Waffle Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 19,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_125",
+    "name": "Jagung Bakar Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 17,
+    "price": 58,
+    "type": "food"
+  },
+  {
+    "id": "item_126",
+    "name": "Taiyaki Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 16,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_127",
+    "name": "Hotdog Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 15,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_128",
+    "name": "Takoyaki Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 27,
+    "price": 58,
+    "type": "food"
+  },
+  {
+    "id": "item_129",
+    "name": "Sosis Bakar Hangat",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 22,
+    "price": 56,
+    "type": "food"
+  },
+  {
+    "id": "item_130",
+    "name": "Sate Taichan Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 16,
+    "price": 55,
+    "type": "food"
+  },
+  {
+    "id": "item_131",
+    "name": "Jagung Bakar Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 18,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_132",
+    "name": "Donat Pedas",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 22,
+    "price": 58,
+    "type": "food"
+  },
+  {
+    "id": "item_133",
+    "name": "Batagor Hangat",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 28,
+    "price": 57,
+    "type": "food"
+  },
+  {
+    "id": "item_134",
+    "name": "Puding Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 21,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_135",
+    "name": "Popcorn Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_136",
+    "name": "Kue Cubit Asin",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 17,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_137",
+    "name": "Brownies Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 29,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_138",
+    "name": "Sate Taichan Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 26,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_139",
+    "name": "Kebab Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 23,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_140",
+    "name": "Churros Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 25,
+    "price": 55,
+    "type": "food"
+  },
+  {
+    "id": "item_141",
+    "name": "Roti Bakar Biasa",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 22,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_142",
+    "name": "Churros Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 23,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_143",
+    "name": "Kue Tart Asin",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 15,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_144",
+    "name": "Es Krim Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 23,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_145",
+    "name": "Batagor Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 20,
+    "price": 57,
+    "type": "food"
+  },
+  {
+    "id": "item_146",
+    "name": "Es Krim Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 19,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_147",
+    "name": "Jagung Bakar Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 16,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_148",
+    "name": "Jelly Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 22,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_149",
+    "name": "Pancake Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 20,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_150",
+    "name": "Churros Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 15,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_151",
+    "name": "Hotdog Hangat",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 25,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_152",
+    "name": "Donat Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 28,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_153",
+    "name": "Crepes Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 28,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_154",
+    "name": "Churros Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 23,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_155",
+    "name": "Takoyaki Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 29,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_156",
+    "name": "Roti Bakar Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 20,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_157",
+    "name": "Kentang Goreng Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 26,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_158",
+    "name": "Baguette Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 57,
+    "type": "food"
+  },
+  {
+    "id": "item_159",
+    "name": "Brownies Pedas",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 28,
+    "price": 57,
+    "type": "food"
+  },
+  {
+    "id": "item_160",
+    "name": "Baguette Biasa",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 23,
+    "price": 56,
+    "type": "food"
+  },
+  {
+    "id": "item_161",
+    "name": "Burger Hangat",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 20,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_162",
+    "name": "Terang Bulan Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 17,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_163",
+    "name": "Jagung Bakar Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 18,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_164",
+    "name": "Brownies Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 24,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_165",
+    "name": "Hotdog Biasa",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_166",
+    "name": "Hotdog Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 20,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_167",
+    "name": "Crepes Pedas",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_168",
+    "name": "Waffle Pedas",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_169",
+    "name": "Kebab Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 25,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_170",
+    "name": "Sirup Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 25,
+    "price": 57,
+    "type": "food"
+  },
+  {
+    "id": "item_171",
+    "name": "Brownies Hangat",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 21,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_172",
+    "name": "Permen Kapas Asin",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 16,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_173",
+    "name": "Sosis Bakar Asin",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 20,
+    "price": 55,
+    "type": "food"
+  },
+  {
+    "id": "item_174",
+    "name": "Taiyaki Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 23,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_175",
+    "name": "Terang Bulan Biasa",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 21,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_176",
+    "name": "Taiyaki Pedas",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 20,
+    "price": 58,
+    "type": "food"
+  },
+  {
+    "id": "item_177",
+    "name": "Brownies Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 16,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_178",
+    "name": "Batagor Pedas",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 22,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_179",
+    "name": "Terang Bulan Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 27,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_180",
+    "name": "Batagor Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 21,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_181",
+    "name": "Crepes Asin",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_182",
+    "name": "Es Krim Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 16,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_183",
+    "name": "Martabak Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 24,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_184",
+    "name": "Croissant Hangat",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 29,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_185",
+    "name": "Puding Gosong",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 27,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_186",
+    "name": "Martabak Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 15,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_187",
+    "name": "Marshmallow Asin",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 22,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_188",
+    "name": "Jelly Manis",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 17,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_189",
+    "name": "Puding Pedas",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 28,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_190",
+    "name": "Croissant Biasa",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 21,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_191",
+    "name": "Biskuit Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 19,
+    "price": 57,
+    "type": "food"
+  },
+  {
+    "id": "item_192",
+    "name": "Terang Bulan Hangat",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 15,
+    "price": 59,
+    "type": "food"
+  },
+  {
+    "id": "item_193",
+    "name": "Puding Asin",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 57,
+    "type": "food"
+  },
+  {
+    "id": "item_194",
+    "name": "Burger Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 21,
+    "price": 58,
+    "type": "food"
+  },
+  {
+    "id": "item_195",
+    "name": "Cokelat Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_196",
+    "name": "Permen Kapas Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 26,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_197",
+    "name": "Pancake Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 21,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_198",
+    "name": "Cilok Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 27,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_199",
+    "name": "Puding Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 17,
+    "price": 53,
+    "type": "food"
+  },
+  {
+    "id": "item_200",
+    "name": "Sate Taichan Renyah",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 17,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_201",
+    "name": "Karamel Pedas",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 28,
+    "price": 54,
+    "type": "food"
+  },
+  {
+    "id": "item_202",
+    "name": "Baguette Asin",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 17,
+    "price": 56,
+    "type": "food"
+  },
+  {
+    "id": "item_203",
+    "name": "Puding Hangat",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 29,
+    "price": 58,
+    "type": "food"
+  },
+  {
+    "id": "item_204",
+    "name": "Kue Tart Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 25,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_205",
+    "name": "Roti Tawar Gurih",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 21,
+    "price": 56,
+    "type": "food"
+  },
+  {
+    "id": "item_206",
+    "name": "Kue Cubit Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 15,
+    "price": 51,
+    "type": "food"
+  },
+  {
+    "id": "item_207",
+    "name": "Kentang Goreng Biasa",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 18,
+    "price": 57,
+    "type": "food"
+  },
+  {
+    "id": "item_208",
+    "name": "Hotdog Lembut",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 26,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_209",
+    "name": "Crepes Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 24,
+    "price": 50,
+    "type": "food"
+  },
+  {
+    "id": "item_210",
+    "name": "Biskuit Kering",
+    "tier": 2,
+    "tierName": "Uncommon",
+    "icon": "🟩",
+    "stamina": 30,
+    "price": 52,
+    "type": "food"
+  },
+  {
+    "id": "item_211",
+    "name": "Croissant Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 43,
+    "price": 154,
+    "type": "food"
+  },
+  {
+    "id": "item_212",
+    "name": "Roti Tawar Kopi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 30,
+    "price": 172,
+    "type": "food"
+  },
+  {
+    "id": "item_213",
+    "name": "Kue Tart Matcha",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 39,
+    "price": 159,
+    "type": "food"
+  },
+  {
+    "id": "item_214",
+    "name": "Cireng Keju",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 34,
+    "price": 172,
+    "type": "food"
+  },
+  {
+    "id": "item_215",
+    "name": "Churros Bawang",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 35,
+    "price": 163,
+    "type": "food"
+  },
+  {
+    "id": "item_216",
+    "name": "Puding Bawang",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 33,
+    "price": 161,
+    "type": "food"
+  },
+  {
+    "id": "item_217",
+    "name": "Pretzel Kopi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 48,
+    "price": 174,
+    "type": "food"
+  },
+  {
+    "id": "item_218",
+    "name": "Terang Bulan Kopi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 39,
+    "price": 173,
+    "type": "food"
+  },
+  {
+    "id": "item_219",
+    "name": "Popcorn Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 49,
+    "price": 167,
+    "type": "food"
+  },
+  {
+    "id": "item_220",
+    "name": "Popcorn Matcha",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 42,
+    "price": 168,
+    "type": "food"
+  },
+  {
+    "id": "item_221",
+    "name": "Permen Kapas Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 33,
+    "price": 162,
+    "type": "food"
+  },
+  {
+    "id": "item_222",
+    "name": "Brownies Madu",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 30,
+    "price": 150,
+    "type": "food"
+  },
+  {
+    "id": "item_223",
+    "name": "Kentang Goreng Bawang",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 30,
+    "price": 169,
+    "type": "food"
+  },
+  {
+    "id": "item_224",
+    "name": "Es Krim Matcha",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 35,
+    "price": 178,
+    "type": "food"
+  },
+  {
+    "id": "item_225",
+    "name": "Kacang Rebus Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 39,
+    "price": 152,
+    "type": "food"
+  },
+  {
+    "id": "item_226",
+    "name": "Jelly Madu",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 42,
+    "price": 172,
+    "type": "food"
+  },
+  {
+    "id": "item_227",
+    "name": "Jagung Bakar Keju",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 35,
+    "price": 151,
+    "type": "food"
+  },
+  {
+    "id": "item_228",
+    "name": "Hotdog Vanilla",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 38,
+    "price": 153,
+    "type": "food"
+  },
+  {
+    "id": "item_229",
+    "name": "Cokelat Blueberry",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 36,
+    "price": 165,
+    "type": "food"
+  },
+  {
+    "id": "item_230",
+    "name": "Sosis Bakar Madu",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 38,
+    "price": 173,
+    "type": "food"
+  },
+  {
+    "id": "item_231",
+    "name": "Muffin Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 34,
+    "price": 167,
+    "type": "food"
+  },
+  {
+    "id": "item_232",
+    "name": "Martabak Vanilla",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 48,
+    "price": 161,
+    "type": "food"
+  },
+  {
+    "id": "item_233",
+    "name": "Biskuit Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 49,
+    "price": 176,
+    "type": "food"
+  },
+  {
+    "id": "item_234",
+    "name": "Cilok Blueberry",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 44,
+    "price": 150,
+    "type": "food"
+  },
+  {
+    "id": "item_235",
+    "name": "Pretzel Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 34,
+    "price": 167,
+    "type": "food"
+  },
+  {
+    "id": "item_236",
+    "name": "Pretzel Madu",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 33,
+    "price": 171,
+    "type": "food"
+  },
+  {
+    "id": "item_237",
+    "name": "Permen Kapas Keju",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 40,
+    "price": 177,
+    "type": "food"
+  },
+  {
+    "id": "item_238",
+    "name": "Hotdog Bawang",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 33,
+    "price": 171,
+    "type": "food"
+  },
+  {
+    "id": "item_239",
+    "name": "Roti Tawar Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 45,
+    "price": 179,
+    "type": "food"
+  },
+  {
+    "id": "item_240",
+    "name": "Takoyaki Bawang",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 34,
+    "price": 172,
+    "type": "food"
+  },
+  {
+    "id": "item_241",
+    "name": "Karamel Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 43,
+    "price": 158,
+    "type": "food"
+  },
+  {
+    "id": "item_242",
+    "name": "Roti Bakar Matcha",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 42,
+    "price": 172,
+    "type": "food"
+  },
+  {
+    "id": "item_243",
+    "name": "Sirup Madu",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 48,
+    "price": 158,
+    "type": "food"
+  },
+  {
+    "id": "item_244",
+    "name": "Kacang Rebus Madu",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 39,
+    "price": 159,
+    "type": "food"
+  },
+  {
+    "id": "item_245",
+    "name": "Batagor Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 39,
+    "price": 176,
+    "type": "food"
+  },
+  {
+    "id": "item_246",
+    "name": "Pretzel Blueberry",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 44,
+    "price": 172,
+    "type": "food"
+  },
+  {
+    "id": "item_247",
+    "name": "Sate Taichan Cokelat Lumer",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 49,
+    "price": 167,
+    "type": "food"
+  },
+  {
+    "id": "item_248",
+    "name": "Martabak Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 31,
+    "price": 156,
+    "type": "food"
+  },
+  {
+    "id": "item_249",
+    "name": "Karamel Madu",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 46,
+    "price": 174,
+    "type": "food"
+  },
+  {
+    "id": "item_250",
+    "name": "Muffin Blueberry",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 31,
+    "price": 163,
+    "type": "food"
+  },
+  {
+    "id": "item_251",
+    "name": "Hotdog Keju",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 50,
+    "price": 173,
+    "type": "food"
+  },
+  {
+    "id": "item_252",
+    "name": "Kue Tart Vanilla",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 35,
+    "price": 151,
+    "type": "food"
+  },
+  {
+    "id": "item_253",
+    "name": "Burger Cokelat Lumer",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 44,
+    "price": 159,
+    "type": "food"
+  },
+  {
+    "id": "item_254",
+    "name": "Biskuit Keju",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 43,
+    "price": 151,
+    "type": "food"
+  },
+  {
+    "id": "item_255",
+    "name": "Pancake Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 38,
+    "price": 168,
+    "type": "food"
+  },
+  {
+    "id": "item_256",
+    "name": "Churros Blueberry",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 39,
+    "price": 156,
+    "type": "food"
+  },
+  {
+    "id": "item_257",
+    "name": "Takoyaki Keju",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 33,
+    "price": 178,
+    "type": "food"
+  },
+  {
+    "id": "item_258",
+    "name": "Kue Cubit Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 48,
+    "price": 152,
+    "type": "food"
+  },
+  {
+    "id": "item_259",
+    "name": "Martabak Kopi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 46,
+    "price": 163,
+    "type": "food"
+  },
+  {
+    "id": "item_260",
+    "name": "Roti Bakar Bawang",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 48,
+    "price": 174,
+    "type": "food"
+  },
+  {
+    "id": "item_261",
+    "name": "Jelly Bawang",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 32,
+    "price": 167,
+    "type": "food"
+  },
+  {
+    "id": "item_262",
+    "name": "Baguette Vanilla",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 40,
+    "price": 177,
+    "type": "food"
+  },
+  {
+    "id": "item_263",
+    "name": "Kue Tart Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 39,
+    "price": 161,
+    "type": "food"
+  },
+  {
+    "id": "item_264",
+    "name": "Martabak Cokelat Lumer",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 38,
+    "price": 151,
+    "type": "food"
+  },
+  {
+    "id": "item_265",
+    "name": "Marshmallow Madu",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 34,
+    "price": 165,
+    "type": "food"
+  },
+  {
+    "id": "item_266",
+    "name": "Terang Bulan Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 33,
+    "price": 165,
+    "type": "food"
+  },
+  {
+    "id": "item_267",
+    "name": "Marshmallow Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 47,
+    "price": 163,
+    "type": "food"
+  },
+  {
+    "id": "item_268",
+    "name": "Burger Bawang",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 32,
+    "price": 168,
+    "type": "food"
+  },
+  {
+    "id": "item_269",
+    "name": "Sosis Bakar Kopi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 44,
+    "price": 161,
+    "type": "food"
+  },
+  {
+    "id": "item_270",
+    "name": "Waffle Vanilla",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 44,
+    "price": 154,
+    "type": "food"
+  },
+  {
+    "id": "item_271",
+    "name": "Donat Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 32,
+    "price": 155,
+    "type": "food"
+  },
+  {
+    "id": "item_272",
+    "name": "Waffle Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 33,
+    "price": 154,
+    "type": "food"
+  },
+  {
+    "id": "item_273",
+    "name": "Baguette Stroberi",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 42,
+    "price": 158,
+    "type": "food"
+  },
+  {
+    "id": "item_274",
+    "name": "Jagung Bakar Vanilla",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 30,
+    "price": 155,
+    "type": "food"
+  },
+  {
+    "id": "item_275",
+    "name": "Jelly Vanilla",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 31,
+    "price": 178,
+    "type": "food"
+  },
+  {
+    "id": "item_276",
+    "name": "Jelly Matcha",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 36,
+    "price": 155,
+    "type": "food"
+  },
+  {
+    "id": "item_277",
+    "name": "Brownies Keju",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 31,
+    "price": 160,
+    "type": "food"
+  },
+  {
+    "id": "item_278",
+    "name": "Burger Matcha",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 34,
+    "price": 156,
+    "type": "food"
+  },
+  {
+    "id": "item_279",
+    "name": "Martabak Durian",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 30,
+    "price": 177,
+    "type": "food"
+  },
+  {
+    "id": "item_280",
+    "name": "Cireng Blueberry",
+    "tier": 3,
+    "tierName": "Rare",
+    "icon": "🟦",
+    "stamina": 32,
+    "price": 159,
+    "type": "food"
+  },
+  {
+    "id": "item_281",
+    "name": "Sosis Bakar Keju",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 52,
+    "price": 578,
+    "type": "food"
+  },
+  {
+    "id": "item_282",
+    "name": "Burger Keju",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 65,
+    "price": 530,
+    "type": "food"
+  },
+  {
+    "id": "item_283",
+    "name": "Baguette Kopi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 67,
+    "price": 519,
+    "type": "food"
+  },
+  {
+    "id": "item_284",
+    "name": "Waffle Keju",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 63,
+    "price": 593,
+    "type": "food"
+  },
+  {
+    "id": "item_285",
+    "name": "Terang Bulan Vanilla",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 53,
+    "price": 569,
+    "type": "food"
+  },
+  {
+    "id": "item_286",
+    "name": "Es Krim Durian",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 72,
+    "price": 521,
+    "type": "food"
+  },
+  {
+    "id": "item_287",
+    "name": "Popcorn Stroberi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 71,
+    "price": 588,
+    "type": "food"
+  },
+  {
+    "id": "item_288",
+    "name": "Sirup Blueberry",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 59,
+    "price": 578,
+    "type": "food"
+  },
+  {
+    "id": "item_289",
+    "name": "Croissant Cokelat Lumer",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 56,
+    "price": 526,
+    "type": "food"
+  },
+  {
+    "id": "item_290",
+    "name": "Jelly Stroberi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 62,
+    "price": 576,
+    "type": "food"
+  },
+  {
+    "id": "item_291",
+    "name": "Sate Taichan Stroberi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 57,
+    "price": 536,
+    "type": "food"
+  },
+  {
+    "id": "item_292",
+    "name": "Takoyaki Cokelat Lumer",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 55,
+    "price": 527,
+    "type": "food"
+  },
+  {
+    "id": "item_293",
+    "name": "Crepes Madu",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 76,
+    "price": 579,
+    "type": "food"
+  },
+  {
+    "id": "item_294",
+    "name": "Sate Taichan Kopi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 61,
+    "price": 508,
+    "type": "food"
+  },
+  {
+    "id": "item_295",
+    "name": "Jagung Bakar Bawang",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 76,
+    "price": 566,
+    "type": "food"
+  },
+  {
+    "id": "item_296",
+    "name": "Pancake Bawang",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 54,
+    "price": 596,
+    "type": "food"
+  },
+  {
+    "id": "item_297",
+    "name": "Kacang Rebus Keju",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 73,
+    "price": 569,
+    "type": "food"
+  },
+  {
+    "id": "item_298",
+    "name": "Waffle Blueberry",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 76,
+    "price": 578,
+    "type": "food"
+  },
+  {
+    "id": "item_299",
+    "name": "Biskuit Matcha",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 60,
+    "price": 562,
+    "type": "food"
+  },
+  {
+    "id": "item_300",
+    "name": "Takoyaki Stroberi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 54,
+    "price": 540,
+    "type": "food"
+  },
+  {
+    "id": "item_301",
+    "name": "Muffin Keju",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 57,
+    "price": 556,
+    "type": "food"
+  },
+  {
+    "id": "item_302",
+    "name": "Marshmallow Blueberry",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 73,
+    "price": 507,
+    "type": "food"
+  },
+  {
+    "id": "item_303",
+    "name": "Brownies Vanilla",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 58,
+    "price": 500,
+    "type": "food"
+  },
+  {
+    "id": "item_304",
+    "name": "Gulali Madu",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 61,
+    "price": 515,
+    "type": "food"
+  },
+  {
+    "id": "item_305",
+    "name": "Sosis Bakar Durian",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 58,
+    "price": 590,
+    "type": "food"
+  },
+  {
+    "id": "item_306",
+    "name": "Hotdog Stroberi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 59,
+    "price": 566,
+    "type": "food"
+  },
+  {
+    "id": "item_307",
+    "name": "Marshmallow Kopi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 52,
+    "price": 529,
+    "type": "food"
+  },
+  {
+    "id": "item_308",
+    "name": "Churros Vanilla",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 72,
+    "price": 534,
+    "type": "food"
+  },
+  {
+    "id": "item_309",
+    "name": "Es Krim Vanilla",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 57,
+    "price": 551,
+    "type": "food"
+  },
+  {
+    "id": "item_310",
+    "name": "Puding Kopi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 79,
+    "price": 518,
+    "type": "food"
+  },
+  {
+    "id": "item_311",
+    "name": "Sosis Bakar Blueberry",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 57,
+    "price": 502,
+    "type": "food"
+  },
+  {
+    "id": "item_312",
+    "name": "Cireng Cokelat Lumer",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 68,
+    "price": 546,
+    "type": "food"
+  },
+  {
+    "id": "item_313",
+    "name": "Martabak Blueberry",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 70,
+    "price": 568,
+    "type": "food"
+  },
+  {
+    "id": "item_314",
+    "name": "Takoyaki Madu",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 70,
+    "price": 549,
+    "type": "food"
+  },
+  {
+    "id": "item_315",
+    "name": "Sosis Bakar Stroberi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 74,
+    "price": 551,
+    "type": "food"
+  },
+  {
+    "id": "item_316",
+    "name": "Cokelat Madu",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 56,
+    "price": 533,
+    "type": "food"
+  },
+  {
+    "id": "item_317",
+    "name": "Batagor Blueberry",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 76,
+    "price": 574,
+    "type": "food"
+  },
+  {
+    "id": "item_318",
+    "name": "Permen Kapas Madu",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 57,
+    "price": 572,
+    "type": "food"
+  },
+  {
+    "id": "item_319",
+    "name": "Jagung Bakar Cokelat Lumer",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 68,
+    "price": 569,
+    "type": "food"
+  },
+  {
+    "id": "item_320",
+    "name": "Croissant Vanilla",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 71,
+    "price": 589,
+    "type": "food"
+  },
+  {
+    "id": "item_321",
+    "name": "Kacang Rebus Vanilla",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 76,
+    "price": 532,
+    "type": "food"
+  },
+  {
+    "id": "item_322",
+    "name": "Puding Madu",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 75,
+    "price": 532,
+    "type": "food"
+  },
+  {
+    "id": "item_323",
+    "name": "Cilok Durian",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 71,
+    "price": 556,
+    "type": "food"
+  },
+  {
+    "id": "item_324",
+    "name": "Popcorn Bawang",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 59,
+    "price": 514,
+    "type": "food"
+  },
+  {
+    "id": "item_325",
+    "name": "Hotdog Kopi",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 68,
+    "price": 587,
+    "type": "food"
+  },
+  {
+    "id": "item_326",
+    "name": "Muffin Bawang",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 56,
+    "price": 577,
+    "type": "food"
+  },
+  {
+    "id": "item_327",
+    "name": "Sirup Cokelat Lumer",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 66,
+    "price": 591,
+    "type": "food"
+  },
+  {
+    "id": "item_328",
+    "name": "Pretzel Vanilla",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 70,
+    "price": 506,
+    "type": "food"
+  },
+  {
+    "id": "item_329",
+    "name": "Waffle Bawang",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 80,
+    "price": 570,
+    "type": "food"
+  },
+  {
+    "id": "item_330",
+    "name": "Puding Matcha",
+    "tier": 4,
+    "tierName": "Epic",
+    "icon": "🟪",
+    "stamina": 56,
+    "price": 570,
+    "type": "food"
+  },
+  {
+    "id": "item_331",
+    "name": "Sate Taichan Super",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 97,
+    "price": 2167,
+    "type": "food"
+  },
+  {
+    "id": "item_332",
+    "name": "Kue Tart Mini",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 88,
+    "price": 2007,
+    "type": "food"
+  },
+  {
+    "id": "item_333",
+    "name": "Croissant Jumbo",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 88,
+    "price": 2320,
+    "type": "food"
+  },
+  {
+    "id": "item_334",
+    "name": "Baguette Mini",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 85,
+    "price": 2159,
+    "type": "food"
+  },
+  {
+    "id": "item_335",
+    "name": "Martabak Mini",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 88,
+    "price": 2072,
+    "type": "food"
+  },
+  {
+    "id": "item_336",
+    "name": "Batagor Misterius",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 94,
+    "price": 2074,
+    "type": "food"
+  },
+  {
+    "id": "item_337",
+    "name": "Martabak Eksotis",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 88,
+    "price": 2241,
+    "type": "food"
+  },
+  {
+    "id": "item_338",
+    "name": "Jelly Super",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 83,
+    "price": 2398,
+    "type": "food"
+  },
+  {
+    "id": "item_339",
+    "name": "Cilok Gaib",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 85,
+    "price": 2096,
+    "type": "food"
+  },
+  {
+    "id": "item_340",
+    "name": "Baguette Jumbo",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 84,
+    "price": 2098,
+    "type": "food"
+  },
+  {
+    "id": "item_341",
+    "name": "Gulali Misterius",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 84,
+    "price": 2218,
+    "type": "food"
+  },
+  {
+    "id": "item_342",
+    "name": "Sate Taichan Gaib",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 83,
+    "price": 2052,
+    "type": "food"
+  },
+  {
+    "id": "item_343",
+    "name": "Kue Tart Super",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 92,
+    "price": 2028,
+    "type": "food"
+  },
+  {
+    "id": "item_344",
+    "name": "Es Krim Spesial",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 98,
+    "price": 2166,
+    "type": "food"
+  },
+  {
+    "id": "item_345",
+    "name": "Croissant Gaib",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 88,
+    "price": 2054,
+    "type": "food"
+  },
+  {
+    "id": "item_346",
+    "name": "Roti Tawar Gaib",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 92,
+    "price": 2113,
+    "type": "food"
+  },
+  {
+    "id": "item_347",
+    "name": "Churros Gaib",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 88,
+    "price": 2132,
+    "type": "food"
+  },
+  {
+    "id": "item_348",
+    "name": "Batagor Eksotis",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 100,
+    "price": 2137,
+    "type": "food"
+  },
+  {
+    "id": "item_349",
+    "name": "Sosis Bakar Sihir",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 84,
+    "price": 2379,
+    "type": "food"
+  },
+  {
+    "id": "item_350",
+    "name": "Brownies Mini",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 87,
+    "price": 2238,
+    "type": "food"
+  },
+  {
+    "id": "item_351",
+    "name": "Pretzel Beracun",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 87,
+    "price": 2180,
+    "type": "food"
+  },
+  {
+    "id": "item_352",
+    "name": "Muffin Misterius",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 87,
+    "price": 2144,
+    "type": "food"
+  },
+  {
+    "id": "item_353",
+    "name": "Kentang Goreng Jumbo",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 96,
+    "price": 2205,
+    "type": "food"
+  },
+  {
+    "id": "item_354",
+    "name": "Popcorn Premium",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 83,
+    "price": 2002,
+    "type": "food"
+  },
+  {
+    "id": "item_355",
+    "name": "Kue Cubit Super",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 91,
+    "price": 2164,
+    "type": "food"
+  },
+  {
+    "id": "item_356",
+    "name": "Crepes Super",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 100,
+    "price": 2097,
+    "type": "food"
+  },
+  {
+    "id": "item_357",
+    "name": "Marshmallow Misterius",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 96,
+    "price": 2203,
+    "type": "food"
+  },
+  {
+    "id": "item_358",
+    "name": "Taiyaki Spesial",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 98,
+    "price": 2290,
+    "type": "food"
+  },
+  {
+    "id": "item_359",
+    "name": "Kacang Rebus Premium",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 100,
+    "price": 2288,
+    "type": "food"
+  },
+  {
+    "id": "item_360",
+    "name": "Kue Tart Premium",
+    "tier": 5,
+    "tierName": "Legendary",
+    "icon": "🟨",
+    "stamina": 89,
+    "price": 2370,
+    "type": "food"
+  },
+  {
+    "id": "item_361",
+    "name": "Burger Spesial",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 133,
+    "price": 9089,
+    "type": "food"
+  },
+  {
+    "id": "item_362",
+    "name": "Sosis Bakar Spesial",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 131,
+    "price": 8755,
+    "type": "food"
+  },
+  {
+    "id": "item_363",
+    "name": "Cokelat Super",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 123,
+    "price": 9213,
+    "type": "food"
+  },
+  {
+    "id": "item_364",
+    "name": "Kue Cubit Jumbo",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 113,
+    "price": 8972,
+    "type": "food"
+  },
+  {
+    "id": "item_365",
+    "name": "Puding Premium",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 113,
+    "price": 8145,
+    "type": "food"
+  },
+  {
+    "id": "item_366",
+    "name": "Kebab Super",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 143,
+    "price": 9026,
+    "type": "food"
+  },
+  {
+    "id": "item_367",
+    "name": "Terang Bulan Eksotis",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 107,
+    "price": 8573,
+    "type": "food"
+  },
+  {
+    "id": "item_368",
+    "name": "Crepes Beracun",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 133,
+    "price": 8662,
+    "type": "food"
+  },
+  {
+    "id": "item_369",
+    "name": "Karamel Premium",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 148,
+    "price": 8339,
+    "type": "food"
+  },
+  {
+    "id": "item_370",
+    "name": "Hotdog Sihir",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 147,
+    "price": 8521,
+    "type": "food"
+  },
+  {
+    "id": "item_371",
+    "name": "Brownies Gaib",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 101,
+    "price": 9006,
+    "type": "food"
+  },
+  {
+    "id": "item_372",
+    "name": "Roti Tawar Jumbo",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 102,
+    "price": 8401,
+    "type": "food"
+  },
+  {
+    "id": "item_373",
+    "name": "Gulali Eksotis",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 141,
+    "price": 8305,
+    "type": "food"
+  },
+  {
+    "id": "item_374",
+    "name": "Karamel Sihir",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 128,
+    "price": 8400,
+    "type": "food"
+  },
+  {
+    "id": "item_375",
+    "name": "Roti Tawar Spesial",
+    "tier": 6,
+    "tierName": "Mythic",
+    "icon": "🔴",
+    "stamina": 130,
+    "price": 9098,
+    "type": "food"
+  },
+  {
+    "id": "item_376",
+    "name": "Biskuit Krakatau",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 180,
+    "price": 25737,
+    "type": "food"
+  },
+  {
+    "id": "item_377",
+    "name": "Gulali Krakatau",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 156,
+    "price": 28499,
+    "type": "food"
+  },
+  {
+    "id": "item_378",
+    "name": "Popcorn Unicorn",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 193,
+    "price": 27056,
+    "type": "food"
+  },
+  {
+    "id": "item_379",
+    "name": "Kentang Goreng Meteor",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 153,
+    "price": 29561,
+    "type": "food"
+  },
+  {
+    "id": "item_380",
+    "name": "Kentang Goreng Bintang",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 152,
+    "price": 27214,
+    "type": "food"
+  },
+  {
+    "id": "item_381",
+    "name": "Popcorn Naga",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 173,
+    "price": 25056,
+    "type": "food"
+  },
+  {
+    "id": "item_382",
+    "name": "Kentang Goreng Naga",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 191,
+    "price": 26407,
+    "type": "food"
+  },
+  {
+    "id": "item_383",
+    "name": "Sate Taichan Phoenix",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 189,
+    "price": 27332,
+    "type": "food"
+  },
+  {
+    "id": "item_384",
+    "name": "Terang Bulan Unicorn",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 196,
+    "price": 25387,
+    "type": "food"
+  },
+  {
+    "id": "item_385",
+    "name": "Taiyaki Unicorn",
+    "tier": 7,
+    "tierName": "Ancient",
+    "icon": "🟠",
+    "stamina": 166,
+    "price": 25024,
+    "type": "food"
+  },
+  {
+    "id": "item_386",
+    "name": "Sirup Bintang",
+    "tier": 8,
+    "tierName": "Relic",
+    "icon": "🟣",
+    "stamina": 250,
+    "price": 119518,
+    "type": "food"
+  },
+  {
+    "id": "item_387",
+    "name": "Batagor Krakatau",
+    "tier": 8,
+    "tierName": "Relic",
+    "icon": "🟣",
+    "stamina": 272,
+    "price": 112059,
+    "type": "food"
+  },
+  {
+    "id": "item_388",
+    "name": "Roti Tawar Phoenix",
+    "tier": 8,
+    "tierName": "Relic",
+    "icon": "🟣",
+    "stamina": 267,
+    "price": 118708,
+    "type": "food"
+  },
+  {
+    "id": "item_389",
+    "name": "Brownies Krakatau",
+    "tier": 8,
+    "tierName": "Relic",
+    "icon": "🟣",
+    "stamina": 232,
+    "price": 108547,
+    "type": "food"
+  },
+  {
+    "id": "item_390",
+    "name": "Biskuit Naga",
+    "tier": 8,
+    "tierName": "Relic",
+    "icon": "🟣",
+    "stamina": 251,
+    "price": 119915,
+    "type": "food"
+  },
+  {
+    "id": "item_391",
+    "name": "Cokelat Naga",
+    "tier": 8,
+    "tierName": "Relic",
+    "icon": "🟣",
+    "stamina": 290,
+    "price": 104546,
+    "type": "food"
+  },
+  {
+    "id": "item_392",
+    "name": "Takoyaki Matahari",
+    "tier": 8,
+    "tierName": "Relic",
+    "icon": "🟣",
+    "stamina": 285,
+    "price": 117701,
+    "type": "food"
+  },
+  {
+    "id": "item_393",
+    "name": "Cokelat Kutukan",
+    "tier": 9,
+    "tierName": "Divine",
+    "icon": "🟢",
+    "stamina": 413,
+    "price": 575632,
+    "type": "food"
+  },
+  {
+    "id": "item_394",
+    "name": "Puding Kosmik",
+    "tier": 9,
+    "tierName": "Divine",
+    "icon": "🟢",
+    "stamina": 379,
+    "price": 533538,
+    "type": "food"
+  },
+  {
+    "id": "item_395",
+    "name": "Batagor Kosmik",
+    "tier": 9,
+    "tierName": "Divine",
+    "icon": "🟢",
+    "stamina": 326,
+    "price": 560814,
+    "type": "food"
+  },
+  {
+    "id": "item_396",
+    "name": "Kue Cubit Dimensi",
+    "tier": 9,
+    "tierName": "Divine",
+    "icon": "🟢",
+    "stamina": 420,
+    "price": 581503,
+    "type": "food"
+  },
+  {
+    "id": "item_397",
+    "name": "Cireng Iblis",
+    "tier": 10,
+    "tierName": "Celestial",
+    "icon": "🔵",
+    "stamina": 909,
+    "price": 2365061,
+    "type": "food"
+  },
+  {
+    "id": "item_398",
+    "name": "Kentang Goreng Galaksi",
+    "tier": 10,
+    "tierName": "Celestial",
+    "icon": "🔵",
+    "stamina": 615,
+    "price": 2372701,
+    "type": "food"
+  },
+  {
+    "id": "item_399",
+    "name": "Roti Cahaya Ascendant",
+    "tier": 11,
+    "tierName": "Ascendant",
+    "icon": "🟡",
+    "stamina": 2070,
+    "price": 10107376,
+    "type": "food"
+  },
+  {
+    "id": "item_400",
+    "name": "The Wazle Masterpiece",
+    "tier": 12,
+    "tierName": "Singular",
+    "icon": "👑",
+    "stamina": 9999,
+    "price": 112835559,
+    "type": "food"
+  }
+]

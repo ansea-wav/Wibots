@@ -147,7 +147,7 @@ async function handleTebakCommand(socket, remoteJid, senderNumber, pushName, msg
   }
 }
 
-async function startTebakGame(socket, remoteJid, msg) {
+async function startTebakGame(socket, remoteJid, msg, isZeinaJoin = false) {
   const game = tebakGames.get(remoteJid);
   if (!game) return;
 
@@ -166,10 +166,29 @@ async function startTebakGame(socket, remoteJid, msg) {
     caption += `\n\n💡 Petunjuk / Soal: ${game.hint}`;
   }
 
+  let sentMsg;
   if (game.image && game.image.startsWith('http')) {
-    await socket.sendMessage(remoteJid, { image: { url: game.image }, caption });
+    sentMsg = await socket.sendMessage(remoteJid, { image: { url: game.image }, caption });
   } else {
-    await socket.sendMessage(remoteJid, { text: caption });
+    sentMsg = await socket.sendMessage(remoteJid, { text: caption });
+  }
+
+  if (isZeinaJoin) {
+    const ownerId = socket.user.id.split(':')[0] + '@s.whatsapp.net';
+    setTimeout(async () => {
+      try {
+        const yay_engine = require('./yay_engine');
+        const { text: zText, isCorrect } = await yay_engine.playTebakUmumZeina(ownerId, remoteJid, game.category, game.hint, game.answer);
+        await socket.sendMessage(remoteJid, { text: zText }, { quoted: sentMsg });
+        
+        // Simulasikan handleTebakReply
+        if (isCorrect) {
+           await handleTebakReply(socket, remoteJid, 'zeina@s.whatsapp.net', 'Zeina (AI)', game.answer, sentMsg, null);
+        }
+      } catch(e) {
+        console.log("[Zeina] Error play tebak umum:", e);
+      }
+    }, Math.floor(Math.random() * 5000) + 5000); // 5-10 detik delay
   }
 }
 

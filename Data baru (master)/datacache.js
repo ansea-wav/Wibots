@@ -25,6 +25,13 @@ class DataCache {
       return false;
     }
 
+    // Clear existing cache before re-indexing
+    this.clients.clear();
+    this.configs.clear();
+    this.responders.clear();
+    this.macros.clear();
+    this.blacklist.clear();
+
     const { clients, configs, responders, macros, blacklist } = result.data;
 
     // Index clients

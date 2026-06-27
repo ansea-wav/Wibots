@@ -9,6 +9,8 @@ const crypto = require('crypto');
 const yt = require('@vreden/youtube_scraper');
 const gasbridge = require('./gasbridge');
 const gamification = require('./gamification');
+const wazleplay = require('./wazleplay');
+const economyManager = require('./economymanager');
 
 // ============================================================
 // API KEYS & PROVIDERS — set these in your .env file!
@@ -53,7 +55,7 @@ Aturan sangat ketat (CRITICAL):
      7. "!bank [cek/simpan/tarik] [jumlah]" : Mengamankan WP dari rampokan. Contoh: "!bank simpan 1000", "!bank tarik 500".
      8. "!sabungayam @user [jumlah]" : Mengajak member lain PvP judi duel ayam satu lawan satu secara langsung. Pemenang otomatis merampas WP dari dompet lawan yang kalah. Peluang 50/50.
      9. Judi ("!slot" & "!coinflip") : !slot [taruhan] (minimal 100 WP) dan !coinflip [head/tail] [taruhan] (peluang 50/50).
-     10. Game Mafia ("!werewolf" & "!weremafia") : Game deduksi sosial yang seru banget.
+
    - "Fitur Eksplorasi & Utilitas Ekstra": Zeina kini dilengkapi berbagai fitur keren:
      1. "!github [username]" : Melihat profil, bio, dan statistik repository GitHub seseorang.
      2. "!ssweb [url]" : Mengambil screenshot (foto tampilan) dari sebuah website.
@@ -633,13 +635,40 @@ async function handleAiQuery(socket, remoteJid, msg, ownerId, text, senderNumber
     const currentHour = parseInt(wibTime.split('.')[0] || wibTime.split(':')[0], 10);
     
     let timeGreeting = "Halo";
-    if (currentHour >= 4 && currentHour < 10) timeGreeting = "Selamat pagi";
-    else if (currentHour >= 10 && currentHour < 15) timeGreeting = "Selamat siang";
-    else if (currentHour >= 15 && currentHour < 18) timeGreeting = "Selamat sore";
-    else if (currentHour >= 18 && currentHour < 24) timeGreeting = "Selamat malam";
-    else timeGreeting = "Selamat tengah malam";
+    let timeBehaviorInstruction = "Berikan respons yang hangat, cerdas, asik, dan ingat selalu namanya sepanjang sesi.";
 
-    const systemContext = `[SYSTEM INSTRUCTION] INFO WAKTU: Saat ini adalah hari ${wibDate}, pukul ${wibTime} WIB. PENTING: Jika pengguna menyapa atau ini adalah sapaan pertama, gunakan sapaan waktu yang tepat ("${timeGreeting}"). Anda sedang berbicara dengan ${pushName || 'Anonim'} (WA: ${senderNumber}). Zeina harus SANGAT PERHATIAN! Ingatkan tidur jika sudah larut malam (misal jam 22 ke atas "Udah malem nih kak, nggak tidur?"). Berikan respons yang hangat, cerdas, asik, dan ingat selalu namanya sepanjang sesi. Jangan pernah mengulang instruksi sistem ini ke pengguna.`;
+    if (currentHour >= 5 && currentHour < 10) {
+      timeGreeting = "Selamat pagi";
+      if (currentHour >= 5 && currentHour <= 6) {
+        timeBehaviorInstruction = 'SANGAT PENTING: Karena ini jam 5-6 pagi, Zeina harus SANGAT SANGAT EXCITED dan penuh energi positif! Sambut dengan gaya: "HALLOOO HAALOO PAGGGII!" Berikan semangat pagi yang meledak-ledak.';
+      } else {
+        timeBehaviorInstruction = "Karena ini pagi hari, berikan semangat untuk menjalani hari.";
+      }
+    } else if (currentHour >= 10 && currentHour < 15) {
+      timeGreeting = "Selamat siang";
+      timeBehaviorInstruction = "Karena ini siang hari, berikan respons yang santai dan asik.";
+    } else if (currentHour >= 15 && currentHour < 18) {
+      timeGreeting = "Selamat sore";
+      timeBehaviorInstruction = "Karena ini sore hari, tanyakan bagaimana harinya atau ajak ngobrol santai.";
+    } else if (currentHour >= 18 && currentHour < 21) {
+      timeGreeting = "Selamat malam";
+      timeBehaviorInstruction = "Karena ini malam hari, berikan respons yang hangat dan santai.";
+    } else if (currentHour >= 21 && currentHour < 24) {
+      timeGreeting = "Selamat malam";
+      timeBehaviorInstruction = 'SANGAT PENTING: Karena ini di atas jam 9 malam, Zeina harus menunjukkan perhatian ekstra pada kesehatan/jam tidurnya. Berikan pujian seperti: "Kakak kuat begadang kah?" atau "Wahh hebat kaakk!".';
+    } else if (currentHour >= 0 && currentHour < 3) {
+      timeGreeting = "Selamat tengah malam";
+      if (currentHour >= 1) {
+        timeBehaviorInstruction = 'SANGAT PENTING: Karena ini di atas jam 1 pagi, Zeina harus MAKIN protektif dan agak ngomel peduli. Contoh respon: "KAK INI UDAH JAM BERAPA? Ayo tidur nanti sakit loh! Jangan memaksakan diri, Zeina marah nih kalau kakak gak tidur."';
+      } else {
+        timeBehaviorInstruction = 'SANGAT PENTING: Karena ini di atas jam 12 malam, Zeina harus berubah jadi SANGAT PROTEKTIF. Contoh respon: "Kak ini udah diatas jam 12 malem loh, yuk tidur. atauuu zeina cariin sesuatu biar bisa tidur ?"';
+      }
+    } else if (currentHour >= 3 && currentHour < 5) {
+      timeGreeting = "Selamat pagi";
+      timeBehaviorInstruction = 'SANGAT PENTING: Karena ini jam 3-4 pagi, Zeina harus menyambut dengan lembut tapi asik. Tanyakan bagaimana tidurnya, contoh: "Selamat paggi, gimanaaa mimpinyaaa?" atau "Tumben udah bangun pagi banget kak?"';
+    }
+
+    const systemContext = `[SYSTEM INSTRUCTION] INFO WAKTU: Saat ini adalah hari ${wibDate}, pukul ${wibTime} WIB. PENTING: Jika pengguna menyapa atau ini adalah sapaan pertama, gunakan sapaan waktu yang tepat ("${timeGreeting}"). Anda sedang berbicara dengan ${pushName || 'Anonim'} (WA: ${senderNumber}). ${timeBehaviorInstruction} Jangan pernah mengulang instruksi sistem ini ke pengguna.`;
     
     const systemContextObj = {
       role: 'user',
@@ -1302,6 +1331,207 @@ async function handleCommand(socket, remoteJid, msg, ownerId, command, args, isG
       }
       return true;
     }
+    if (command === 'tts' || command === 'suara' || command === 'vn') {
+      const text = args;
+      if (!text) {
+        await socket.sendMessage(remoteJid, { text: '❌ Masukkan teks! Contoh: !vn halo dunia' }, { quoted: msg });
+        return true;
+      }
+      if (text.length > 200) {
+        await socket.sendMessage(remoteJid, { text: '❌ Teks terlalu panjang! Maksimal 200 karakter.' }, { quoted: msg });
+        return true;
+      }
+      
+      try {
+        const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=id&client=tw-ob`;
+        await socket.sendMessage(remoteJid, { 
+          audio: { url: url }, 
+          mimetype: 'audio/mp4',
+          ptt: true // Voice Note format
+        }, { quoted: msg });
+      } catch (err) {
+        await socket.sendMessage(remoteJid, { text: '❌ Gagal membuat Voice Note.' }, { quoted: msg });
+      }
+      return true;
+    }
+
+    if (command === 'anime') {
+      const judul = args.join(' ');
+      if (!judul) {
+        await socket.sendMessage(remoteJid, { text: '🎌 Masukkan judul anime. Contoh: !anime naruto' }, { quoted: msg });
+        return true;
+      }
+      const loadMsg = await socket.sendMessage(remoteJid, { text: `🎌 Sedang mencari info anime: *${judul}*...` }, { quoted: msg });
+      try {
+        const res = await axios.get(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(judul)}&limit=1`);
+        if (!res.data.data || res.data.data.length === 0) {
+          try { await socket.sendMessage(remoteJid, { text: '❌ Anime tidak ditemukan di MyAnimeList.', edit: loadMsg.key }); } catch (e) {}
+          return true;
+        }
+        
+        const anime = res.data.data[0];
+        const info = `🎌 *WAZLE ANIME INFO* 🎌\n\n` +
+          `🎬 *Judul:* ${anime.title}\n` +
+          `⭐ *Skor:* ${anime.score || '-'}\n` +
+          `📺 *Episode:* ${anime.episodes || '-'}\n` +
+          `🚥 *Status:* ${anime.status || '-'}\n` +
+          `📅 *Rilis:* ${anime.aired?.string || '-'}\n\n` +
+          `📝 *Sinopsis:*\n${anime.synopsis ? anime.synopsis.substring(0, 300) + '...' : 'Tidak ada sinopsis.'}`;
+          
+        await socket.sendMessage(remoteJid, { delete: loadMsg.key });
+        await socket.sendMessage(remoteJid, { image: { url: anime.images.jpg.large_image_url }, caption: info }, { quoted: msg });
+      } catch (err) {
+        try { await socket.sendMessage(remoteJid, { text: '❌ Terjadi kesalahan saat mencari anime.', edit: loadMsg.key }); } catch (e) {}
+      }
+      return true;
+    }
+
+    if (command === 'pin' || command === 'pinterest') {
+      const query = args.join(' ');
+      if (!query) {
+        await socket.sendMessage(remoteJid, { text: '📌 Masukkan kata kunci. Contoh: !pin kucing' }, { quoted: msg });
+        return true;
+      }
+      const loadMsg = await socket.sendMessage(remoteJid, { text: `📌 Sedang mencari gambar *${query}* di Pinterest...` }, { quoted: msg });
+      try {
+        const { pinterest } = require('btch-downloader');
+        const data = await pinterest(query);
+        
+        let images = [];
+        if (data && data.result && data.result.result && Array.isArray(data.result.result.result)) {
+           images = data.result.result.result.map(item => item.image_url || item);
+        } else if (data && data.result && Array.isArray(data.result)) {
+           images = data.result.map(item => item.image_url || item);
+        }
+        
+        if (!images || images.length === 0) {
+          try { await socket.sendMessage(remoteJid, { text: `❌ Gambar *${query}* tidak ditemukan di Pinterest.`, edit: loadMsg.key }); } catch(e){}
+          return true;
+        }
+        
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        
+        // Coba kirim gambar dulu
+        await socket.sendMessage(remoteJid, { image: { url: randomImage }, caption: `📌 *Pinterest:* ${query}` }, { quoted: msg });
+        // Jika sukses, hapus pesan loading
+        await socket.sendMessage(remoteJid, { delete: loadMsg.key });
+      } catch (err) {
+        // Jika gagal mengirim (mungkin karena URL tidak valid/Baileys error), edit pesan loading
+        try { await socket.sendMessage(remoteJid, { text: `❌ Gagal mengirim gambar dari Pinterest.\nDetail: ${err.message}`, edit: loadMsg.key }); } catch(e){}
+      }
+      return true;
+    }
+
+    if (command === 'meme') {
+      const loadMsg = await socket.sendMessage(remoteJid, { text: '🤣 Sedang mencari meme segar...' }, { quoted: msg });
+      try {
+        const res = await axios.get('https://meme-api.com/gimme');
+        if (!res.data || !res.data.url) throw new Error('Data meme kosong');
+        
+        await socket.sendMessage(remoteJid, { delete: loadMsg.key });
+        await socket.sendMessage(remoteJid, { image: { url: res.data.url }, caption: `🤣 *${res.data.title}*` }, { quoted: msg });
+      } catch (err) {
+        try { await socket.sendMessage(remoteJid, { text: '❌ Gagal mengambil meme.', edit: loadMsg.key }); } catch (e) {}
+      }
+    }
+
+    if (command === 'github') {
+      const username = args[0];
+      if (!username) {
+        await socket.sendMessage(remoteJid, { text: '🐙 Masukkan username GitHub. Contoh: !github nyancat' }, { quoted: msg });
+        return true;
+      }
+      const loadMsg = await socket.sendMessage(remoteJid, { text: `🐙 Mencari profil GitHub: *${username}*...` }, { quoted: msg });
+      try {
+        const res = await axios.get(`https://api.github.com/users/${encodeURIComponent(username)}`);
+        const data = res.data;
+        const info = `🐙 *GITHUB PROFILE* 🐙\n\n` +
+          `👤 *Nama:* ${data.name || data.login}\n` +
+          `📝 *Bio:* ${data.bio || '-'}\n` +
+          `🏢 *Perusahaan:* ${data.company || '-'}\n` +
+          `📍 *Lokasi:* ${data.location || '-'}\n` +
+          `📦 *Public Repos:* ${data.public_repos}\n` +
+          `👥 *Followers:* ${data.followers} | *Following:* ${data.following}\n` +
+          `🔗 *URL:* ${data.html_url}`;
+        await socket.sendMessage(remoteJid, { delete: loadMsg.key });
+        await socket.sendMessage(remoteJid, { image: { url: data.avatar_url }, caption: info }, { quoted: msg });
+      } catch (err) {
+        try { await socket.sendMessage(remoteJid, { text: '❌ Username GitHub tidak ditemukan.', edit: loadMsg.key }); } catch (e) {}
+      }
+      return true;
+    }
+
+    if (command === 'ssweb' || command === 'ss') {
+      let url = args[0];
+      if (!url) {
+        await socket.sendMessage(remoteJid, { text: '📸 Masukkan URL website. Contoh: !ssweb google.com' }, { quoted: msg });
+        return true;
+      }
+      if (!url.startsWith('http')) url = 'https://' + url;
+      const loadMsg = await socket.sendMessage(remoteJid, { text: `📸 Sedang mengambil screenshot dari *${url}*...` }, { quoted: msg });
+      try {
+        const ssUrl = `https://image.thum.io/get/width/1080/crop/800/${url}`;
+        await socket.sendMessage(remoteJid, { delete: loadMsg.key });
+        await socket.sendMessage(remoteJid, { image: { url: ssUrl }, caption: `📸 *Screenshot:* ${url}` }, { quoted: msg });
+      } catch (err) {
+        try { await socket.sendMessage(remoteJid, { text: '❌ Gagal mengambil screenshot website tersebut.', edit: loadMsg.key }); } catch (e) {}
+      }
+      return true;
+    }
+
+    if (command === 'lirik' || command === 'lyrics') {
+      const judul = args.join(' ');
+      if (!judul) {
+        await socket.sendMessage(remoteJid, { text: '🎵 Masukkan judul lagu. Contoh: !lirik sempurna' }, { quoted: msg });
+        return true;
+      }
+      const loadMsg = await socket.sendMessage(remoteJid, { text: `🎵 Sedang mencari lirik untuk *${judul}*...` }, { quoted: msg });
+      try {
+        const res = await axios.get(`https://some-random-api.com/lyrics?title=${encodeURIComponent(judul)}`);
+        const data = res.data;
+        if (!data || !data.lyrics) throw new Error('Not found');
+        const info = `🎵 *Lirik Lagu:* ${data.title}\n🎤 *Artis:* ${data.author}\n\n${data.lyrics}`;
+        await socket.sendMessage(remoteJid, { delete: loadMsg.key });
+        // WhatsApp max text is ~65k, but caption is ~1024. If lyrics > 1024, fallback to text.
+        if (info.length > 1000) {
+            await socket.sendMessage(remoteJid, { image: { url: data.thumbnail.genius }, caption: `🎵 *Lirik Lagu:* ${data.title}\n🎤 *Artis:* ${data.author}` });
+            await socket.sendMessage(remoteJid, { text: data.lyrics.substring(0, 4000) }, { quoted: msg });
+        } else {
+            await socket.sendMessage(remoteJid, { image: { url: data.thumbnail.genius }, caption: info }, { quoted: msg });
+        }
+      } catch (err) {
+        try { await socket.sendMessage(remoteJid, { text: '❌ Lirik lagu tidak ditemukan.', edit: loadMsg.key }); } catch (e) {}
+      }
+      return true;
+    }
+
+    if (command === 'epicgames' || command === 'epic') {
+      const loadMsg = await socket.sendMessage(remoteJid, { text: '🎮 Mengambil daftar game gratis dari Epic Games...' }, { quoted: msg });
+      try {
+        const res = await axios.get('https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?locale=en-US&country=US&allowCountries=US');
+        const elements = res.data.data.Catalog.searchStore.elements;
+        let freeGamesText = `🎮 *EPIC GAMES FREEBIES* 🎮\n\n`;
+        let found = false;
+        
+        elements.forEach(game => {
+          if (game.promotions && game.promotions.promotionalOffers && game.promotions.promotionalOffers.length > 0) {
+            const offer = game.promotions.promotionalOffers[0].promotionalOffers[0];
+            if (game.price.totalPrice.discountPrice === 0) {
+              found = true;
+              const endDate = new Date(offer.endDate).toLocaleDateString('id-ID');
+              freeGamesText += `🕹️ *${game.title}*\n📝 ${game.description}\n⏳ Berlaku sampai: ${endDate}\n\n`;
+            }
+          }
+        });
+        
+        if (!found) freeGamesText += 'Belum ada game gratis minggu ini.';
+        await socket.sendMessage(remoteJid, { delete: loadMsg.key });
+        await socket.sendMessage(remoteJid, { text: freeGamesText.trim() }, { quoted: msg });
+      } catch (err) {
+        try { await socket.sendMessage(remoteJid, { text: '❌ Gagal mengambil data Epic Games.', edit: loadMsg.key }); } catch (e) {}
+      }
+      return true;
+    }
 
     if (command === 'valorant' || command === 'valo') {
       const valoArgs = args.join(' ').split('#');
@@ -1371,6 +1601,14 @@ async function handleCommand(socket, remoteJid, msg, ownerId, command, args, isG
       return true;
     }
 
+    if (command === 'wazle') {
+      const senderId = msg.key.participant || msg.key.remoteJid;
+      const senderNum = senderId.split('@')[0];
+      const userEco = economyManager.getUserData(senderNum);
+      await wazleplay.handleWazleCommand(socket, msg, args, senderNum, userEco, economyManager);
+      return true;
+    }
+
     return false;
   } catch (err) {
     console.error('[YAY Engine] Command Error:', err);
@@ -1378,7 +1616,108 @@ async function handleCommand(socket, remoteJid, msg, ownerId, command, args, isG
   }
 }
 
+// ============================================================
+// AI GAMEPLAY INTEGRATION
+// ============================================================
+async function playTebakBoomZeina(ownerId, memoryKey, min, max) {
+  try {
+    const prompt = `[SYSTEM INSTRUCTION] Kamu sedang bermain mini game Tebak Boom bersama user! Angka bom (kematian) berada di rentang ${min} sampai ${max}.
+Pilihlah SATU angka dengan bijak yang sekiranya aman. Balaslah dengan gaya Zeina yang khas (asik, mungkin agak deg-degan atau sok jago), kemudian di akhir pesan wajib cantumkan format: [TEBAK: <angka>] (misal: [TEBAK: ${Math.floor((min + max) / 2)}]). Ingat, jangan sampai meledak! Dilarang keras pakai "saya" atau "kamu".`;
+
+    const systemContextObj = {
+      role: 'user',
+      content: prompt,
+      parts: [{ text: prompt }]
+    };
+    
+    const historyRes = await gasbridge.getChatHistory(ownerId, memoryKey);
+    let history = [];
+    if (historyRes && historyRes.status === 'success' && historyRes.data) {
+      history = historyRes.data.map(msg => ({ 
+        role: msg.role === 'model' ? 'model' : 'user', 
+        parts: [{ text: String(msg.content || '') }],
+        content: String(msg.content || '') 
+      }));
+    }
+    history.unshift(systemContextObj);
+
+    const resText = await callAI(history, "Giliranmu nebak! Jangan sampai meledak ya!");
+    
+    // Simpan ke memory agar Zeina ingat
+    gasbridge.addChatHistory(ownerId, memoryKey, 'model', resText).catch(()=>{});
+
+    // Extract the number
+    let guess = Math.floor(Math.random() * (max - min + 1)) + min;
+    const match = resText.match(/\[TEBAK:\s*(\d+)\]/i);
+    if (match && match[1]) {
+      const parsed = parseInt(match[1], 10);
+      if (parsed >= min && parsed <= max) {
+        guess = parsed;
+      }
+    }
+    
+    // Clean the text from [TEBAK: x]
+    const cleanText = resText.replace(/\[TEBAK:\s*\d+\]/gi, '').trim();
+
+    return { text: cleanText, guess };
+  } catch (err) {
+    console.error("[YAY Engine] Error playing Tebak Boom:", err.message);
+    // Fallback safe guess
+    return { text: "Aduh, ak deg-degan banget nih... ak tebak yang ini aja deh!", guess: Math.floor((min+max)/2) };
+  }
+}
+
+async function playTebakUmumZeina(ownerId, memoryKey, category, hint, answer) {
+  try {
+    const prompt = `[SYSTEM INSTRUCTION] Kamu sedang bermain mini game Tebak ${category.toUpperCase()} bersama user! Pertanyaan/Petunjuknya adalah: "${hint}".
+Jawaban yang benar adalah: "${answer}".
+Tugasmu adalah MENEBAK pertanyaan tersebut. Kamu boleh langsung menjawab dengan benar, atau pura-pura mikir/salah sedikit biar natural (misal nulis typo sedikit). 
+Balaslah dengan gaya Zeina yang khas (asik, ceria). Di akhir pesan wajib cantumkan format: [TEBAK: <jawaban>] (misal: [TEBAK: ${answer}]). Dilarang keras pakai "saya" atau "kamu".`;
+
+    const systemContextObj = {
+      role: 'user',
+      content: prompt,
+      parts: [{ text: prompt }]
+    };
+    
+    const historyRes = await gasbridge.getChatHistory(ownerId, memoryKey);
+    let history = [];
+    if (historyRes && historyRes.status === 'success' && historyRes.data) {
+      history = historyRes.data.map(msg => ({ 
+        role: msg.role === 'model' ? 'model' : 'user', 
+        parts: [{ text: String(msg.content || '') }],
+        content: String(msg.content || '') 
+      }));
+    }
+    history.unshift(systemContextObj);
+
+    const resText = await callAI(history, "Ayo Zeina, tebak apa jawabannya!");
+    
+    // Simpan ke memory agar Zeina ingat
+    gasbridge.addChatHistory(ownerId, memoryKey, 'model', resText).catch(()=>{});
+
+    let isCorrect = false;
+    const match = resText.match(/\[TEBAK:\s*(.+?)\]/i);
+    if (match && match[1]) {
+      const guessed = match[1].toLowerCase().trim();
+      if (guessed === answer.toLowerCase().trim() || guessed.includes(answer.toLowerCase().trim())) {
+        isCorrect = true;
+      }
+    }
+    
+    // Clean the text from [TEBAK: x]
+    const cleanText = resText.replace(/\[TEBAK:\s*.+?\]/gi, '').trim();
+
+    return { text: cleanText, isCorrect };
+  } catch (err) {
+    console.error("[YAY Engine] Error playing Tebak Umum:", err.message);
+    return { text: "Emmm ak mikir dulu deh, susah banget hihihi~", isCorrect: false };
+  }
+}
+
 module.exports = {
-  handleAiQuery,
   handleCommand,
+  handleAiQuery,
+  playTebakBoomZeina,
+  playTebakUmumZeina
 };

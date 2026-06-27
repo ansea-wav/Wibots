@@ -228,6 +228,10 @@ async function updateTipsState(state) {
   });
 }
 
+async function updateWazleData(phoneNumber, wazleData) {
+  return gasRequest('kue_cubit', { phone_number: phoneNumber, wazle_data: wazleData });
+}
+
 module.exports = {
   gasRequest,
   authenticateUser,
@@ -270,5 +274,6 @@ module.exports = {
   getLeaderboard,
   getChatLeaderboard,
   getTipsState,
-  updateTipsState
+  updateTipsState,
+  updateWazleData
 };

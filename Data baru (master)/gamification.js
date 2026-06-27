@@ -40,14 +40,7 @@ const ACHIEVEMENTS = {
   "Chicken Lord": { desc: "Menang sabung ayam pertama", wm: 5000, wp: 50, title: "Chicken Lord", badge: "🐔" },
   "Arena Victor": { desc: "Menang 25 duel", wm: 25000, wp: 250, permata: 1, title: "Arena Victor", badge: "🏅" },
   
-  // 34-45 Games & Weremafia
-  "Villager": { desc: "Main Weremafia pertama", wm: 1000, wp: 20, title: "Villager", badge: "🎭" },
-  "Mafia Recruit": { desc: "Menang sebagai Mafia", wm: 5000, wp: 50, title: "Mafia Recruit", badge: "🔫" },
-  "Moon Howler": { desc: "Menang Werewolf pertama", wm: 5000, wp: 50, title: "Moon Howler", badge: "🐺" },
-  "Silent Doctor": { desc: "Menyelamatkan pemain", wm: 5000, wp: 50, title: "Silent Doctor", badge: "🩺" },
-  "Master Detective": { desc: "Mengungkap Mafia", wm: 10000, wp: 100, title: "Master Detective", badge: "🔍" },
-  "Fool's Triumph": { desc: "Menang sebagai Jester", wm: 15000, wp: 150, title: "Fool's Triumph", badge: "🤡" },
-  "Judge of Fate": { desc: "Ikut 100 voting", wm: 25000, wp: 250, title: "Judge of Fate", badge: "⚖️" },
+  // 34-45 Games
   "Casual Gamer": { desc: "Main 20 mini game", wm: 5000, wp: 50, title: "Casual Gamer", badge: "🎮" },
   "Puzzle Solver": { desc: "Menang tebak kata", wm: 1000, wp: 10, title: "Puzzle Solver", badge: "🧩" },
   "Bomb Survivor": { desc: "Menang Tebak Boom", wm: 2000, wp: 20, title: "Bomb Survivor", badge: "💣" },
@@ -195,13 +188,6 @@ const TRACKER_KEYS = {
   // Quests
   'QUEST_COMPLETED': 'quests_completed',
   
-  // Weremafia specific trackers will be injected via Weremafia Engine
-  'PLAY_WEREMAFIA': 'wm_played',
-  'WIN_MAFIA': 'wm_mafia_wins',
-  'WIN_WEREWOLF': 'wm_werewolf_wins',
-  'DOC_SAVED': 'wm_doc_saves',
-  'DETECTIVE_FOUND': 'wm_det_finds',
-  'WIN_JESTER': 'wm_jester_wins',
 };
 
 // =====================================
@@ -215,7 +201,6 @@ const DAILY_QUEST_POOL = [
   { id: 'q5', type: 'coinflip_wins', target: 2, desc: 'Menang Coinflip 2 kali' },
   { id: 'q6', type: 'weather_checked', target: 1, desc: 'Cek cuaca kota' },
   { id: 'q7', type: 'knowledge_used', target: 2, desc: 'Gunakan fitur Knowledge 2x' },
-  { id: 'q8', type: 'wm_played', target: 1, desc: 'Main Weremafia 1 kali' },
   { id: 'q9', type: 'sabungayam_wins', target: 1, desc: 'Menang Sabung Ayam 1 kali' },
   { id: 'q10', type: 'pet_fed_times', target: 2, desc: 'Kasih makan Pet 2 kali' }
 ];
@@ -366,13 +351,7 @@ async function checkAchievements(socket, remoteJid, msg, phone) {
   await checkAndGrant("Media Collector", track.media_downloaded >= 100);
   await checkAndGrant("Archivist", track.media_downloaded >= 500);
 
-  // Weremafia
-  await checkAndGrant("Villager", track.wm_played >= 1);
-  await checkAndGrant("Mafia Recruit", track.wm_mafia_wins >= 1);
-  await checkAndGrant("Moon Howler", track.wm_werewolf_wins >= 1);
-  await checkAndGrant("Master Detective", track.wm_det_finds >= 1);
-  await checkAndGrant("Silent Doctor", track.wm_doc_saves >= 1);
-  await checkAndGrant("Fool's Triumph", track.wm_jester_wins >= 1);
+
   await checkAndGrant("Judge of Fate", track.total_votes_cast >= 100);
   
   // Legacy

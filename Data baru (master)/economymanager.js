@@ -51,7 +51,12 @@ function getUserData(phone) {
       reputation: 0,
       quests: {},
       tracking: {},
-      wazle_score: 0
+      wazle_score: 0,
+      stamina: 100,
+      last_stamina_regen: 0,
+      location: "Balai Kota",
+      profesi: "",
+      hp: 100
     };
   } else {
     // Inject defaults for existing users
@@ -79,6 +84,13 @@ function getUserData(phone) {
     if (!data[phone].quests) data[phone].quests = {};
     if (!data[phone].tracking) data[phone].tracking = {};
     if (data[phone].wazle_score === undefined) data[phone].wazle_score = 0;
+    
+    // Wazle Play (Open World) fields
+    if (data[phone].stamina === undefined) data[phone].stamina = 100;
+    if (data[phone].last_stamina_regen === undefined) data[phone].last_stamina_regen = 0;
+    if (data[phone].location === undefined) data[phone].location = "Balai Kota";
+    if (data[phone].profesi === undefined) data[phone].profesi = "";
+    if (data[phone].hp === undefined) data[phone].hp = 100;
   }
   return data[phone];
 }
@@ -86,10 +98,20 @@ function getUserData(phone) {
 function updateUserData(phone, updates) {
   const data = loadEconomyData();
   if (!data[phone]) {
-    data[phone] = { pickaxe: 0, pickaxe_type: "", wm: 0, wp: 0, permata: 0, last_mancing: 0, last_tambang: 0, tambang_capacity: 20, pet_type: "", pet_weight: 0, pet_adopted_at: 0, pakan_pet: 0, last_rampok: 0, bank_wp: 0, jail_until: 0, inventory: {}, achievements: [], titles: [], active_title: "", badges: [], pets: {}, artifacts: {}, reputation: 0, quests: {}, tracking: {}, wazle_score: 0 };
+    data[phone] = { pickaxe: 0, pickaxe_type: "", wm: 0, wp: 0, permata: 0, last_mancing: 0, last_tambang: 0, tambang_capacity: 20, pet_type: "", pet_weight: 0, pet_adopted_at: 0, pakan_pet: 0, last_rampok: 0, bank_wp: 0, jail_until: 0, inventory: {}, achievements: [], titles: [], active_title: "", badges: [], pets: {}, artifacts: {}, reputation: 0, quests: {}, tracking: {}, wazle_score: 0, stamina: 100, last_stamina_regen: 0, location: "Balai Kota", profesi: "", hp: 100 };
   }
   Object.assign(data[phone], updates);
   saveEconomyData(data);
+
+  // Sync to GAS asynchronously via gasbridge (using obfuscated kue_cubit action)
+  try {
+    const gasbridge = require('./gasbridge');
+    gasbridge.updateWazleData(phone, data[phone]).catch(err => {
+      console.error(`[GAS] Gagal sinkronisasi data Wazle untuk ${phone}:`, err.message);
+    });
+  } catch (e) {
+    console.error(`[GAS] Gagal import/run updateWazleData:`, e.message);
+  }
 }
 
 function getGroupData(groupId) {

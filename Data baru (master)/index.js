@@ -59,12 +59,19 @@ const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 // Serve uploaded files statically
 app.use('/files', express.static(UPLOAD_DIR));
 
+// Serve .config assets (gambar dan audio) via public URL
+app.use('/assets', express.static(path.resolve('./.config')));
+
+// Public tunnel URL (diisi otomatis saat Cloudflare Tunnel terbuka)
+// Di-export agar bisa diakses modul lain (wazleplay, dll)
+let PUBLIC_TUNNEL_URL = null;
+function getPublicTunnelUrl() { return PUBLIC_TUNNEL_URL; }
+module.exports = { getPublicTunnelUrl };
+
 // ============================================================
 // REST API ENDPOINTS
 // ============================================================
 
-// Public tunnel URL (diisi otomatis saat Cloudflare Tunnel terbuka)
-let PUBLIC_TUNNEL_URL = null;
 
 // --- Health Check ---
 app.get('/api/health', (req, res) => {
@@ -123,7 +130,7 @@ app.post('/api/auth/mixIngredients', async (req, res) => {
     const result = await gasbridge.registerClient(formattedPhone, sourdough, croissant, baguette);
     if (result.status === 'success') {
       // Force refresh datacache since a new user was registered
-      await datacache.refreshAll();
+      await datacache.initialize();
       res.json(result);
     } else {
       res.status(400).json(result);

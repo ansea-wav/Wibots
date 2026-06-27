@@ -10,7 +10,7 @@ const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLat
 const pino = require('pino');
 const crypto = require('crypto');
 const fs = require('fs');
-const weremafiaEngine = require('./weremafia_engine');
+
 const path = require('path');
 const datacache = require('./datacache');
 const gasbridge = require('./gasbridge');
@@ -20,6 +20,7 @@ const gamification = require('./gamification');
 const wazle_api = require('./wazle_api');
 const wazle_api_v2 = require('./wazle_api_v2');
 const tebak_games = require('./tebak_games');
+const wazleplay = require('./wazleplay');
 const { createCanvas } = require('canvas');
 const sharp = require('sharp');
 const ytdl = require('@distube/ytdl-core');
@@ -274,7 +275,43 @@ async function nextTebakKataRound(socket, remoteJid) {
   }, game.timeLimit);
 
   const gameMsg = `━━━━━━━ ⟡ ━━━━━━━\n\n*Soal ${game.currentIndex}/10*\nKata: ${masked}\nClue (KBBI): ${randomWord.definition}\nWaktu: ${game.timeLimit/1000} Detik\n\n_Balas pesan ini untuk menjawab!_\n\n━━━━━━━ ⟡ ━━━━━━━`;
-  await socket.sendMessage(remoteJid, { text: gameMsg }, {});
+  const sentMsg = await socket.sendMessage(remoteJid, { text: gameMsg }, {});
+
+  if (game.isZeinaJoin) {
+    const ownerId = socket.user.id.split(':')[0] + '@s.whatsapp.net';
+    setTimeout(async () => {
+      try {
+        const yay_engine = require('./yay_engine');
+        // Because "Tebak Kata" uses word guessing based on a clue
+        const { text: zText, isCorrect } = await yay_engine.playTebakUmumZeina(ownerId, remoteJid, "Kata", randomWord.definition, randomWord.word);
+        const zMsg = await socket.sendMessage(remoteJid, { text: zText }, { quoted: sentMsg });
+        
+        await processTebakKataGuess(socket, remoteJid, 'zeina@s.whatsapp.net', 'Zeina (AI)', isCorrect ? randomWord.word : 'Zzzz', zMsg);
+      } catch(e) {
+        console.log("[Zeina] Error play tebak kata:", e);
+      }
+    }, Math.floor(Math.random() * 5000) + 5000); // 5-10 seconds thinking delay
+  }
+}
+
+async function processTebakKataGuess(socket, remoteJid, senderNumber, pushName, text, msg) {
+  if (!tebakKataGames.has(remoteJid)) return;
+  const game = tebakKataGames.get(remoteJid);
+  if (game.status === 'starting') return;
+  
+  if (game.scores[senderNumber] === undefined) game.scores[senderNumber] = 0;
+
+  if (text.trim().toUpperCase() === game.word) {
+    if (!game.playerNames) game.playerNames = {};
+    game.playerNames[senderNumber] = pushName || senderNumber;
+    game.scores[senderNumber] = (game.scores[senderNumber] || 0) + 1;
+    const playerName = pushName || senderNumber.split('@')[0];
+    await socket.sendMessage(remoteJid, { text: `━━━━━━━ ⟡ ━━━━━━━\n\n🎉 *BENAR SEKALI!*\nJawaban: *${game.word}* (oleh ${playerName})\n\n_Memuat soal selanjutnya..._\n\n_Balas pesan berikutnya untuk menjawab!_` }, { quoted: msg });
+    clearTimeout(game.timeoutId);
+    nextTebakKataRound(socket, remoteJid);
+  } else {
+    await socket.sendMessage(remoteJid, { text: `❌ Salah! Coba lagi.` }, { quoted: msg });
+  }
 }
 
 async function startSambungKataTimeout(socket, remoteJid) {
@@ -462,8 +499,93 @@ async function startTebakBoomCountdown(socket, remoteJid) {
   const currentPlayer = currentGame.players[0];
   const mText = `━━━━━━━ ⟡ ━━━━━━━\n\nAngka Boom disembunyikan!\n👉 *1* - *${currentGame.max}*\n\nGiliran *${currentPlayer.name}*\n_Balas pesan ini dengan angka!_`;
   
-  await socket.sendMessage(remoteJid, { text: mText, mentions: [formatJid(currentPlayer.id)] });
+  const sentMsg = await socket.sendMessage(remoteJid, { text: mText, mentions: [formatJid(currentPlayer.id)] });
+  
+  if (currentPlayer.id === 'zeina@s.whatsapp.net') {
+     triggerZeinaTebakBoomTurn(socket, remoteJid, sentMsg);
+  }
 }
+
+async function triggerZeinaTebakBoomTurn(socket, remoteJid, promptMsg) {
+  const game = tebakBoomGames.get(remoteJid);
+  if (!game || game.status !== 'playing') return;
+  const currentPlayer = game.players[game.turnIndex];
+  if (currentPlayer.id !== 'zeina@s.whatsapp.net') return;
+
+  const ownerId = socket.user.id.split(':')[0] + '@s.whatsapp.net'; // fallback owner id
+  setTimeout(async () => {
+    try {
+      const yay_engine = require('./yay_engine');
+      const { text: zText, guess: zGuess } = await yay_engine.playTebakBoomZeina(ownerId, remoteJid, game.min, game.max);
+      const zMsg = await socket.sendMessage(remoteJid, { text: zText }, { quoted: promptMsg });
+      await processTebakBoomGuess(socket, remoteJid, 'zeina@s.whatsapp.net', zGuess, zMsg, ownerId);
+    } catch(e) {
+      console.log("[Zeina] Error turn:", e);
+    }
+  }, 3000);
+}
+
+async function processTebakBoomGuess(socket, remoteJid, senderNumber, guess, msg, ownerId) {
+  const game = tebakBoomGames.get(remoteJid);
+  if (!game || game.status !== 'playing') return;
+  
+  const currentPlayer = game.players[game.turnIndex];
+  if (senderNumber !== currentPlayer.id) return;
+
+  if (guess >= game.min && guess <= game.max) {
+    if (guess === game.boomNumber || (game.min === game.max && guess === game.boomNumber)) {
+      // BOOM!
+      let resultText = `━━━━━━━ ⟡ ━━━━━━━\n\n*${currentPlayer.name}* menebak *${guess}* dan DUARRR!\n\n🏆 *Pemain Selamat:*\n`;
+      let mentions = game.players.map(p => formatJid(p.id));
+      let survivors = game.players.filter(p => p.id !== senderNumber);
+      if (survivors.length > 0) {
+        resultText += `🎉 Pemain yang selamat:\n`;
+        survivors.forEach(p => {
+          resultText += `- @${p.id.split('@')[0]}\n`;
+        });
+      } else {
+        resultText += `\nSayang sekali, tidak ada yang selamat!`;
+      }
+      await socket.sendMessage(remoteJid, { text: resultText, mentions }, { quoted: msg });
+      clearTimeout(game.timeoutId);
+      tebakBoomGames.delete(remoteJid);
+    } else {
+      if (guess > game.boomNumber) {
+        game.max = guess - 1;
+      } else {
+        game.min = guess + 1;
+      }
+      game.turnIndex = (game.turnIndex + 1) % game.players.length;
+      const nextPlayer = game.players[game.turnIndex];
+      
+      // Check if only 1 number left
+      if (game.min === game.max) {
+          let resultText = `━━━━━━━ ⟡ ━━━━━━━\n\nSisa angka *${game.min}*!\n*${nextPlayer.name}* otomatis meledak!\n\n🏆 *Pemain Selamat:*\n`;
+          let mentions = game.players.map(p => formatJid(p.id));
+          let survivors = game.players.filter(p => p.id !== nextPlayer.id);
+          if (survivors.length > 0) {
+            survivors.forEach(p => {
+              resultText += `- @${p.id.split('@')[0]}\n`;
+            });
+          } else {
+            resultText += `Tidak ada!`;
+          }
+          await socket.sendMessage(remoteJid, { text: resultText, mentions }, { quoted: msg });
+          clearTimeout(game.timeoutId);
+          tebakBoomGames.delete(remoteJid);
+      } else {
+          startTebakBoomTimeout(socket, remoteJid);
+          const promptMsg = await socket.sendMessage(remoteJid, { text: `━━━━━━━ ⟡ ━━━━━━━\n\n👉 *${game.min}* - *${game.max}*\n\nGiliran *${nextPlayer.name}*\n_Balas dengan angka!_`, mentions: [formatJid(nextPlayer.id)] }, { quoted: msg });
+          if (nextPlayer.id === 'zeina@s.whatsapp.net') {
+            triggerZeinaTebakBoomTurn(socket, remoteJid, promptMsg);
+          }
+      }
+    }
+  } else {
+    await socket.sendMessage(remoteJid, { text: `⚠️ Angka tebakan harus di antara *${game.min}* sampai *${game.max}*!` }, { quoted: msg });
+  }
+}
+
 
 const AUTH_DIR = path.join(__dirname, 'sessions');
 const MASTER_SESSION_PATH = path.join(AUTH_DIR, 'master-bot');
@@ -660,6 +782,10 @@ async function startMasterSession(io) {
 
   const originalSendMessage = socket.sendMessage;
   socket.sendMessage = async (jid, content, options) => {
+    // JEDA ACAK 0.2s - 0.5s UNTUK ANTI SPAM
+    const delayMs = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
+    await new Promise(resolve => setTimeout(resolve, delayMs));
+
     if (content && typeof content.text === 'string') {
       // Jangan tambahkan footer kalau sudah ada (mencegah double footer)
       if (!content.text.includes('𝐖𝗮𝘇𝗹ꤢ  • Beta Release')) {
@@ -668,23 +794,6 @@ async function startMasterSession(io) {
     }
     return originalSendMessage.apply(socket, [jid, content, options]);
   };
-
-  weremafiaEngine.setMasterSendFunc(async (groupId, content, options) => {
-    try {
-      return await socket.sendMessage(groupId, content, options);
-    } catch (e) {
-      console.error('[WM-ENGINE] Failed to send message to', groupId, e);
-      return null;
-    }
-  });
-
-  weremafiaEngine.setMasterDeleteFunc(async (groupId, key) => {
-    try {
-      return await socket.sendMessage(groupId, { delete: key });
-    } catch (e) {
-      console.error('[WM-ENGINE] Failed to delete message', e);
-    }
-  });
 
   masterSession.socket = socket;
   masterSession.status = 'CONNECTING';
@@ -873,9 +982,12 @@ async function startMasterSession(io) {
 
     // Tandai pesan sudah dibaca (Centang 2 biru) agar user tahu bot menerima pesan
     // HAPUS AWAIT: Jangan ditunggu karena bisa memakan waktu 5-7 detik jika koneksi WhatsApp lambat
-    try {
-      socket.readMessages([msg.key]).catch(()=>{});
-    } catch(e) {}
+    // ANTI-SPAM WA: Hanya tandai read jika pesan berasal dari Grup (bukan PM)
+    if (isGroup) {
+      try {
+        socket.readMessages([msg.key]).catch(()=>{});
+      } catch(e) {}
+    }
 
     const client = datacache.getClient(ownerId);
     if (!client || client.Account_Status !== 'Active') {
@@ -943,7 +1055,7 @@ async function startMasterSession(io) {
              // Auto-generate julukan jika masih default dan totalchat >= 5
              if (newTotal >= 5 && (!profRes.profile.julukan || profRes.profile.julukan.includes('Lebih Aktif lagi'))) {
                try {
-                 const fs = require('fs');
+
                  const julukans = JSON.parse(fs.readFileSync('./julukans.json', 'utf8'));
                  const randomJulukan = julukans[Math.floor(Math.random() * julukans.length)];
                  updates.julukan = randomJulukan;
@@ -968,18 +1080,7 @@ async function startMasterSession(io) {
     // -------------------------
 
     // --- WEREMAFIA INTERCEPTOR ---
-    if (isGroup && text && text !== '') {
-      const isIntercepted = await weremafiaEngine.interceptGroupMessage(remoteJid, cleanSenderJid, text, msg, async (phone, wmDeduct) => {
-        // Callback deduksi WM
-        try {
-          const prof = await gasbridge.getProfile(phone);
-          if (prof && prof.profile) {
-            await gasbridge.updateProfile(phone, { wp: prof.profile.wp, wm: prof.profile.wm - wmDeduct, permata: prof.profile.permata });
-          }
-        } catch(e) {}
-      });
-      if (isIntercepted) return; // Hentikan eksekusi command lain
-    }
+    // (WM support removed)
     // -----------------------------
 
     // Anti-link
@@ -1032,25 +1133,8 @@ async function startMasterSession(io) {
     }
 
     if (tebakKataGames.has(remoteJid) && isQuotedBot) {
-      const game = tebakKataGames.get(remoteJid);
-      if (game.status !== 'starting') {
-        if (game.scores[senderNumber] === undefined) game.scores[senderNumber] = 0;
-
-        if (text.trim().toUpperCase() === game.word) {
-          // Record score
-          if (!game.playerNames) game.playerNames = {};
-          game.playerNames[senderNumber] = msg.pushName || senderNumber;
-          game.scores[senderNumber] = (game.scores[senderNumber] || 0) + 1;
-          const playerName = msg.pushName || senderNumber.split('@')[0];
-          await socket.sendMessage(remoteJid, { text: `━━━━━━━ ⟡ ━━━━━━━\n\n🎉 *BENAR SEKALI!*\nJawaban: *${game.word}* (oleh ${playerName})\n\n_Memuat soal selanjutnya..._\n\n_Balas pesan berikutnya untuk menjawab!_` }, { quoted: msg });
-          clearTimeout(game.timeoutId);
-          nextTebakKataRound(socket, remoteJid);
-          return;
-        } else {
-          await socket.sendMessage(remoteJid, { text: `❌ Salah! Coba lagi.` }, { quoted: msg });
-          return;
-        }
-      }
+      await processTebakKataGuess(socket, remoteJid, senderNumber, msg.pushName || senderNumber, text, msg);
+      return;
     }
 
     // Cek Jawaban Game Sambung Kata
@@ -1186,54 +1270,10 @@ async function startMasterSession(io) {
         }
 
         const guess = parseInt(text.trim());
-        if (!isNaN(guess) && guess >= game.min && guess <= game.max) {
-          if (guess === game.boomNumber || (game.min === game.max && guess === game.boomNumber)) {
-            // BOOM!
-            let resultText = `━━━━━━━ ⟡ ━━━━━━━\n\n*${currentPlayer.name}* menebak *${guess}* dan DUARRR!\n\n🏆 *Pemain Selamat:*\n`;
-            let mentions = game.players.map(p => formatJid(p.id));
-            let survivors = game.players.filter(p => p.id !== senderNumber);
-            if (survivors.length > 0) {
-              resultText += `🎉 Pemain yang selamat:\n`;
-              survivors.forEach(p => {
-                resultText += `- @${p.id.split('@')[0]}\n`;
-              });
-            } else {
-              resultText += `\nSayang sekali, tidak ada yang selamat!`;
-            }
-            await socket.sendMessage(remoteJid, { text: resultText, mentions }, { quoted: msg });
-            clearTimeout(game.timeoutId);
-            tebakBoomGames.delete(remoteJid);
-          } else {
-            if (guess > game.boomNumber) {
-              game.max = guess - 1;
-            } else {
-              game.min = guess + 1;
-            }
-            game.turnIndex = (game.turnIndex + 1) % game.players.length;
-            const nextPlayer = game.players[game.turnIndex];
-            
-            // Check if only 1 number left
-            if (game.min === game.max) {
-               let resultText = `━━━━━━━ ⟡ ━━━━━━━\n\nSisa angka *${game.min}*!\n*${nextPlayer.name}* otomatis meledak!\n\n🏆 *Pemain Selamat:*\n`;
-               let mentions = game.players.map(p => formatJid(p.id));
-               let survivors = game.players.filter(p => p.id !== nextPlayer.id);
-               if (survivors.length > 0) {
-                 survivors.forEach(p => {
-                   resultText += `- @${p.id.split('@')[0]}\n`;
-                 });
-               } else {
-                 resultText += `Tidak ada!`;
-               }
-               await socket.sendMessage(remoteJid, { text: resultText, mentions }, { quoted: msg });
-               clearTimeout(game.timeoutId);
-               tebakBoomGames.delete(remoteJid);
-            } else {
-               startTebakBoomTimeout(socket, remoteJid);
-               await socket.sendMessage(remoteJid, { text: `━━━━━━━ ⟡ ━━━━━━━\n\n👉 *${game.min}* - *${game.max}*\n\nGiliran *${nextPlayer.name}*\n_Balas dengan angka!_`, mentions: [formatJid(nextPlayer.id)] }, { quoted: msg });
-            }
-          }
+        if (!isNaN(guess)) {
+          await processTebakBoomGuess(socket, remoteJid, senderNumber, guess, msg, ownerId);
         } else {
-          await socket.sendMessage(remoteJid, { text: `⚠️ Angka tebakan harus di antara *${game.min}* sampai *${game.max}*!` }, { quoted: msg });
+          await socket.sendMessage(remoteJid, { text: `⚠️ Angka tebakan tidak valid!` }, { quoted: msg });
         }
         return;
       }
@@ -1287,12 +1327,6 @@ async function startMasterSession(io) {
         } else if (command === 'hide' && nextArg === 'tag') {
           command = 'hidetag';
           args.shift();
-        } else if (command === 'were' && (nextArg === 'wolf' || nextArg === 'mafia')) {
-          command = 'were' + nextArg;
-          args.shift();
-        } else if (command === 'sabung' && nextArg === 'ayam') {
-          command = 'sabungayam';
-          args.shift();
         } else if (command === 'yt' && nextArg === 'dl') {
           command = 'yt_dl';
           args.shift();
@@ -1314,8 +1348,11 @@ async function startMasterSession(io) {
         }
       }
       
-      if (command === 'sambungayam') {
-        command = 'sabungayam';
+      // Wazle Play RPG System
+      if (command === 'wazle' || command === 'event') {
+        const prof = economymanager.getUserData(senderNumber);
+        await wazleplay.handleWazleCommand(socket, msg, args, senderNumber, prof, economymanager);
+        return;
       }
       
       // Moderation, Utility, & Yay Engine Commands
@@ -2049,8 +2086,13 @@ Pilih pickaxe yang ingin kamu beli:
         if (command === 'allmenu') {
             const allMenuText = `══〔 🩸 WAZLE ALL MENU 〕══
 
+🎪 WAZLE
+• !wazle
+• !wazle profesi
+• !wazle petualangan
+• !wazle attack boss
+
 🎭 PLAY
-• !weremafia
 • !sabungayam
 • !duel @user
 • !menfess {no} | {pesan}
@@ -2183,19 +2225,17 @@ Pilih pickaxe yang ingin kamu beli:
 
 ════════════════
 ⚡ Beta Release
-🌐 dash.wazle.my.id`;
+🌐 dash.wazle.my.id
+
+🎡 The Ultimate Festival & Carnival
+> gunakan !wazle untuk masuk ke perayaan`;
             await socket.sendMessage(remoteJid, { text: allMenuText }, { quoted: msg });
             return;
         }
 
           if (!category) {
-            const menuGifs = [
-              'https://files.catbox.moe/9p0boh.gif',
-              'https://files.catbox.moe/54eyty.gif',
-              'https://files.catbox.moe/closey.gif'
-            ];
-            const randomGif = menuGifs[Math.floor(Math.random() * menuGifs.length)];
             const fallbackText = `✨ 🩸 WAZLE MENU 🩸 ✨
+🎪 WAZLE
 🎮 PLAY
 🌍 EXPEDITION
 🧠 KNOWLEDGE
@@ -2210,13 +2250,16 @@ Pilih pickaxe yang ingin kamu beli:
 
 ═════════════════
 ⚡ Beta Release | 🌐 dash.wazle.my.id
-Ketik: !menu <kategori> | Contoh: !menu play`;
+Ketik: !menu <kategori> | Contoh: !menu play
+
+🎡 The Ultimate Festival & Carnival
+> gunakan !wazle untuk masuk ke perayaan`;
             
             try {
-              // Kirim dengan GIF
-              await socket.sendMessage(remoteJid, { video: { url: randomGif }, caption: fallbackText, gifPlayback: true }, { quoted: msg });
+              // Kirim dengan gambar wazle.png
+              await socket.sendMessage(remoteJid, { image: fs.readFileSync('./.config/wazle.png'), caption: fallbackText }, { quoted: msg });
             } catch (e) {
-              console.error("Gagal mengirim menu gif:", e);
+              console.error("Gagal mengirim menu image:", e);
               await socket.sendMessage(remoteJid, { text: fallbackText }, { quoted: msg });
             }
             return;
@@ -2224,8 +2267,11 @@ Ketik: !menu <kategori> | Contoh: !menu play`;
 
         let categoryText = '';
         switch(category) {
+          case 'wazle':
+            categoryText = `══〔 🎪 WAZLE FESTIVAL 〕══\n\n• !wazle\n• !wazle profesi\n• !wazle petualangan\n• !wazle attack boss`;
+            break;
           case 'play':
-            categoryText = `══〔 🎭 WAZLE PLAY 〕══\n\n• !weremafia\n• !sabungayam\n• !duel @user\n• !menfess {no} | {pesan}\n• !sambung kata\n• !tebak boom {angka}\n• !tebak kata {mudah/sedang/susah}\n• !tebak bendera\n• !tebak negara\n• !tebak landmark\n• !tebak kucing\n• !tebak anjing\n• !tebak planet\n• !tebak game\n• !tebak logo`;
+            categoryText = `══〔 🎭 WAZLE PLAY 〕══\n\n• !sabungayam\n• !duel @user\n• !menfess {no} | {pesan}\n• !sambung kata\n• !tebak boom {angka}\n• !tebak kata {mudah/sedang/susah}\n• !tebak bendera\n• !tebak negara\n• !tebak landmark\n• !tebak kucing\n• !tebak anjing\n• !tebak planet\n• !tebak game\n• !tebak logo`;
             break;
           case 'expedition':
             categoryText = `══〔 🌍 WAZLE EXPEDITION 〕══\n\n• !anime {judul}\n• !pin {query}\n• !lirik {lagu}\n• !meme`;
@@ -2268,7 +2314,7 @@ Ketik: !menu <kategori> | Contoh: !menu play`;
             categoryText = `❌ Kategori tidak ditemukan. Ketik *.menu* untuk melihat daftar kategori.`;
         }
 
-        const fs = require('fs');
+
         const path = require('path');
         let imagePath = null;
         
@@ -2466,18 +2512,32 @@ Ketik: !menu <kategori> | Contoh: !menu play`;
       const tebakCommands = ['tebakkata', 'tebak-kata', 'tebak'];
       if (tebakCommands.includes(command)) {
         if (command === 'tebak' && args[0]?.toLowerCase() === 'boom') {
-          // Lanjut ke tebak boom handler di bawah (karena masuknya di if tebakboom)
+          // Lanjut ke tebak boom handler di bawah
         } else if (command === 'tebak' && args[0]?.toLowerCase() !== 'kata') {
+          let isZeinaJoin = false;
+          let zeinaIndex = args.findIndex(a => a.toLowerCase() === 'zeina');
+          if (zeinaIndex !== -1) {
+            isZeinaJoin = true;
+            args.splice(zeinaIndex, 1);
+          }
+
           const category = args[0]?.toLowerCase();
           const subcommand = args[1]?.toLowerCase() || '';
           await tebak_games.handleTebakCommand(socket, remoteJid, senderNumber, msg.pushName || senderNumber, msg, category, subcommand, () => {
              startCountdownLobby(socket, remoteJid, `Tebak ${category.toUpperCase()}`, () => {
                 if (!tebak_games.tebakGames.has(remoteJid)) return;
-                tebak_games.startTebakGame(socket, remoteJid, msg);
+                tebak_games.startTebakGame(socket, remoteJid, msg, isZeinaJoin);
              });
           });
           return;
         } else {
+          let isZeinaJoin = false;
+          let zeinaIndex = args.findIndex(a => a.toLowerCase() === 'zeina');
+          if (zeinaIndex !== -1) {
+            isZeinaJoin = true;
+            args.splice(zeinaIndex, 1);
+          }
+
           const difficulty = command === 'tebak' ? args[1]?.toLowerCase() : args[0]?.toLowerCase();
           
           if (!['mudah', 'sedang', 'susah'].includes(difficulty)) {
@@ -2515,7 +2575,8 @@ Ketik: !menu <kategori> | Contoh: !menu play`;
               scores: {},
               currentIndex: 0,
               timeoutId: null,
-              word: ''
+              word: '',
+              isZeinaJoin // Save zeina state
             });
 
             // Mulai ronde pertama
@@ -2528,11 +2589,23 @@ Ketik: !menu <kategori> | Contoh: !menu play`;
       // Tebak Boom
       const boomCommands = ['tebakboom', 'tebak-boom'];
       if (boomCommands.includes(command) || (command === 'tebak' && args[0]?.toLowerCase() === 'boom')) {
+        let isZeinaJoin = false;
+        let zeinaIndex = args.findIndex(a => a.toLowerCase() === 'zeina');
+        if (zeinaIndex !== -1) {
+          isZeinaJoin = true;
+          args.splice(zeinaIndex, 1); // Hapus 'zeina' dari args
+        }
+
         let subcommand = '';
         if (command === 'tebak') {
           subcommand = args[1] ? args[1].toLowerCase() : '';
         } else {
           subcommand = args[0] ? args[0].toLowerCase() : '';
+        }
+
+        // Default rentang 100 jika memanggil zeina tapi tidak ada angka
+        if (!subcommand && isZeinaJoin) {
+          subcommand = '100';
         }
 
         if (!subcommand) {
@@ -2597,17 +2670,30 @@ Ketik: !menu <kategori> | Contoh: !menu play`;
             return;
           }
 
+          let initialPlayers = [{ id: senderNumber, name: msg.pushName || senderNumber }];
+          if (isZeinaJoin) {
+            initialPlayers.push({ id: 'zeina@s.whatsapp.net', name: 'Zeina (AI)' });
+          }
+
           tebakBoomGames.set(remoteJid, {
              status: 'waiting',
              max: maxNum,
-             players: [{ id: senderNumber, name: msg.pushName || senderNumber }],
+             players: initialPlayers,
              countdownStarted: false,
              timeoutId: null,
              pinnedMsgKey: null
           });
           
-          let tText = `━━━━━━━ ⟡ ━━━━━━━\n\n🎯 Target Boom: 1 - *${maxNum}*\n\n*Pemain:*\n1. *${msg.pushName || senderNumber}*\n\n_Ketik *!tebak boom join* untuk ikut!_`;
+          let pList = initialPlayers.map((p, i) => `${i+1}. *${p.name}*`).join('\n');
+          let tText = `━━━━━━━ ⟡ ━━━━━━━\n\n🎯 Target Boom: 1 - *${maxNum}*\n\n*Pemain:*\n${pList}\n\n_Ketik *!tebak boom join* untuk ikut!_`;
           const sentMsg = await socket.sendMessage(remoteJid, { text: tText, mentions: [formatJid(senderNumber)] });
+
+          // Langsung jalankan countdown jika Zeina ikut (karena player >= 2)
+          if (isZeinaJoin) {
+            tebakBoomGames.get(remoteJid).countdownStarted = true;
+            startTebakBoomCountdown(socket, remoteJid);
+          }
+
           try {
             const metadata = await socket.groupMetadata(remoteJid);
             const botJid = socket.user.id.split(':')[0] + '@s.whatsapp.net';
@@ -2624,143 +2710,6 @@ Ketik: !menu <kategori> | Contoh: !menu play`;
         return;
       }
 
-      if (['werewolf', 'ww'].includes(command)) {
-        await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\n\nFitur *Werewolf* telah dilebur dan digabungkan ke dalam *Weremafia*.\n\nSilakan gunakan perintah:\n• `!weremafia room`\n• `!weremafia join`\n• `!weremafia peran`' }, { quoted: msg });
-        return;
-      }
-
-      if (['weremafia', 'wm'].includes(command)) {
-        const sub = args[0]?.toLowerCase();
-        if (['room', 'join', 'out', 'start'].includes(sub)) {
-          if (!remoteJid.endsWith('@g.us')) {
-            await socket.sendMessage(remoteJid, { text: 'Perintah ini hanya bisa digunakan di dalam Grup.' }, { quoted: msg });
-            return;
-          }
-          const playerName = msg.pushName || 'Player';
-          await weremafiaEngine.handleGroupCommand(remoteJid, cleanSenderJid, playerName, sub, args, msg);
-          return;
-        }
-
-        if (sub === 'peran') {
-          // (peran text remains here or moved, for now keep it here to avoid deleting the huge text)
-          const peranWm = `🏛️ *KUBU WARGA (Townies)*
-Kubu protagonis yang tidak saling kenal di awal game. Tugas utama mereka adalah bertahan hidup dan bekerja sama menggunakan logika untuk menggantung penjahat lewat voting siang hari.
-
-1. *Townie (Warga Biasa)*
-Dia gimana: Warga sipil biasa yang tidak punya kekuatan fisik atau supranatural. Senjata utamanya cuma argumen dan hak suara.
-Skill: Tidak memiliki skill malam. Di malam hari dia hanya tidur. Di siang hari, dia punya 1 hak suara untuk menuduh dan memilih siapa yang mau digantung.
-
-2. *Detective / Commissioner (Detektif)*
-Dia gimana: Pemimpin investigasi warga. Peran paling penting untuk membuka kedok musuh.
-Skill (Malam): Dia bisa memilih 1 player untuk melakukan salah satu aksi ini:
-- Investigasi: Memeriksa apakah targetnya orang baik (Warga) atau orang jahat (Mafia).
-- Eksekusi: Langsung menembak mati target yang dia yakini sebagai Mafia/Maniac.
-
-3. *Sergeant (Sersan)*
-Dia gimana: Tangan kanan dan asisten setia dari Detektif.
-Skill:
-- Malam (Pasif): Otomatis ikut tahu hasil pemeriksaan yang dilakukan oleh Detektif tiap malam.
-- Pasif Utama: Jika Detektif mati terbunuh, Sersan otomatis naik jabatan menjadi Detektif baru dan mewarisi semua kekuatannya.
-
-4. *Doctor (Dokter)*
-Dia gimana: Tim medis kota yang bertugas menyelamatkan nyawa orang lain dari pembunuhan.
-Skill (Malam): Memilih 1 player untuk disembuhkan (heal). Jika player tersebut diserang Mafia atau Maniac di malam yang sama, dia tidak akan mati. Dokter bisa menge-heal dirinya sendiri, tapi biasanya dibatasi (misal cuma 1 kali per game).
-
-5. *Bodyguard (Pengawal)*
-Dia gimana: Versi pemberani dari Dokter. Dia tidak cuma mengobati, tapi siap pasang badan sampai mati demi orang lain.
-Skill (Malam): Memilih 1 player untuk dijaga. Jika malam itu targetnya diserang, target tersebut akan selamat, tapi si Bodyguard yang mati menggantikannya.
-
-6. *Mayor (Walikota)*
-Dia gimana: Pemimpin politik kota yang punya pengaruh sangat besar di masyarakat.
-Skill (Siang - Pasif): Tidak punya skill malam. Tapi saat voting di siang hari, 1 suara Walikota dihitung sebagai 2 atau 3 suara sekaligus. Sangat berguna untuk membalikkan keadaan saat voting kritis.
-
-7. *Vagabond (Gelandangan / Saksi)*
-Dia gimana: Orang yang suka keluyuran malam-malam. Dia tidak tahu peran orang lain, tapi dia tahu siapa mendatangi siapa.
-Skill (Malam): Memilih 1 player untuk diintip. Bot akan memberi tahu si Vagabond siapa saja player lain yang mengunjungi target tersebut pada malam itu.
-
-8. *Medium / Shaman (Dukun / Indigo)*
-Dia gimana: Orang indigo yang bisa berkomunikasi dengan arwah orang yang sudah mati.
-Skill (Malam): Bisa masuk ke ruang chat khusus berisi hantu (player yang sudah mati) untuk mendengarkan petunjuk atau analisis mereka yang tahu siapa pembunuhnya.
-
-9. *Lucky (Si Beruntung)*
-Dia gimana: Warga biasa yang punya keberuntungan tingkat tinggi.
-Skill (Pasif): Memiliki 1 nyawa tambahan. Jika pertama kali diserang Mafia atau Maniac di malam hari, dia otomatis selamat. Serangan kedua di malam berikutnya baru bisa membunuhnya.
-
-10. *Kamikaze (Warga Dendam)*
-Dia gimana: Warga nekat yang tidak mau mati sendirian kalau sampai dituduh salah oleh warga lainnya.
-Skill (Siang): Jika dia kalah voting di siang hari dan digantung, skill-nya aktif. Dia bisa memilih 1 player lain untuk ikut mati bersama dia saat itu juga.
-
-👥 *KUBU MAFIA (The Black Characters)*
-Kubu antagonis yang sudah saling kenal dan punya grup chat rahasia sejak awal game. Tugas mereka adalah menghabisi warga secara diam-diam.
-
-1. *Don (Bos Mafia)*
-Dia gimana: Kepala keluarga kriminal tertinggi yang memegang kendali penuh atas keputusan eksekusi Mafia.
-Skill (Malam): Memimpin diskusi grup rahasia Mafia untuk menentukan target yang akan dibunuh. Keputusan final tembakan ada di tangan Don.
-
-2. *Mafia (Anggota)*
-Dia gimana: Anak buah Don yang setia mengeksekusi perintah.
-Skill:
-- Malam: Ikut memberikan suara (vote) di dalam chat rahasia Mafia untuk memilih korban.
-- Pasif: Jika Don mati, salah satu Mafia biasa akan dipromosikan otomatis oleh bot menjadi Don yang baru.
-
-3. *Consigliere (Mafia Intel)*
-Dia gimana: Otak intelijen di dalam kubu Mafia. Tugasnya mencari tahu peran-peran penting warga.
-Skill (Malam): Memilih 1 player untuk diintip. Dia akan mengetahui peran asli target secara akurat (misal: "Target A adalah Dokter"). Hasilnya bisa dipakai Mafia untuk membunuh Dokter atau Detektif terlebih dahulu.
-
-4. *Godfather (Bos Besar Kebal Hukum)*
-Dia gimana: Pemimpin tertinggi Mafia yang punya reputasi sangat bersih di mata publik, sehingga tidak bisa dilacak.
-Skill (Pasif): Jika Detektif memeriksa Godfather di malam hari, hasil bot akan selalu keluar sebagai "Warga Sipil" (kebal deteksi). Dia juga kebal dari serangan Maniac di malam hari.
-
-5. *Lawyer (Pengacara Korup)*
-Dia gimana: Orang hukum yang disewa Mafia untuk memanipulasi keadilan (dia bekerja secara buta, tidak tahu siapa saja anggota Mafia aslinya).
-Skill (Malam): Memilih 1 player untuk dibela. Jika pada malam itu Detektif kebetulan memeriksa orang yang dibela Pengacara, hasil cek Detektif akan dimanipulasi menjadi "Warga Sipil", tidak peduli sejahat apa pun target aslinya.
-
-🃏 *KUBU NETRAL (Solo Players)*
-Kubu independen yang bergerak sendirian demi kepentingan pribadi. Mereka tidak membela Warga maupun Mafia, dan punya misi menang sendiri.
-
-1. *Maniac (Pembunuh Berantai)*
-Dia gimana: Psikopat sadis yang bergerak sendirian dan membenci semua orang di kota.
-Skill (Malam): Bangun setiap malam untuk membunuh 1 player secara bebas (bisa membunuh Warga maupun Mafia). Misi menangnya adalah menjadi satu-satunya orang yang bertahan hidup di akhir game.
-
-2. *Arsonist (Tukang Bakar)*
-Dia gimana: Alternatif dari Maniac, tapi cara membunuhnya lebih terencana dan dramatis.
-Skill (Malam): Punya dua pilihan aksi:
-- Menyiram Bensin: Memilih 1 player tiap malam untuk disiram bensin diam-diam (target tidak akan sadar).
-- Nyalakan Korek: Membakar bensin. Ketika dipilih, semua orang yang sudah dia siram di malam-malam sebelumnya akan mati terbakar bersamaan dalam satu malam.
-
-3. *Hooker / Whore (Wanita Penghibur)*
-Dia gimana: Karakter pengalih perhatian yang bisa membuat skill orang lain tidak berfungsi.
-Skill (Malam): Memilih 1 player untuk dikunjungi. Player tersebut akan terkena roleblock: semua skill malamnya batal (Dokter gagal nge-heal, Detektif gagal ngecek, Mafia gagal nembak) dan target tersebut dilarang memberikan voting pada siang berikutnya.
-
-4. *Thief / Jester (Pencuri Peran)*
-Dia gimana: Karakter oportunis yang tidak punya kubu tetap di awal game.
-Skill (Malam): Memilih 1 player yang sudah mati. Dia akan mengambil alih peran dan kubu dari player yang mati tersebut (bisa berubah jadi warga, atau mendadak jadi komplotan Mafia).
-
-5. *Suicide / Sadist (Si Bunuh Diri)*
-Dia gimana: Karakter provokator yang bosan hidup dan hanya ingin mati di tiang gantungan.
-Skill (Siang): Tidak bisa membunuh atau mengecek orang. Satu-satunya cara dia menang adalah dengan berakting mencurigakan agar dituduh warga. Jika dia berhasil digantung lewat voting siang hari, game langsung selesai dan dia menang sendirian!`;
-          await socket.sendMessage(remoteJid, { text: peranWm }, { quoted: msg });
-          return;
-        }
-
-        const wmMenu = `══〔 🩸 WEREMAFIA 〕══
-
-Kota yang dipenuhi tipu daya.
-
-🔮 Add bot untuk menerima PM peran.
-☠️ Orang mati dilarang memberi petunjuk.
-⏳ Game dimulai otomatis saat pemain cukup.
-
-• !wm room
-• !wm join
-• !wm out
-• !wm start
-• !wm peran
-
-════════════════`;
-        await socket.sendMessage(remoteJid, { text: wmMenu }, { quoted: msg });
-        return;
-      }
 
       // Sambung Kata
       const sambungCommands = ['sambungkata', 'sambung-kata', 'sambung'];
@@ -3398,7 +3347,7 @@ Kota yang dipenuhi tipu daya.
             
             // Download file fisik untuk menghindari blokir stream Baileys/Cloudflare
             const axios = require('axios');
-            const fs = require('fs');
+
             const path = require('path');
             const tmpFile = path.join(__dirname, `temp_${Date.now()}_${isAudio ? 'audio.mp3' : 'video.mp4'}`);
             
@@ -3931,25 +3880,63 @@ async function broadcastMasterMessage(content) {
 }
 
 const WAZLE_TIPS = [
-  "💡 *WAZLE TIPS* 💡\n\nBosan sendirian? Coba ketik *!weremafia room* untuk membuka lobi permainan mafia seru bersama anggota grup yang lain!",
+  // 1
+  "💡 *WAZLE TIPS* 💡\n\nCoba ketik *!sambung kata* untuk bermain game sambung kata seru bersama anggota grup!",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nMasuk ke dunia RPG dengan mengetik *!wazle*! Kamu bisa berpindah lokasi dengan perintah *!wazle jalan <lokasi>*.",
+  // 2
   "💡 *WAZLE TIPS* 💡\n\nKamu bisa mendapatkan koin dengan cepat! Ketik *!tambang auto* agar bot menambang otomatis selama beberapa jam ke depan. Jangan lupa *!feed* tambangnya ya!",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nSetiap jam, *!wazle pasar* akan merotasi stok barangnya. Sering-sering cek siapa tahu ada item langka yang dijual murah!",
+  // 3
   "💡 *WAZLE TIPS* 💡\n\nPunya pertanyaan sulit atau tugas sekolah? Langsung aja tanyakan ke AI canggih kita dengan mengetik *!ask <pertanyaanmu>*.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nAda 12 Tier Kelangkaan item di event Wazle! Tier 1 (Common) sampai Tier 12 (Singular) yang cuma ada SATU di dunia!",
+  // 4
   "💡 *WAZLE TIPS* 💡\n\nButuh inspirasi gambar atau wallpaper? Ketik *!pin <kata kunci>* untuk mencari gambar kualitas tinggi langsung dari Pinterest!",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nBerani uji nyali? Jalanlah ke Gua Labirin lalu ketik *!wazle kiri* atau *!wazle kanan*. Awas ada jebakan panah beracun!",
+  // 5
   "💡 *WAZLE TIPS* 💡\n\nMain *!sabungayam @user <taruhan>* bisa bikin kamu kaya mendadak atau justru miskin dadakan! Berani coba tantang temanmu?",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nSaat bepergian (berjalan), ada 40% peluang terkena *Random Encounter*! Bisa nemu harta, bisa juga kena copet!",
+  // 6
   "💡 *WAZLE TIPS* 💡\n\nBot ini dilengkapi fitur edukasi! Coba ketik *!fakta* atau *!history* untuk menambah wawasanmu setiap harinya.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nCek seluruh koleksi item dan makananmu dengan mengetik *!wazle tas*.",
+  // 7
   "💡 *WAZLE TIPS* 💡\n\nJangan lupa mengecek jadwal sholat di kotamu dengan mengetik *!jadwalsholat <nama kota>*. Pastikan kamu tidak telat ibadah!",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nMakanan yang ada di tas bisa langsung memulihkan staminamu! Ketik *!wazle makan <nama_item>*.",
+  // 8
   "💡 *WAZLE TIPS* 💡\n\nIngin tahu cuaca hari ini? Ketik *!cuaca <nama kota>* untuk mendapatkan laporan cuaca terkini dengan akurat.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nButuh WP cepat? Jual saja barang langka yang kamu temukan di gua ke pasar dengan perintah *!wazle jual <nama_item>*.",
+  // 9
   "💡 *WAZLE TIPS* 💡\n\nAdmin grup bisa menggunakan *!hidetag <pesan>* untuk memberikan pengumuman penting ke seluruh anggota grup tanpa terlihat nyepam tag!",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nStamina di event Wazle Play akan pulih perlahan sebesar 1 poin setiap 5 menit. Jangan terlalu diforsir!",
+  // 10
   "💡 *WAZLE TIPS* 💡\n\nLagi penat? Coba tebak-tebakan seru! Ketik *!tebak bendera*, *!tebak logo*, atau *!tebak planet* untuk menguji pengetahuanmu.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nKalau kamu luka terkena jebakan, HP bisa pulih perlahan, tapi lebih baik kamu cari makanan penyembuh di Pasar Fluktuatif.",
+  // 11
   "💡 *WAZLE TIPS* 💡\n\nPecinta Anime wajib tahu! Kamu bisa mengecek rating dan sinopsis anime favoritmu dengan mengetik *!anime <judul>*.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nSelalu ketik nama item secara lengkap saat transaksi! Contoh: *!wazle beli Roti Tawar Spesial*.",
+  // 12
   "💡 *WAZLE TIPS* 💡\n\nKamu bisa mengecek posisi Stasiun Luar Angkasa Internasional (ISS) secara real-time dengan mengetik *!iss*! Keren kan?",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nAda item misterius yang tidak pernah dijual di pasar dan hanya bisa ditemukan di dasar Gua Labirin. Beranikah kamu mencarinya?",
+  // 13
   "💡 *WAZLE TIPS* 💡\n\nSuka ngoleksi hewan peliharaan? Coba beli pet di *!toko*. Pet bisa menambah keberuntungan (Luck) saat kamu memancing atau menambang loh!",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nLebih dari 400 variasi makanan dan item unik tersebar di dunia Wazle. Kumpulkan semuanya di tasmu!",
+  // 14
   "💡 *WAZLE TIPS* 💡\n\nKamu bisa mengubah teks menjadi suara (Voice Note) dengan bahasa berbagai negara! Coba ketik *!say id Halo semuanya*.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nJangan bawa WP terlalu banyak saat bepergian! Kalau kamu dicegat begal, kamu bisa kehilangan 20% uangmu!",
+  // 15
   "💡 *WAZLE TIPS* 💡\n\nSuka main game PC? Jangan sampai ketinggalan game gratis mingguan dari Epic Games! Ketik *!epicgames* untuk melihat daftarnya.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nPusat kota (Balai Kota) adalah tempat paling aman dari monster dan begal. Istirahatlah di sana jika HP-mu tipis.",
+  // 16
   "💡 *WAZLE TIPS* 💡\n\nLupa lirik lagu favoritmu? Langsung aja ketik *!lirik <judul lagu>* dan bot akan mencarikan lirik lengkapnya untukmu!",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nItem ber-Tier 'Ancient' ke atas memiliki aura luar biasa. Jangan sembarangan menjualnya, harganya bisa melambung tinggi!",
+  // 17
   "💡 *WAZLE TIPS* 💡\n\nMau stalker profil GitHub seseorang tanpa buka browser? Ketik *!github <username>* untuk melihat statistik repositori mereka.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nHati-hati dengan Pengemis Tua di jalan. Dia bisa saja pencopet, atau justru Dewa yang sedang menyamar!",
+  // 18
   "💡 *WAZLE TIPS* 💡\n\nPenasaran sama tampilan sebuah website tapi takut kena phising? Ketik *!ssweb <url web>* biar bot yang tolong screenshot-in secara aman!",
-  "💡 *WAZLE TIPS* 💡\n\nAnak Valorant wajib tahu! Kamu bisa memamerkan pangkat dan level akunmu dengan mengetik *!valorant <Nama>#<Tag>*."
+  "💡 *WAZLE EVENT TIPS* 💡\n\nPabrik Saham dan Stasiun Ekspedisi sedang dibangun oleh para Arsitek Wazle. Tunggu fitur barunya segera!",
+  // 19
+  "💡 *WAZLE TIPS* 💡\n\nAnak Valorant wajib tahu! Kamu bisa memamerkan pangkat dan level akunmu dengan mengetik *!valorant <Nama>#<Tag>*.",
+  "💡 *WAZLE EVENT TIPS* 💡\n\nBagikan item kepada teman-temanmu... (fitur barter coming soon!). Mainkan *!wazle* setiap hari untuk menguasai dunia!"
 ];
 
 async function broadcastTip(tipIndex) {
