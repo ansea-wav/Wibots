@@ -141,6 +141,12 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
     mass: 0.8
   };
 
+  const slideTransition = {
+    type: "spring" as const,
+    stiffness: 180,
+    damping: 15
+  };
+
   return (
     <div className="fixed inset-0 z-[9999] bg-[#0d0d11] flex items-center justify-center p-3 sm:p-6 md:p-8 overflow-hidden font-sans">
       
@@ -192,20 +198,20 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
             </button>
           </motion.div>
 
-          <motion.div layout className="flex flex-col gap-4">
-            <AnimatePresence mode="popLayout">
+          {/* Form Container with relative positioning to host absolute exiting slides */}
+          <motion.div layout className="relative flex flex-col overflow-hidden">
+            <AnimatePresence initial={false}>
               {/* LOGIN MODE */}
               {mode === 'login' && (
                 <motion.div 
                   key="login-view"
-                  layout
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -80 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{
-                    x: { type: "spring", stiffness: 180, damping: 15 },
-                    opacity: { duration: 0.15 },
-                    layout: jellyTransition
+                  exit={{ opacity: 0, x: 80 }}
+                  transition={slideTransition}
+                  style={{ 
+                    position: mode === 'login' ? 'relative' : 'absolute', 
+                    width: '100%'
                   }}
                   className="flex flex-col gap-3.5"
                 >
@@ -244,7 +250,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
                   
                   {error && (
-                    <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
+                    <motion.div layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -259,18 +265,18 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                 </motion.div>
               )}
 
-              {/* REGISTER MODE */}
+              {/* REGISTER MODE - STEP 1 */}
               {mode === 'register' && step === 1 && (
                 <motion.div 
                   key="reg-step1"
-                  layout
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 80 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{
-                    x: { type: "spring", stiffness: 180, damping: 15 },
-                    opacity: { duration: 0.15 },
-                    layout: jellyTransition
+                  exit={{ opacity: 0, x: -80 }}
+                  transition={slideTransition}
+                  style={{ 
+                    position: (mode === 'register' && step === 1) ? 'relative' : 'absolute', 
+                    width: '100%',
+                    top: 0
                   }}
                   className="flex flex-col gap-3.5"
                 >
@@ -287,7 +293,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
                   
                   {error && (
-                    <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
+                    <motion.div layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -302,17 +308,18 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                 </motion.div>
               )}
 
+              {/* REGISTER MODE - STEP 2 */}
               {mode === 'register' && step === 2 && (
                 <motion.div 
                   key="reg-step2"
-                  layout
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 80 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{
-                    x: { type: "spring", stiffness: 180, damping: 15 },
-                    opacity: { duration: 0.15 },
-                    layout: jellyTransition
+                  exit={{ opacity: 0, x: -80 }}
+                  transition={slideTransition}
+                  style={{ 
+                    position: (mode === 'register' && step === 2) ? 'relative' : 'absolute', 
+                    width: '100%',
+                    top: 0
                   }}
                   className="flex flex-col gap-3.5"
                 >
@@ -329,7 +336,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
 
                   {error && (
-                    <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
+                    <motion.div layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -352,17 +359,18 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                 </motion.div>
               )}
 
+              {/* REGISTER MODE - STEP 3 */}
               {mode === 'register' && step === 3 && (
                 <motion.div 
                   key="reg-step3"
-                  layout
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 80 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{
-                    x: { type: "spring", stiffness: 180, damping: 15 },
-                    opacity: { duration: 0.15 },
-                    layout: jellyTransition
+                  exit={{ opacity: 0, x: -80 }}
+                  transition={slideTransition}
+                  style={{ 
+                    position: (mode === 'register' && step === 3) ? 'relative' : 'absolute', 
+                    width: '100%',
+                    top: 0
                   }}
                   className="flex flex-col gap-3.5"
                 >
@@ -403,7 +411,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
 
                   {error && (
-                    <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
+                    <motion.div layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -427,21 +435,22 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                 </motion.div>
               )}
             </AnimatePresence>
+          </motion.div>
 
-            <motion.p layout="position" className="text-white/30 text-[10px] text-center mt-4 leading-relaxed px-4">
+          <motion.div layout="position" className="mt-4">
+            <p className="text-white/30 text-[10px] text-center leading-relaxed px-4">
               Protected by Wazle Secure Auth.<br/>By continuing you agree to our Terms.
-            </motion.p>
+            </p>
 
-            <motion.a 
-              layout="position"
+            <a 
               href="https://wa.me/62882008677172" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="auth-link text-[10px] text-center mt-1 font-medium flex items-center justify-center gap-1 transition-colors"
+              className="auth-link text-[10px] text-center mt-1 font-medium flex items-center justify-center gap-1 transition-colors block"
             >
               <span className="material-symbols-outlined text-[12px]">support_agent</span>
               Hubungi Wazle Support Service
-            </motion.a>
+            </a>
           </motion.div>
         </motion.div>
       </div>
