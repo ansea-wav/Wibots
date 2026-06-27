@@ -135,7 +135,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
   };
 
   const jellyTransition = {
-    type: "spring",
+    type: "spring" as const,
     stiffness: 180,
     damping: 10,
     mass: 0.8
