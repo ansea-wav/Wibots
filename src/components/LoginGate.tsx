@@ -135,21 +135,24 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
   };
 
   return (
-    <div className="fixed inset-0 auth-wrapper flex items-center justify-center z-[9999]">
-      {/* Background Ambience */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[80%] bg-zinc-800/10 rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[80%] bg-zinc-700/10 rounded-full blur-[100px]"></div>
-      </div>
+    <div className="fixed inset-0 z-[9999] bg-[#0d0d11] flex items-center justify-center p-3 sm:p-6 md:p-8 overflow-hidden font-sans">
+      
+      {/* Viewport inner white panel matching landing page sheet shape */}
+      <div className="w-full h-full max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] max-w-7xl rounded-[2.5rem] bg-[#fdfcf7] border border-white/20 shadow-2xl flex items-center justify-center overflow-hidden relative">
+        
+        {/* Background Ambience / Blur (subtle soft gray glow) */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40">
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-zinc-350/20 rounded-full blur-[100px]"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-zinc-300/10 rounded-full blur-[100px]"></div>
+        </div>
 
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95, y: 15 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 180, damping: 15 }}
-        className={`relative z-10 w-full max-w-md ${isMobile ? 'h-full flex flex-col justify-end' : ''}`}
-      >
-        <div className={`${isMobile ? 'bg-[#111113] min-h-[75vh] rounded-t-[2.5rem] p-8 pb-12 flex flex-col border-t border-white/5' : 'auth-card backdrop-blur-2xl rounded-3xl p-8 border shadow-2xl'} overflow-hidden`}>
-          
+        {/* Floating Black Login Card with Spring Entry */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 180, damping: 15 }}
+          className={`relative z-10 w-full max-w-md auth-card backdrop-blur-2xl rounded-3xl p-8 border shadow-2xl ${shake ? 'animate-shake' : ''}`}
+        >
           {isMobile && <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-8"></div>}
 
           <div className="text-center mb-8">
@@ -177,8 +180,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
             </button>
           </div>
 
-          <div className={`flex flex-col gap-5 flex-1 ${shake ? 'animate-shake' : ''}`}>
-            
+          <div className="flex flex-col gap-5">
             <AnimatePresence mode="wait">
               {/* LOGIN MODE */}
               {mode === 'login' && (
@@ -405,15 +407,12 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
             </a>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Local style overrides to protect colors from global theme variables */}
       <style dangerouslySetInnerHTML={{__html: `
-        .auth-wrapper {
-          background-color: #050505 !important;
-        }
         .auth-card {
-          background-color: rgba(17, 17, 19, 0.8) !important;
+          background-color: #111113 !important;
           border-color: rgba(255, 255, 255, 0.1) !important;
           color: #ffffff !important;
         }
