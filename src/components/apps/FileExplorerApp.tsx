@@ -94,162 +94,197 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
   };
 
   return (
-    <div className="flex flex-col h-full" style={{ background: 'var(--surface-panel)' }}>
-      {/* Storage Progress Bar Area */}
-      <div className="px-4 pt-4 pb-2 border-b border-[var(--border-subtle)]">
-        <div className="flex justify-between items-end mb-2">
-          <div>
-            <h2 className="text-sm font-bold text-white mb-0.5">Google Drive Storage</h2>
-            <div className="text-[10px] text-[var(--text-tertiary)] flex gap-2">
-              <span>{files.length} files</span>
-              <span>•</span>
-              <span>{formatSize(usedBytes)} / {quotaMB} MB used</span>
+    <div className="max-w-6xl mx-auto space-y-6 text-left">
+      
+      {/* Storage and View Card */}
+      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-6">
+        
+        {/* Storage Info Header */}
+        <div>
+          <div className="flex justify-between items-end mb-2">
+            <div>
+              <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-1">
+                Google Drive Storage
+              </div>
+              <div className="text-[11px] text-zinc-500 font-semibold flex gap-2">
+                <span>{files.length} files</span>
+                <span>•</span>
+                <span>{formatSize(usedBytes)} / {quotaMB} MB used</span>
+              </div>
             </div>
+            <span className="text-[9px] font-bold text-white bg-zinc-950 px-2.5 py-0.5 rounded-full uppercase border border-zinc-800">
+              {tier}
+            </span>
           </div>
-          <span className="text-[10px] font-semibold text-[var(--text-secondary)] bg-white/5 px-2 py-0.5 rounded uppercase">
-            {tier}
-          </span>
-        </div>
-        <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden flex">
-          <div 
-            className={`h-full transition-all duration-500 ${percentUsed > 90 ? 'bg-red-500' : percentUsed > 70 ? 'bg-yellow-500' : 'bg-[var(--neon-green)]'}`} 
-            style={{ width: `${percentUsed}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Toolbar */}
-      <div className="px-4 py-3 flex items-center justify-between flex-shrink-0">
-        <div className="flex rounded-lg border border-[var(--border-subtle)] overflow-hidden">
-          <button
-            onClick={() => setViewMode('grid')}
-            className={`px-2 py-1 text-[10px] cursor-pointer transition-colors ${viewMode === 'grid' ? 'bg-white/10 text-white' : 'text-[var(--text-tertiary)]'}`}
-          >
-            ▦
-          </button>
-          <button
-            onClick={() => setViewMode('list')}
-            className={`px-2 py-1 text-[10px] cursor-pointer transition-colors ${viewMode === 'list' ? 'bg-white/10 text-white' : 'text-[var(--text-tertiary)]'}`}
-          >
-            ☰
-          </button>
-        </div>
-        <label className={`px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--neon-green)]/15 text-[var(--neon-green)] border border-[var(--neon-green)]/20 cursor-pointer hover:bg-[var(--neon-green)]/25 transition-all ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
-          {loading ? '⏳ Uploading...' : '📤 Upload File'}
-          <input type="file" className="hidden" onChange={handleFileInput} disabled={loading} />
-        </label>
-      </div>
-
-      {/* Drop Zone / File Content */}
-      <div
-        className={`flex-1 overflow-auto px-4 pb-4 transition-colors ${dragOver ? 'bg-[var(--neon-green)]/5' : ''}`}
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={handleDrop}
-      >
-        {files.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="text-5xl mb-4 opacity-20">📂</div>
-            <div className="text-sm text-[var(--text-tertiary)] mb-1">No files uploaded</div>
-            <div className="text-[10px] text-[var(--text-tertiary)]">Drag &amp; drop files here or click Upload</div>
+          <div className="w-full h-2 bg-zinc-200/60 rounded-full overflow-hidden flex">
+            <div 
+              className={`h-full transition-all duration-500 ${
+                percentUsed > 90 
+                  ? 'bg-rose-500' 
+                  : percentUsed > 70 
+                    ? 'bg-amber-500' 
+                    : 'bg-zinc-950'
+              }`} 
+              style={{ width: `${percentUsed}%` }}
+            />
           </div>
-        ) : viewMode === 'grid' ? (
-          /* Grid View */
-          <div className="grid grid-cols-3 gap-3">
-            {files.map((f) => (
-              <div
-                key={f.filename}
-                className={`group p-3 rounded-xl border transition-all cursor-pointer ${
-                  selectedFile?.filename === f.filename
-                    ? 'border-[var(--neon-green)]/30 bg-[var(--neon-green)]/5'
-                    : 'border-[var(--border-subtle)] hover:border-[var(--border-medium)] bg-[var(--surface-glass)]'
-                }`}
-                onClick={() => setSelectedFile(f)}
-              >
-                {/* Preview */}
-                <div className="w-full aspect-square rounded-lg overflow-hidden mb-2 flex items-center justify-center relative"
-                  style={{ background: 'rgba(0,0,0,0.3)' }}>
-                  {isImage(f) ? (
-                    <img src={f.id ? `https://drive.google.com/uc?export=view&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`} alt={f.filename || 'image'} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-3xl">{getFileIcon(f)}</span>
-                  )}
-                  {/* Actions Overlay */}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+        </div>
+
+        {/* Toolbar */}
+        <div className="flex items-center justify-between border-t border-zinc-200/40 pt-4">
+          <div className="flex rounded-full border border-zinc-200 overflow-hidden p-0.5 bg-zinc-50">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition-colors ${
+                viewMode === 'grid' 
+                  ? 'bg-white text-zinc-950 shadow-sm border border-zinc-200/50' 
+                  : 'text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              Grid
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition-colors ${
+                viewMode === 'list' 
+                  ? 'bg-white text-zinc-950 shadow-sm border border-zinc-200/50' 
+                  : 'text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              List
+            </button>
+          </div>
+          
+          <label className={`px-4 py-1.5 rounded-full text-xs font-bold bg-zinc-950 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
+            {loading ? '⏳ Uploading...' : '📤 Upload File'}
+            <input type="file" className="hidden" onChange={handleFileInput} disabled={loading} />
+          </label>
+        </div>
+
+        {/* Drop Zone / File Grid */}
+        <div
+          className={`border-2 border-dashed rounded-2xl p-4 transition-colors ${
+            dragOver 
+              ? 'border-zinc-900 bg-zinc-50' 
+              : 'border-zinc-200/80 hover:border-zinc-300'
+          }`}
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={handleDrop}
+        >
+          {files.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="text-5xl mb-4 opacity-20">📂</div>
+              <div className="text-sm font-bold text-zinc-400 mb-1">No files uploaded</div>
+              <div className="text-[10px] text-zinc-400">Drag &amp; drop files here or click Upload</div>
+            </div>
+          ) : viewMode === 'grid' ? (
+            /* Grid View */
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+              {files.map((f) => (
+                <div
+                  key={f.filename}
+                  className={`group p-2.5 rounded-2xl border transition-all cursor-pointer ${
+                    selectedFile?.filename === f.filename
+                      ? 'border-zinc-900 bg-zinc-50'
+                      : 'border-zinc-200 bg-white hover:bg-zinc-50/50 shadow-sm'
+                  }`}
+                  onClick={() => setSelectedFile(f)}
+                >
+                  {/* Preview Box */}
+                  <div className="w-full aspect-square rounded-xl overflow-hidden mb-2 flex items-center justify-center relative bg-zinc-100 border border-zinc-200/40">
+                    {isImage(f) ? (
+                      <img 
+                        src={f.id ? `https://drive.google.com/uc?export=view&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`} 
+                        alt={f.filename || 'image'} 
+                        className="w-full h-full object-cover" 
+                      />
+                    ) : (
+                      <span className="text-3xl">{getFileIcon(f)}</span>
+                    )}
+                    
+                    {/* Hover Actions Overlay */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
+                      <button
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          const fullUrl = f.id ? `https://drive.google.com/uc?export=download&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
+                          window.open(fullUrl, '_blank');
+                        }}
+                        className="p-1.5 rounded-full bg-white/90 hover:bg-white text-zinc-900 transition-colors flex items-center justify-center"
+                        title="Download"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">download</span>
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleCopy(f.url); }}
+                        className="p-1.5 rounded-full bg-white/90 hover:bg-white text-zinc-900 transition-colors flex items-center justify-center"
+                        title="Copy URL"
+                      >
+                        {copiedUrl === f.url 
+                          ? <span className="material-symbols-outlined text-[16px] text-emerald-600 font-bold">check</span> 
+                          : <span className="material-symbols-outlined text-[16px]">content_copy</span>
+                        }
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); doDelete(f.filename); }}
+                        className="p-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 transition-colors flex items-center justify-center"
+                        title="Delete"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">delete</span>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="text-[11px] text-zinc-900 truncate font-bold ml-0.5">{f.filename || (f as any).name || 'Unknown File'}</div>
+                  <div className="text-[9px] text-zinc-500 font-semibold ml-0.5">{formatSize(f.size)}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            /* List View */
+            <div className="space-y-1.5">
+              {files.map((f) => (
+                <div
+                  key={f.filename}
+                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-zinc-50 transition-colors group cursor-pointer border border-transparent hover:border-zinc-200"
+                  onClick={() => setSelectedFile(f)}
+                >
+                  <span className="text-xl shrink-0">{getFileIcon(f)}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs text-zinc-900 font-bold truncate">{f.filename || (f as any).name || 'Unknown File'}</div>
+                    <div className="text-[9px] text-zinc-500 font-bold uppercase mt-0.5">{formatSize(f.size)}</div>
+                  </div>
+                  
+                  <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={(e) => { 
                         e.stopPropagation(); 
                         const fullUrl = f.id ? `https://drive.google.com/uc?export=download&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
                         window.open(fullUrl, '_blank');
                       }}
-                      className="p-2 rounded-full bg-blue-500/20 hover:bg-blue-500/40 text-blue-400 transition-colors"
-                      title="Download"
+                      className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 transition-colors cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-sm">download</span>
+                      Download
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); handleCopy(f.url); }}
-                      className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors flex items-center justify-center"
-                      title="Copy URL"
+                      className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 transition-colors cursor-pointer"
                     >
-                      {copiedUrl === f.url ? <span className="material-symbols-outlined text-sm">check</span> : <span className="material-symbols-outlined text-sm">content_copy</span>}
+                      {copiedUrl === f.url ? '✓ Copied' : 'Copy URL'}
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); doDelete(f.filename); }}
-                      className="p-2 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors"
-                      title="Delete"
+                      className="px-3 py-1 rounded-full text-[10px] font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer"
                     >
-                      🗑
+                      Delete
                     </button>
                   </div>
                 </div>
-                <div className="text-[11px] text-white truncate font-medium">{f.filename || (f as any).name || 'Unknown File'}</div>
-                <div className="text-[10px] text-[var(--text-tertiary)]">{formatSize(f.size)}</div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          /* List View */
-          <div className="space-y-1">
-            {files.map((f) => (
-              <div
-                key={f.filename}
-                className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.03] transition-colors group cursor-pointer border border-transparent hover:border-white/5"
-                onClick={() => setSelectedFile(f)}
-              >
-                <span className="text-lg">{getFileIcon(f)}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs text-white truncate">{f.filename || (f as any).name || 'Unknown File'}</div>
-                  <div className="text-[10px] text-[var(--text-tertiary)]">{formatSize(f.size)}</div>
-                </div>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      const fullUrl = f.id ? `https://drive.google.com/uc?export=download&id=${f.id}` : f.url.startsWith('http') ? f.url : `${apiBase}${f.url}`;
-                      window.open(fullUrl, '_blank');
-                    }}
-                    className="px-2 py-1 rounded text-[10px] text-blue-400 hover:bg-blue-400/10 cursor-pointer transition-colors"
-                  >
-                    Down
-                  </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleCopy(f.url); }}
-                    className="px-2 py-1 rounded text-[10px] text-[var(--neon-cyan)] hover:bg-[var(--neon-cyan)]/10 cursor-pointer transition-colors"
-                  >
-                    {copiedUrl === f.url ? '✓' : 'Copy'}
-                  </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); doDelete(f.filename); }}
-                    className="px-2 py-1 rounded text-[10px] text-[var(--neon-red)] hover:bg-[var(--neon-red)]/10 cursor-pointer transition-colors"
-                  >
-                    Del
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {toastElement}

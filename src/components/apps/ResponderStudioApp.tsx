@@ -35,7 +35,6 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
     Payload_Data: '',
     Target_Groups: 'All',
   });
-  const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { showToast, toastElement } = useToast();
   const { t } = useLanguage();
@@ -110,9 +109,6 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
     (r.Payload_Data || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const matchColor = (type: string) =>
-    type === 'Exact' ? 'var(--neon-cyan)' : 'var(--neon-amber)';
-
   const typeIcon = (type: string) =>
     type === 'Text' ? '📝' : type === 'Image' ? '🖼️' : '📄';
 
@@ -136,12 +132,10 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
     let currentTargets = Array.isArray(normalized) ? [...normalized] : [];
     
     if ((tier === 'Standard' || tier === 'Standart')) {
-      // Standard: Pilih 1 grup spesifik atau Semua
       setForm({ ...form, Target_Groups: [target] });
       return;
     }
 
-    // Premium: Multi-select
     if (currentTargets.includes(target)) {
       currentTargets = currentTargets.filter(t => t !== target);
       if (currentTargets.length === 0) setForm({ ...form, Target_Groups: 'All' });
@@ -155,235 +149,238 @@ export default function ResponderStudioApp({ client, responders, files, apiBase,
   const currentFormTargetGroups = parseTargetGroups(form.Target_Groups);
 
   return (
-    <div className="flex flex-col h-full" style={{ background: 'var(--surface-panel)' }}>
-      {/* Header */}
-      <div className="p-4 border-b border-[var(--border-subtle)] flex-shrink-0">
-        <div className="flex items-center justify-between mb-3">
+    <div className="max-w-6xl mx-auto space-y-6 text-left">
+      
+      {/* Main Table Card */}
+      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold text-white">Responder Studio</h2>
-            <p className="text-[11px] text-[var(--text-tertiary)]">{responders.length} keyword rules configured</p>
+            <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-1">
+              Keyword Responders
+            </div>
+            <p className="text-[11px] text-zinc-500 font-medium">
+              {responders.length} keyword rules configured
+            </p>
           </div>
-          <button
-            onClick={() => { resetForm(); setShowForm(!showForm); }}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer"
-            style={{
-              background: showForm ? 'rgba(255,59,92,0.15)' : 'rgba(57,255,20,0.15)',
-              color: showForm ? 'var(--neon-red)' : 'var(--neon-green)',
-              border: `1px solid ${showForm ? 'rgba(255,59,92,0.2)' : 'rgba(57,255,20,0.2)'}`,
-            }}
-          >
-            {showForm ? '✕ Cancel' : '+ Add Rule'}
-          </button>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Search keywords..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="bg-zinc-50 border border-zinc-200/80 rounded-full px-4 py-1.5 text-xs text-zinc-950 outline-none focus:border-zinc-500 placeholder:text-zinc-400 transition-all"
+            />
+            <button
+              onClick={() => { resetForm(); setShowForm(!showForm); }}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
+                showForm 
+                  ? 'bg-rose-50 hover:bg-rose-100 text-rose-600 border-rose-200' 
+                  : 'bg-zinc-950 hover:bg-zinc-900 text-white border-zinc-800'
+              }`}
+            >
+              {showForm ? '✕ Cancel' : '+ Add Rule'}
+            </button>
+          </div>
         </div>
-        {/* Search */}
-        <input
-          type="text"
-          placeholder="🔍 Search keywords..."
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="w-full bg-[var(--surface-input)] border border-[var(--border-medium)] rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-[var(--neon-green)] transition-all placeholder:text-[var(--text-tertiary)]"
-        />
-      </div>
 
-      {/* Add/Edit Form */}
-      {showForm && (
-        <div className="p-4 border-b border-[var(--border-subtle)] space-y-3 flex-shrink-0"
-          style={{ background: 'rgba(57,255,20,0.02)' }}>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mb-1 block">Keyword</label>
-              <input
-                type="text"
-                value={form.Keyword || ''}
-                onChange={e => setForm({ ...form, Keyword: e.target.value })}
-                className="w-full bg-[var(--surface-input)] border border-[var(--border-medium)] rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-[var(--neon-green)] transition-all"
-                placeholder="e.g. /pricelist"
-              />
-            </div>
-            <div>
-              <label className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mb-1 block">Match Type</label>
-              <select
-                value={form.Match_Type || 'Exact'}
-                onChange={e => setForm({ ...form, Match_Type: e.target.value as 'Exact' | 'Contains' })}
-                className="w-full bg-[var(--surface-input)] border border-[var(--border-medium)] rounded-lg px-3 py-2 text-white text-xs outline-none cursor-pointer"
-              >
-                <option value="Exact">Exact Match</option>
-                <option value="Contains">Contains</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mb-1 block">Response Type</label>
-            <div className="flex gap-2">
-              {(['Text', 'Image', 'Document'] as const).map(type => (
-                <button
-                  key={type}
-                  onClick={() => setForm({ ...form, Response_Type: type })}
-                  className="px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer"
-                  style={{
-                    background: form.Response_Type === type ? 'rgba(57,255,20,0.15)' : 'var(--surface-input)',
-                    color: form.Response_Type === type ? 'var(--neon-green)' : 'var(--text-secondary)',
-                    border: `1px solid ${form.Response_Type === type ? 'rgba(57,255,20,0.3)' : 'var(--border-medium)'}`,
-                  }}
+        {/* Add/Edit Form inside Card */}
+        {showForm && (
+          <div className="bg-zinc-50 border border-zinc-200/50 rounded-2xl p-5 space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block mb-1 ml-1">Keyword</label>
+                <input
+                  type="text"
+                  value={form.Keyword || ''}
+                  onChange={e => setForm({ ...form, Keyword: e.target.value })}
+                  className="w-full bg-white border border-zinc-200/80 rounded-2xl px-4 py-2.5 text-xs text-zinc-950 outline-none focus:border-zinc-500 transition-all"
+                  placeholder="e.g. /pricelist"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block mb-1 ml-1">Match Type</label>
+                <select
+                  value={form.Match_Type || 'Exact'}
+                  onChange={e => setForm({ ...form, Match_Type: e.target.value as 'Exact' | 'Contains' })}
+                  className="w-full bg-white border border-zinc-200/80 rounded-2xl px-4 py-2.5 text-xs text-zinc-950 outline-none cursor-pointer"
                 >
-                  {typeIcon(type)} {type}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div>
-            <label className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mb-1 block">
-              {form.Response_Type === 'Text' ? 'Response Text' : 'File URL / Path'}
-            </label>
-            <div className="relative">
-              <textarea
-                value={form.Payload_Data || ''}
-                onChange={handlePayloadChange}
-                rows={3}
-                className="w-full bg-[var(--surface-input)] border border-[var(--border-medium)] rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-[var(--neon-green)] transition-all resize-none relative z-10"
-                placeholder={form.Response_Type === 'Text' ? 'Bot response message...' : 'https://example.com/file.jpg'}
-              />
-              {showMentionMenu && files?.length > 0 && (
-                <div className="absolute left-0 right-0 bottom-[calc(100%+8px)] bg-[var(--surface-input)] rounded-lg border border-[var(--neon-green)] shadow-lg z-50 max-h-40 overflow-y-auto">
-                  {filteredFiles.length === 0 ? (
-                    <div className="p-2 text-[10px] text-[var(--text-tertiary)] text-center">No matching images</div>
-                  ) : (
-                    filteredFiles.map(f => (
-                      <div 
-                        key={f.filename} 
-                        onClick={() => handleSelectImage(f)}
-                        className="flex items-center gap-2 p-2 border-b border-[var(--border-subtle)] hover:bg-[var(--neon-green)]/10 cursor-pointer"
-                      >
-                        <span className="text-[var(--neon-green)] text-xs">🖼️</span>
-                        <div className="text-[10px] text-white truncate flex-1">{f.filename}</div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
-            <div className="text-[9px] text-[var(--text-tertiary)] mt-1 flex items-center gap-1">
-              <span className="text-[10px]">ℹ️</span>
-              {t('mention_hint') || 'Gunakan @ untuk menggunakan gambar'}
-            </div>
-          </div>
-
-          {showTargetSelection && (
-            <div>
-              <label className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mb-1 block">Target Groups</label>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => handleTargetToggle('All')}
-                  className="px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer"
-                  style={{
-                    background: currentFormTargetGroups === 'All' ? 'rgba(57,255,20,0.15)' : 'var(--surface-input)',
-                    color: currentFormTargetGroups === 'All' ? 'var(--neon-green)' : 'var(--text-secondary)',
-                    border: `1px solid ${currentFormTargetGroups === 'All' ? 'rgba(57,255,20,0.3)' : 'var(--border-medium)'}`,
-                  }}
-                >
-                  Semua
-                </button>
-                {availableGroups.map(g => {
-                  const isSelected = currentFormTargetGroups !== 'All' && currentFormTargetGroups?.includes(g);
-                  return (
-                    <button
-                      key={g}
-                      onClick={() => handleTargetToggle(g)}
-                      className="px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer"
-                      style={{
-                        background: isSelected ? 'rgba(57,255,20,0.15)' : 'var(--surface-input)',
-                        color: isSelected ? 'var(--neon-green)' : 'var(--text-secondary)',
-                        border: `1px solid ${isSelected ? 'rgba(57,255,20,0.3)' : 'var(--border-medium)'}`,
-                      }}
-                    >
-                      Grup {g}
-                    </button>
-                  );
-                })}
+                  <option value="Exact">Exact Match</option>
+                  <option value="Contains">Contains Match</option>
+                </select>
               </div>
             </div>
-          )}
 
-          <button
-            onClick={handleSubmit}
-            className="w-full py-2 rounded-lg text-xs font-semibold bg-[var(--neon-green)] text-black transition-all cursor-pointer hover:brightness-110"
-          >
-            {editId ? '✓ Update Rule' : '+ Add Rule'}
-          </button>
-        </div>
-      )}
+            <div>
+              <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block mb-1.5 ml-1">Response Type</label>
+              <div className="flex gap-2">
+                {(['Text', 'Image', 'Document'] as const).map(type => (
+                  <button
+                    key={type}
+                    onClick={() => setForm({ ...form, Response_Type: type })}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
+                      form.Response_Type === type 
+                        ? 'bg-zinc-950 border-zinc-800 text-white' 
+                        : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'
+                    }`}
+                  >
+                    {typeIcon(type)} {type}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-      {/* Table */}
-      <div className="flex-1 overflow-auto">
-        {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center p-8">
-            <div className="text-4xl mb-3 opacity-30">📭</div>
-            <div className="text-sm text-[var(--text-tertiary)]">No keyword rules found</div>
-            <div className="text-[10px] text-[var(--text-tertiary)] mt-1">Click &quot;+ Add Rule&quot; to create your first auto-responder</div>
+            <div>
+              <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block mb-1 ml-1">
+                {form.Response_Type === 'Text' ? 'Response Text' : 'File URL / Path'}
+              </label>
+              <div className="relative">
+                <textarea
+                  value={form.Payload_Data || ''}
+                  onChange={handlePayloadChange}
+                  rows={3}
+                  className="w-full bg-white border border-zinc-200/80 rounded-2xl px-4 py-3 text-zinc-950 text-xs outline-none focus:border-zinc-500 transition-all resize-none relative z-10"
+                  placeholder={form.Response_Type === 'Text' ? 'Bot response message...' : 'https://example.com/file.jpg'}
+                />
+                {showMentionMenu && files?.length > 0 && (
+                  <div className="absolute left-0 right-0 bottom-[calc(100%+8px)] bg-white rounded-2xl border border-zinc-200 shadow-lg z-50 max-h-40 overflow-y-auto p-2">
+                    {filteredFiles.length === 0 ? (
+                      <div className="p-2 text-[10px] text-zinc-400 text-center font-bold">No matching images</div>
+                    ) : (
+                      filteredFiles.map(f => (
+                        <div 
+                          key={f.filename} 
+                          onClick={() => handleSelectImage(f)}
+                          className="flex items-center gap-2 p-2.5 border-b border-zinc-100 hover:bg-zinc-50 cursor-pointer"
+                        >
+                          <span className="text-xs">🖼️</span>
+                          <div className="text-[11px] text-zinc-800 font-bold truncate flex-1">{f.filename}</div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="text-[10px] text-zinc-400 mt-1 flex items-center gap-1 ml-1">
+                <span className="text-[11px]">ℹ️</span>
+                {t('mention_hint') || 'Gunakan @ untuk menyisipkan gambar dari storage'}
+              </div>
+            </div>
+
+            {showTargetSelection && (
+              <div>
+                <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block mb-1.5 ml-1">Target Groups</label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => handleTargetToggle('All')}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
+                      currentFormTargetGroups === 'All' 
+                        ? 'bg-zinc-950 border-zinc-800 text-white' 
+                        : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'
+                    }`}
+                  >
+                    Semua
+                  </button>
+                  {availableGroups.map(g => {
+                    const isSelected = currentFormTargetGroups !== 'All' && currentFormTargetGroups?.includes(g);
+                    return (
+                      <button
+                        key={g}
+                        onClick={() => handleTargetToggle(g)}
+                        className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
+                          isSelected 
+                            ? 'bg-zinc-950 border-zinc-800 text-white' 
+                            : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'
+                        }`}
+                      >
+                        Grup {g}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            <button
+              onClick={handleSubmit}
+              className="w-full py-2.5 rounded-full text-xs font-bold bg-zinc-950 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer"
+            >
+              {editId ? '✓ Update Rule' : '+ Add Rule'}
+            </button>
           </div>
-        ) : (
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="text-left text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider">
-                <th className="px-4 py-2.5 sticky top-0" style={{ background: 'var(--surface-panel)' }}>Keyword</th>
-                <th className="px-4 py-2.5 sticky top-0" style={{ background: 'var(--surface-panel)' }}>Match</th>
-                <th className="px-4 py-2.5 sticky top-0" style={{ background: 'var(--surface-panel)' }}>Type</th>
-                <th className="px-4 py-2.5 sticky top-0" style={{ background: 'var(--surface-panel)' }}>Target</th>
-                <th className="px-4 py-2.5 sticky top-0" style={{ background: 'var(--surface-panel)' }}>Response</th>
-                <th className="px-4 py-2.5 sticky top-0 text-right" style={{ background: 'var(--surface-panel)' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((r) => (
-                <tr key={r.Response_ID} className="border-t border-[var(--border-subtle)] hover:bg-white/[0.02] transition-colors">
-                  <td className="px-4 py-3">
-                    <code className="bg-white/5 px-2 py-0.5 rounded text-[var(--neon-green)] font-mono">{r.Keyword}</code>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
-                      style={{
-                        background: `${matchColor(r.Match_Type)}15`,
-                        color: matchColor(r.Match_Type),
-                        border: `1px solid ${matchColor(r.Match_Type)}30`,
-                      }}>
-                      {r.Match_Type}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span>{typeIcon(r.Response_Type)} {r.Response_Type}</span>
-                  </td>
-                  <td className="px-4 py-3 text-[10px] text-[var(--text-secondary)]">
-                    {(() => {
-                      const tg = parseTargetGroups(r.Target_Groups);
-                      return tg === 'All' ? 'Semua' : `Grup ${tg.join(', ')}`;
-                    })()}
-                  </td>
-                  <td className="px-4 py-3 max-w-[200px]">
-                    <div className="text-[var(--text-secondary)] truncate select-text">{r.Payload_Data}</div>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <button
-                        onClick={() => handleEdit(r)}
-                        className="px-2 py-1 rounded text-[10px] text-[var(--neon-blue)] hover:bg-[var(--neon-blue)]/10 transition-colors cursor-pointer"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => { onDelete(r.Response_ID); showToast(t('toast_responder_deleted'), 'success'); }}
-                        className="p-1.5 rounded bg-white/5 hover:bg-red-500/20 hover:text-red-400 text-[var(--text-tertiary)] transition-colors"
-                        title={t('delete')}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         )}
+
+        {/* Table inside Card */}
+        <div className="overflow-x-auto">
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="text-4xl mb-3 opacity-30">📭</div>
+              <div className="text-sm font-bold text-zinc-400">No keyword rules found</div>
+              <div className="text-[10px] text-zinc-400 mt-0.5">Click &quot;+ Add Rule&quot; to create your first auto-responder.</div>
+            </div>
+          ) : (
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-zinc-200/60 text-[10px] text-zinc-400 uppercase tracking-widest font-black bg-zinc-50/50">
+                  <th className="px-4 py-3">Keyword</th>
+                  <th className="px-4 py-3">Match</th>
+                  <th className="px-4 py-3">Type</th>
+                  <th className="px-4 py-3">Target</th>
+                  <th className="px-4 py-3">Response</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((r) => (
+                  <tr key={r.Response_ID} className="border-b border-zinc-200/30 hover:bg-zinc-50/50 transition-colors">
+                    <td className="px-4 py-3.5">
+                      <code className="bg-zinc-100 border border-zinc-200/80 px-2 py-0.5 rounded text-zinc-900 font-mono text-[11px] font-bold">{r.Keyword}</code>
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border ${
+                        r.Match_Type === 'Exact' 
+                          ? 'bg-zinc-100 text-zinc-800 border-zinc-200' 
+                          : 'bg-amber-50 text-amber-700 border-amber-200'
+                      }`}>
+                        {r.Match_Type}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3.5 font-semibold text-zinc-800">
+                      <span>{typeIcon(r.Response_Type)} {r.Response_Type}</span>
+                    </td>
+                    <td className="px-4 py-3.5 text-[10px] text-zinc-500 font-bold">
+                      {(() => {
+                        const tg = parseTargetGroups(r.Target_Groups);
+                        return tg === 'All' ? 'Semua' : `Grup ${tg.join(', ')}`;
+                      })()}
+                    </td>
+                    <td className="px-4 py-3.5 max-w-[200px]">
+                      <div className="text-zinc-500 truncate select-text">{r.Payload_Data}</div>
+                    </td>
+                    <td className="px-4 py-3.5 text-right">
+                      <div className="flex items-center justify-end gap-2.5">
+                        <button
+                          onClick={() => handleEdit(r)}
+                          className="text-[11px] font-bold text-zinc-500 hover:text-zinc-950 transition-colors cursor-pointer"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => { onDelete(r.Response_ID); showToast(t('toast_responder_deleted'), 'success'); }}
+                          className="px-2.5 py-1 rounded-full bg-zinc-100 hover:bg-rose-50 hover:text-rose-600 border border-zinc-200 hover:border-rose-200 text-[10px] text-zinc-500 font-bold transition-all cursor-pointer"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
+
+      {toastElement}
     </div>
   );
 }

@@ -42,67 +42,72 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
     setSaving(false);
   };
 
-
   const isBasicLocked = tier === 'Basic' && !!client.Group_1;
 
   return (
-    <div className="flex flex-col h-full bg-[var(--surface-panel)] text-white overflow-auto p-6">
-      <div className="mb-6 border-b border-white/10 pb-4">
-        <h2 className="text-xl font-bold mb-1">Group Link Manager</h2>
-        <p className="text-xs text-[var(--text-tertiary)]">
-          Manage your WhatsApp Group Join Links. Your current tier is <span className="font-bold text-[var(--neon-green)]">{tier}</span> (Max {maxGroups} groups).
-        </p>
-      </div>
+    <div className="max-w-4xl mx-auto space-y-6 text-left">
+      
+      {/* Main Settings Card */}
+      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-6">
+        <div>
+          <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-1">
+            Group Link Settings
+          </div>
+          <p className="text-[11px] text-zinc-500 font-medium">
+            Manage your WhatsApp Group Join Links. Your current tier is <span className="font-bold text-zinc-950">{tier}</span> (Max {maxGroups} groups).
+          </p>
+        </div>
 
-      <div className="space-y-5">
-        {[...Array(maxGroups)].map((_, i) => {
-          const groupKey = `Group_${i + 1}` as keyof typeof groups;
-          const isLocked = i === 0 && isBasicLocked;
+        <div className="space-y-4">
+          {[...Array(maxGroups)].map((_, i) => {
+            const groupKey = `Group_${i + 1}` as keyof typeof groups;
+            const isLocked = i === 0 && isBasicLocked;
 
-          return (
-            <div key={groupKey} className="bg-black/20 p-4 rounded-xl border border-white/5">
-              <label className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mb-2 block font-semibold">
-                WhatsApp Group {i + 1}
-              </label>
-              
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  placeholder="https://chat.whatsapp.com/..."
-                  value={groups[groupKey]}
-                  disabled={isLocked}
-                  onChange={(e) => setGroups({ ...groups, [groupKey]: e.target.value })}
-                  className="flex-1 bg-[var(--surface-input)] border border-[var(--border-medium)] rounded-lg px-4 py-2 text-sm outline-none focus:border-[var(--neon-green)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                />
+            return (
+              <div key={groupKey} className="space-y-1.5">
+                <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block ml-1">
+                  WhatsApp Group {i + 1}
+                </label>
                 
-                {tier !== 'Basic' && (
-                  <button
-                    onClick={() => setGroups({ ...groups, [groupKey]: '' })}
-                    className="px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 rounded-lg text-sm transition-colors"
-                  >
-                    Clear
-                  </button>
+                <div className="flex gap-2.5">
+                  <input
+                    type="text"
+                    placeholder="https://chat.whatsapp.com/..."
+                    value={groups[groupKey]}
+                    disabled={isLocked}
+                    onChange={(e) => setGroups({ ...groups, [groupKey]: e.target.value })}
+                    className="flex-1 bg-zinc-50 border border-zinc-200/85 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                  
+                  {tier !== 'Basic' && (
+                    <button
+                      onClick={() => setGroups({ ...groups, [groupKey]: '' })}
+                      className="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold rounded-full text-xs transition-colors border border-zinc-200"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                
+                {isLocked && (
+                  <p className="text-[10px] text-amber-600 mt-1 block font-medium ml-1">
+                    🔒 Hubungi YAY staff untuk merubah link grup.
+                  </p>
                 )}
               </div>
-              
-              {isLocked && (
-                <p className="text-[10px] text-amber-500 mt-2 font-medium">
-                  🔒 Hubungi YAY staff untuk merubah link grup.
-                </p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      <div className="mt-8 pt-4 border-t border-white/10 flex justify-end">
-        <button
-          onClick={handleSave}
-          disabled={isBasicLocked || saving}
-          className="px-6 py-2 bg-[var(--neon-green)] text-black font-bold rounded-lg hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isBasicLocked ? 'Locked' : saving ? 'Saving...' : 'Save Links'}
-        </button>
+        <div className="flex justify-end pt-4 border-t border-zinc-200/40">
+          <button
+            onClick={handleSave}
+            disabled={isBasicLocked || saving}
+            className="px-6 py-2.5 bg-zinc-950 hover:bg-zinc-900 text-white font-bold rounded-full text-xs shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          >
+            {isBasicLocked ? 'Locked' : saving ? 'Saving...' : 'Save Links'}
+          </button>
+        </div>
       </div>
 
       {toastElement}

@@ -30,7 +30,6 @@ export default function ControlCenterApp({
   const [welcomeText, setWelcomeText] = useState(safeConfig.Custom_Welcome_Text || '');
   const [savedWelcome, setSavedWelcome] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [savingStates, setSavingStates] = useState<Record<string, boolean>>({});
   const { t } = useLanguage();
 
   const toggleItems: { key: keyof BotConfig | string; label: string; desc: string; icon: string }[] = [
@@ -78,47 +77,31 @@ export default function ControlCenterApp({
   };
 
   return (
-    <div className="p-6 space-y-6 h-full overflow-y-auto" style={{ background: 'var(--surface-panel)' }}>
-      {/* Header */}
-      <div>
-        <h2 className="text-lg font-bold text-white">Control Center</h2>
-        <p className="text-xs text-[var(--text-tertiary)] mt-1">Real-time bot configuration switches</p>
-      </div>
-
+    <div className="space-y-6 max-w-4xl mx-auto text-left">
+      
       {/* Bot Power Section - Admin Only */}
       {client.Package_Tier === 'God' ? (
-        <div className="rounded-xl border border-[var(--border-subtle)] p-4 space-y-4" style={{ background: 'var(--surface-glass)' }}>
+        <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-5 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                style={{
-                  background: botStatus === 'ONLINE' ? 'rgba(57,255,20,0.1)' : 'rgba(255,59,92,0.1)',
-                  border: `1px solid ${botStatus === 'ONLINE' ? 'rgba(57,255,20,0.2)' : 'rgba(255,59,92,0.2)'}`,
-                }}>
+              <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl bg-zinc-100 border border-zinc-200/50">
                 {botStatus === 'ONLINE' ? '⚡' : '🔌'}
               </div>
               <div>
-                <div className="text-sm font-semibold text-white">Master Bot Engine</div>
+                <div className="text-sm font-black text-zinc-950">Master Bot Engine</div>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <div className="w-[6px] h-[6px] rounded-full"
-                    style={{
-                      background: botStatus === 'ONLINE' ? 'var(--neon-green)' :
-                                  botStatus === 'CONNECTING' ? 'var(--neon-amber)' : 
-                                  botStatus === 'SCAN_QR' ? 'var(--neon-cyan)' : 'var(--neon-red)',
-                      boxShadow: botStatus === 'ONLINE' ? '0 0 6px var(--neon-green)' : 'none',
-                    }} />
-                  <span className="text-[10px] text-[var(--text-secondary)]">{botStatus}</span>
+                  <div className={`w-1.5 h-1.5 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+                  <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{botStatus}</span>
                 </div>
               </div>
             </div>
             <button
               onClick={botStatus === 'ONLINE' ? onStopBot : onStartBot}
-              className="px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer"
-              style={{
-                background: botStatus === 'ONLINE' ? 'rgba(255,59,92,0.15)' : 'rgba(57,255,20,0.15)',
-                color: botStatus === 'ONLINE' ? 'var(--neon-red)' : 'var(--neon-green)',
-                border: `1px solid ${botStatus === 'ONLINE' ? 'rgba(255,59,92,0.2)' : 'rgba(57,255,20,0.2)'}`,
-              }}
+              className={`px-4 py-2 rounded-full text-xs font-bold border transition-all cursor-pointer ${
+                botStatus === 'ONLINE' 
+                  ? 'bg-rose-50 hover:bg-rose-100 text-rose-600 border-rose-200' 
+                  : 'bg-zinc-950 hover:bg-zinc-900 text-white border-zinc-800'
+              }`}
             >
               {botStatus === 'ONLINE' ? '■ Stop' : '▶ Start'}
             </button>
@@ -126,103 +109,122 @@ export default function ControlCenterApp({
           
           {/* Master QR Code Scanner */}
           {botStatus === 'SCAN_QR' && qrCode && (
-            <div className="flex flex-col items-center justify-center py-4 border-t border-[var(--border-subtle)]">
-              <div className="bg-white p-4 rounded-xl shadow-lg mb-3">
+            <div className="flex flex-col items-center justify-center py-4 border-t border-zinc-200/40">
+              <div className="bg-white p-4 rounded-2xl border border-zinc-200/50 shadow-sm mb-3">
                 <QRCodeSVG value={qrCode} size={180} />
               </div>
-              <p className="text-xs text-[var(--text-tertiary)] font-semibold">Scan QR Code dengan WhatsApp Anda</p>
-              <p className="text-[10px] text-[var(--text-tertiary)]">Bot akan terhubung secara otomatis setelah di-scan.</p>
+              <p className="text-xs text-zinc-800 font-bold">Scan QR Code dengan WhatsApp Anda</p>
+              <p className="text-[10px] text-zinc-500 font-semibold mt-0.5">Bot akan terhubung secara otomatis setelah di-scan.</p>
             </div>
           )}
         </div>
       ) : (
-        <div className="rounded-xl border border-[var(--border-subtle)] p-4" style={{ background: 'var(--surface-glass)' }}>
+        <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-5 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-              style={{
-                background: botStatus === 'ONLINE' ? 'rgba(57,255,20,0.1)' : 'rgba(255,59,92,0.1)',
-                border: `1px solid ${botStatus === 'ONLINE' ? 'rgba(57,255,20,0.2)' : 'rgba(255,59,92,0.2)'}`,
-              }}>
+            <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl bg-zinc-100 border border-zinc-200/50">
               {botStatus === 'ONLINE' ? '⚡' : '🔌'}
             </div>
             <div>
-              <div className="text-sm font-semibold text-white">Bot Induk (Server)</div>
+              <div className="text-sm font-black text-zinc-950">Bot Induk (Server)</div>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <div className="w-[6px] h-[6px] rounded-full"
-                  style={{
-                    background: botStatus === 'ONLINE' ? 'var(--neon-green)' : 'var(--neon-red)',
-                    boxShadow: botStatus === 'ONLINE' ? '0 0 6px var(--neon-green)' : 'none',
-                  }} />
-                <span className="text-[10px] text-[var(--text-secondary)]">{botStatus === 'ONLINE' ? 'ACTIVE & RUNNING' : 'SYSTEM OFFLINE'}</span>
+                <div className={`w-1.5 h-1.5 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+                <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+                  {botStatus === 'ONLINE' ? 'ACTIVE & RUNNING' : 'SYSTEM OFFLINE'}
+                </span>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Feature Toggles */}
-      <div className="space-y-2">
-        <div className="text-xs text-[var(--text-tertiary)] uppercase tracking-wider font-semibold mb-3">
+      {/* Feature Toggles Card */}
+      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="text-xs text-zinc-400 uppercase tracking-widest font-black mb-1">
           Feature Switches
         </div>
-        {toggleItems.map((item) => {
-          const isActive = Boolean(safeConfig[item.key as keyof BotConfig]);
-          return (
-            <div
-              key={item.key}
-              className="flex items-center justify-between p-4 rounded-xl border border-[var(--border-subtle)] transition-all hover:border-[var(--border-medium)]"
-              style={{ background: 'var(--surface-glass)' }}
-            >
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <span className="text-lg">{item.icon}</span>
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold text-white">{item.label}</div>
-                  <div className="text-[11px] text-[var(--text-tertiary)] truncate">{item.desc}</div>
+        <div className="divide-y divide-zinc-200/40">
+          {toggleItems.map((item) => {
+            const isActive = Boolean(safeConfig[item.key as keyof BotConfig]);
+            return (
+              <div
+                key={item.key}
+                className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
+              >
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <span className="text-lg shrink-0">{item.icon}</span>
+                  <div className="min-w-0">
+                    <div className="text-sm font-bold text-zinc-950">{item.label}</div>
+                    <div className="text-[11px] text-zinc-500 font-medium truncate mt-0.5">{item.desc}</div>
+                  </div>
+                </div>
+                
+                <div
+                  className={`custom-toggle-track ${isActive ? 'active' : ''} shrink-0`}
+                  onClick={() => {
+                    onToggle(item.key as keyof BotConfig, !isActive);
+                    toast(t('toast_settings_updated').replace('{label}', t(item.label) || item.label), 'success');
+                  }}
+                >
+                  <div className="custom-toggle-thumb" />
                 </div>
               </div>
-              <div
-                className={`toggle-track ${isActive ? 'active' : ''}`}
-                onClick={() => {
-                  setSavingStates(prev => ({ ...prev, [item.key]: true }));
-                  onToggle(item.key as keyof BotConfig, !isActive);
-                  setTimeout(() => {
-                    setSavingStates(prev => ({ ...prev, [item.key]: false }));
-                    toast(t('toast_settings_updated').replace('{label}', t(item.label) || item.label), 'success');
-                  }, 1000);
-                }}
-              >
-                <div className="toggle-thumb" />
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
-      {/* Custom Welcome Text */}
+      {/* Custom Welcome Text Card */}
       {safeConfig.Welcome_Message_Status && (
-        <div className="rounded-xl border border-[var(--border-subtle)] p-4 space-y-3"
-          style={{ background: 'var(--surface-glass)' }}>
-          <div className="text-xs text-[var(--text-tertiary)] uppercase tracking-wider font-semibold">
+        <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+          <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
             Welcome Message Template
           </div>
-          <p className="text-[10px] text-[var(--text-tertiary)]">
-            Gunakan <code className="bg-white/5 px-1 rounded text-[var(--neon-green)]">{'{member}'}</code> untuk nama dan <code className="bg-white/5 px-1 rounded text-[var(--neon-green)]">{'{group}'}</code> untuk grup.
+          <p className="text-[10px] text-zinc-500 font-medium leading-relaxed">
+            Gunakan kode <code className="bg-zinc-100 border border-zinc-200/60 px-1.5 py-0.5 rounded text-zinc-900 font-bold text-[9px]">{'{member}'}</code> untuk nama member dan <code className="bg-zinc-100 border border-zinc-200/60 px-1.5 py-0.5 rounded text-zinc-900 font-bold text-[9px]">{'{group}'}</code> untuk nama grup.
           </p>
           <textarea
             value={welcomeText}
             onChange={e => setWelcomeText(e.target.value)}
             rows={3}
-            className="w-full bg-[var(--surface-input)] border border-[var(--border-medium)] rounded-lg px-4 py-3 text-white text-sm outline-none focus:border-[var(--neon-green)] transition-all resize-none placeholder:text-[var(--text-tertiary)]"
+            className="w-full bg-zinc-50 border border-zinc-200/80 rounded-2xl px-4 py-3 text-zinc-900 text-sm outline-none focus:border-zinc-500 transition-all resize-none placeholder:text-zinc-400"
             placeholder="Selamat datang {member} di {group}! 🎉"
           />
           <button
             onClick={handleSaveWelcome}
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--neon-green)]/15 text-[var(--neon-green)] border border-[var(--neon-green)]/20 transition-all cursor-pointer hover:bg-[var(--neon-green)]/25"
+            className="px-5 py-2.5 rounded-full text-xs font-bold bg-zinc-950 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer"
           >
             {savedWelcome ? '✓ Saved!' : 'Save Template'}
           </button>
         </div>
       )}
+
+      {/* Local style overrides for monochrome switches */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .custom-toggle-track {
+          width: 44px;
+          height: 24px;
+          background-color: #e4e4e7;
+          border-radius: 9999px;
+          padding: 2px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          position: relative;
+        }
+        .custom-toggle-track.active {
+          background-color: #09090b;
+        }
+        .custom-toggle-thumb {
+          width: 20px;
+          height: 20px;
+          background-color: #ffffff;
+          border-radius: 9999px;
+          transition: transform 0.2s;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .custom-toggle-track.active .custom-toggle-thumb {
+          transform: translateX(20px);
+        }
+      `}} />
     </div>
   );
 }

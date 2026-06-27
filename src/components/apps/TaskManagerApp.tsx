@@ -36,73 +36,71 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
   ];
 
   return (
-    <div className="flex flex-col h-full" style={{ background: 'var(--surface-panel)' }}>
-      {/* Header Stats */}
-      <div className="p-4 border-b border-[var(--border-subtle)] flex-shrink-0">
-        <h2 className="text-lg font-bold text-white mb-3">Task Manager</h2>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="p-2.5 rounded-xl border border-[var(--border-subtle)]" style={{ background: 'var(--surface-glass)' }}>
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">Active Windows</div>
-            <div className="text-xl font-bold text-white mt-0.5">{tasks.length}</div>
+    <div className="max-w-6xl mx-auto space-y-6 text-left">
+      
+      {/* Header Stats Card */}
+      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
+          Engine Overview
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="p-4 rounded-2xl border border-zinc-200 bg-white shadow-sm">
+            <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Active Windows</div>
+            <div className="text-xl font-black text-zinc-950 mt-0.5">{tasks.length}</div>
           </div>
-          <div className="p-2.5 rounded-xl border border-[var(--border-subtle)]" style={{ background: 'var(--surface-glass)' }}>
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">Bot Engine</div>
-            <div className="flex items-center gap-1.5 mt-1">
-              <div className="w-[6px] h-[6px] rounded-full" style={{
-                background: botStatus === 'ONLINE' ? 'var(--neon-green)' : botStatus === 'CONNECTING' ? 'var(--neon-amber)' : 'var(--neon-red)',
-                boxShadow: botStatus === 'ONLINE' ? '0 0 6px var(--neon-green)' : 'none',
-              }} />
-              <span className="text-xs font-semibold text-white">{botStatus}</span>
+          
+          <div className="p-4 rounded-2xl border border-zinc-200 bg-white shadow-sm">
+            <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Bot Engine</div>
+            <div className="flex items-center gap-1.5 mt-1.5">
+              <div className={`w-1.5 h-1.5 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+              <span className="text-xs font-bold text-zinc-800 uppercase tracking-wider">{botStatus}</span>
             </div>
           </div>
-          <div className="p-2.5 rounded-xl border border-[var(--border-subtle)]" style={{ background: 'var(--surface-glass)' }}>
-            <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">Uptime</div>
-            <div className="text-sm font-mono font-bold text-white mt-0.5">{formatUptime(uptime)}</div>
+          
+          <div className="p-4 rounded-2xl border border-zinc-200 bg-white shadow-sm">
+            <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Uptime</div>
+            <div className="text-sm font-mono font-black text-zinc-950 mt-1">{formatUptime(uptime)}</div>
           </div>
         </div>
       </div>
 
-      {/* Active Windows */}
-      <div className="p-4 border-b border-[var(--border-subtle)] flex-shrink-0">
-        <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold mb-2">
+      {/* Active Windows Card */}
+      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
           Active Windows ({tasks.length})
         </div>
         {tasks.length === 0 ? (
-          <div className="text-xs text-[var(--text-tertiary)] py-4 text-center">No windows open</div>
+          <div className="text-xs font-bold text-zinc-400 py-4 text-center">No windows open</div>
         ) : (
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             {tasks.map((task) => (
               <div key={task.id}
-                className="flex items-center justify-between p-2.5 rounded-lg hover:bg-white/[0.03] transition-colors group">
+                className="flex items-center justify-between p-3 rounded-2xl hover:bg-zinc-50 border border-transparent hover:border-zinc-200 transition-all group">
                 <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                  <span className="text-sm flex items-center justify-center w-5 h-5 text-white">
-                    {task.icon.startsWith('fi ') ? (
-                      <i className={`${task.icon} text-sm`}></i>
-                    ) : (
-                      task.icon
-                    )}
+                  <span className="text-sm flex items-center justify-center w-5 h-5">
+                    {task.icon}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-white truncate">{task.title}</div>
-                    <div className="text-[9px] text-[var(--text-tertiary)]">
+                    <div className="text-xs font-bold text-zinc-950 truncate">{task.title}</div>
+                    <div className="text-[9px] text-zinc-500 font-semibold mt-0.5">
                       {task.isMinimized ? 'Minimized' : task.isMaximized ? 'Maximized' : 'Windowed'}
                       <span className="mx-1">•</span>
-                      Z: {task.zIndex}
+                      Z-Index: {task.zIndex}
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => onFocusTask(task.id)}
-                    className="px-2 py-1 rounded text-[9px] text-[var(--neon-cyan)] hover:bg-[var(--neon-cyan)]/10 cursor-pointer transition-colors"
+                    className="px-3 py-1 rounded-full text-[10px] font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 transition-colors cursor-pointer"
                   >
                     Focus
                   </button>
                   <button
                     onClick={() => onCloseTask(task.id)}
-                    className="px-2 py-1 rounded text-[9px] text-[var(--neon-red)] hover:bg-[var(--neon-red)]/10 cursor-pointer transition-colors"
+                    className="px-3 py-1 rounded-full text-[10px] font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer"
                   >
-                    End
+                    End Task
                   </button>
                 </div>
               </div>
@@ -111,40 +109,43 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
         )}
       </div>
 
-      {/* System Processes */}
-      <div className="flex-1 overflow-auto p-4">
-        <div className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider font-semibold mb-2">
+      {/* System Processes Card */}
+      <div className="bg-[#fdfcf7] border border-zinc-200/60 rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
           System Processes
         </div>
-        <table className="w-full text-[10px]">
-          <thead>
-            <tr className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-wider">
-              <th className="text-left py-1.5 px-2">Process</th>
-              <th className="text-right py-1.5 px-2">CPU</th>
-              <th className="text-right py-1.5 px-2">Memory</th>
-              <th className="text-right py-1.5 px-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {systemProcesses.map((proc, i) => (
-              <tr key={i} className="border-t border-[var(--border-subtle)] hover:bg-white/[0.02] transition-colors">
-                <td className="py-2 px-2 text-white font-mono">{proc.name}</td>
-                <td className="py-2 px-2 text-right text-[var(--text-secondary)]">{proc.cpu}</td>
-                <td className="py-2 px-2 text-right text-[var(--text-secondary)]">{proc.mem}</td>
-                <td className="py-2 px-2 text-right">
-                  <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${
-                    proc.status === 'Running' ? 'text-[var(--neon-green)] bg-[var(--neon-green)]/10' :
-                    proc.status === 'Waiting' ? 'text-[var(--neon-amber)] bg-[var(--neon-amber)]/10' :
-                    'text-[var(--text-tertiary)] bg-white/5'
-                  }`}>
-                    {proc.status}
-                  </span>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="border-b border-zinc-200/60 text-[9px] text-zinc-400 uppercase tracking-widest font-black bg-zinc-50/50">
+                <th className="py-2.5 px-3">Process</th>
+                <th className="py-2.5 px-3 text-right">CPU</th>
+                <th className="py-2.5 px-3 text-right">Memory</th>
+                <th className="py-2.5 px-3 text-right">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {systemProcesses.map((proc, i) => (
+                <tr key={i} className="border-b border-zinc-200/30 hover:bg-zinc-50/50 transition-colors">
+                  <td className="py-3 px-3 text-zinc-900 font-mono font-bold">{proc.name}</td>
+                  <td className="py-3 px-3 text-right text-zinc-500 font-semibold">{proc.cpu}</td>
+                  <td className="py-3 px-3 text-right text-zinc-500 font-semibold">{proc.mem}</td>
+                  <td className="py-3 px-3 text-right">
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${
+                      proc.status === 'Running' ? 'text-emerald-700 bg-emerald-50 border-emerald-200/50' :
+                      proc.status === 'Waiting' ? 'text-amber-700 bg-amber-50 border-amber-200/50' :
+                      'text-zinc-500 bg-zinc-100 border-zinc-200'
+                    }`}>
+                      {proc.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </div>
   );
 }
