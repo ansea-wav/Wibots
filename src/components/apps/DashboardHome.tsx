@@ -18,8 +18,7 @@ export default function DashboardHome({ client, config, responders, botStatus }:
     config.Anti_Link_Group,
     config.Welcome_Message_Status,
     config.Cmd_SetDel_Status,
-    config.Cmd_Hidetag_Status,
-    config.Cmd_Stiker_Status
+    config.Cmd_Hidetag_Status
   ].filter(Boolean).length;
   
   const totalCommands = responders.length + activeFeaturesCount;
