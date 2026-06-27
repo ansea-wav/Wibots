@@ -6,6 +6,7 @@ import {
   apiUpdateConfig, apiAddResponder, apiDeleteResponder, apiUpdateResponder,
   apiUpdateAccount, apiGetFiles, apiUploadFile, apiDeleteFile, API_BASE
 } from '@/lib/api';
+import { eraseSharedCookie } from '@/lib/cookies';
 
 import DashboardHome from './apps/DashboardHome';
 import ControlCenterApp from './apps/ControlCenterApp';
@@ -108,7 +109,7 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
   }
 
   return (
-    <div className="flex h-screen w-full bg-[#0a0a0f] text-white overflow-hidden font-sans">
+    <div className="flex h-screen w-full bg-[var(--surface-dark)] text-[var(--text-primary)] overflow-hidden font-sans">
       
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
@@ -118,54 +119,59 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
         />
       )}
 
-      {/* Sidebar (Pterodactyl Style) */}
-      <aside className={`fixed md:relative z-50 w-64 h-full bg-[#111113] border-r border-white/5 flex flex-col transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-        {/* Logo Area */}
-        <div className="h-16 flex items-center px-6 border-b border-white/5 shrink-0">
-          <img src="/icons.png" alt="Wazle" className="h-8 w-8 rounded-lg border border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.05)] mr-3 shrink-0" />
-          <span className="font-bold text-lg tracking-wide">Wazle Dash</span>
+      {/* Sidebar (Sleek Dark Theme) */}
+      <aside className={`fixed md:relative z-50 w-64 h-full bg-[#131317] border-r border-zinc-800/80 flex flex-col transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+        {/* Logo Area (Cream square logo box on top left as per mock image) */}
+        <div className="h-20 flex items-center px-6 shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-[#fbf4e5] flex items-center justify-center mr-3 shrink-0 shadow-sm border border-[#faf3dd]">
+            <span className="font-extrabold text-[#1c1917] text-base">W</span>
+          </div>
+          <span className="font-black text-white text-lg tracking-tight">Wazle Dash</span>
         </div>
 
         {/* Server Selection / Profile placeholder */}
-        <div className="p-4 border-b border-white/5 bg-white/[0.02]">
-          <div className="text-xs text-white/40 uppercase tracking-widest font-bold mb-1">Server</div>
+        <div className="mx-4 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.04] mb-4">
+          <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-black mb-1">Server Node</div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">{clientRegistry.Group_1 ? 'Premium Node' : 'Basic Node'}</span>
-            <span className={`w-2 h-2 rounded-full ${botStatus === 'ONLINE' ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-red-500'}`}></span>
+            <span className="text-xs font-semibold text-zinc-300">{clientRegistry.Group_1 ? 'Premium Node' : 'Basic Node'}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-zinc-500 capitalize">{botStatus.toLowerCase()}</span>
+              <span className={`w-2 h-2 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-400 shadow-[0_0_8px_#34d399]' : 'bg-rose-500 shadow-[0_0_8px_#f43f5e]'}`}></span>
+            </div>
           </div>
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+        <nav className="flex-1 overflow-y-auto py-2 px-3 space-y-1">
           {navItems.map(item => (
             <button
               key={item.id}
               onClick={() => { setActiveTab(item.id as Tab); setIsSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all duration-200 ${
                 activeTab === item.id 
-                  ? 'bg-blue-600/10 text-blue-400 font-semibold' 
-                  : 'text-white/60 hover:text-white hover:bg-white/5'
+                  ? 'bg-zinc-800 text-white shadow-sm' 
+                  : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'
               }`}
             >
-              <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+              <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
               {item.label}
             </button>
           ))}
         </nav>
 
         {/* User Info Bottom */}
-        <div className="p-4 border-t border-white/5 flex flex-col gap-3 shrink-0">
-          <a href="https://wazle.my.id" className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded-lg text-sm font-semibold transition-colors">
-            <span className="material-symbols-outlined text-[18px]">public</span>
+        <div className="p-4 border-t border-zinc-800/80 flex flex-col gap-3 shrink-0">
+          <a href="https://wazle.my.id" className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 rounded-xl text-xs font-bold transition-all border border-zinc-850">
+            <span className="material-symbols-outlined text-[16px]">public</span>
             Wazle Home
           </a>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm">
+          <div className="flex items-center gap-3 px-1">
+            <div className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center font-black text-xs text-white uppercase">
               {clientRegistry.WhatsApp_Owner?.toString().slice(-2) || 'WA'}
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-bold truncate">{clientRegistry.WhatsApp_Owner}</span>
-              <span className="text-[10px] text-white/40 truncate">{clientRegistry.Package_Tier} Plan</span>
+              <span className="text-xs font-bold text-white truncate">+{clientRegistry.WhatsApp_Owner}</span>
+              <span className="text-[10px] text-zinc-500 font-semibold truncate">{clientRegistry.Package_Tier} Plan</span>
             </div>
           </div>
         </div>
@@ -174,36 +180,37 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         
-        {/* Top Navbar */}
-        <header className="h-16 flex items-center justify-between px-4 md:px-8 border-b border-white/5 bg-[#111113]/80 backdrop-blur-md shrink-0 z-30">
+        {/* Top Navbar (Light Mode matching mock) */}
+        <header className="h-20 flex items-center justify-between px-6 md:px-8 border-b border-zinc-200/60 bg-white/80 backdrop-blur-md shrink-0 z-30">
           <div className="flex items-center gap-3">
             <button 
-              className="md:hidden p-2 -ml-2 text-white/70 hover:text-white"
+              className="md:hidden p-2 -ml-2 text-zinc-600 hover:text-zinc-900"
               onClick={() => setIsSidebarOpen(true)}
             >
               <span className="material-symbols-outlined">menu</span>
             </button>
-            <h2 className="text-lg font-semibold tracking-tight">
+            <h2 className="text-lg font-black tracking-tight text-zinc-900">
               {navItems.find(i => i.id === activeTab)?.label}
             </h2>
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-white/70">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-100 border border-zinc-200/50 text-[10px] font-bold text-zinc-600">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               API Connected
             </div>
-            <button className="text-white/40 hover:text-white transition-colors" onClick={() => {
+            <button className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer" onClick={() => {
               localStorage.removeItem('yay_user_phone');
+              eraseSharedCookie('yay_user_phone');
               window.location.reload();
-            }}>
-              <span className="material-symbols-outlined">logout</span>
+            }} title="Logout">
+              <span className="material-symbols-outlined text-[20px]">logout</span>
             </button>
           </div>
         </header>
 
         {/* Content Viewport */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#0a0a0f]">
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 bg-[var(--surface-dark)]">
           <div className="max-w-6xl mx-auto h-full">
             {activeTab === 'dashboard' && (
               <DashboardHome 

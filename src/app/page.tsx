@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { apiMe, type UserMasterData } from '@/lib/api';
+import { getSharedCookie, setSharedCookie, eraseSharedCookie } from '@/lib/cookies';
 
 const BootScreen = dynamic(() => import('@/components/BootScreen'));
 const LoginGate = dynamic(() => import('@/components/LoginGate'));
@@ -41,11 +42,22 @@ export default function Home() {
     
     if (authPhone) {
       localStorage.setItem('yay_user_phone', authPhone);
+      setSharedCookie('yay_user_phone', authPhone);
       // Clean up URL without reloading
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    const savedUserPhone = localStorage.getItem('yay_user_phone');
+    let savedUserPhone = localStorage.getItem('yay_user_phone');
+    
+    // Sync with shared cookie if localStorage is empty
+    if (!savedUserPhone) {
+      const cookiePhone = getSharedCookie('yay_user_phone');
+      if (cookiePhone) {
+        localStorage.setItem('yay_user_phone', cookiePhone);
+        savedUserPhone = cookiePhone;
+      }
+    }
+
     if (savedUserPhone) {
       apiMe(savedUserPhone).then(res => {
         if (res.status === 'success' && res.data) {
@@ -55,6 +67,7 @@ export default function Home() {
           setApiSuccess(true);
         } else {
           localStorage.removeItem('yay_user_phone');
+          eraseSharedCookie('yay_user_phone');
         }
         setApiDone(true);
       }).catch(() => {

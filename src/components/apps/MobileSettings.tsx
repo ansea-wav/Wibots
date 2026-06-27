@@ -2,6 +2,7 @@
 
 import { useLanguage } from '@/lib/LanguageContext';
 import { useTheme } from '@/lib/ThemeContext';
+import { eraseSharedCookie } from '@/lib/cookies';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
@@ -23,6 +24,7 @@ export default function MobileSettings() {
   const handleLogout = () => {
     localStorage.removeItem('yay_user_phone');
     localStorage.removeItem('yay_license_key');
+    eraseSharedCookie('yay_user_phone');
     window.location.reload();
   };
 

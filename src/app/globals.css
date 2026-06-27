@@ -14,39 +14,39 @@
 
 :root {
   /* Core Palette */
-  --neon-green: #39ff14;
-  --neon-green-dim: #22c55e;
-  --neon-green-glow: 0 0 20px rgba(57, 255, 20, 0.4);
-  --neon-red: #ff3b5c;
-  --neon-blue: #3b82f6;
-  --neon-purple: #a855f7;
-  --neon-amber: #f59e0b;
-  --neon-cyan: #06b6d4;
+  --neon-green: #0d9488; /* Softer emerald-teal color for light theme indicators */
+  --neon-green-dim: #0f766e;
+  --neon-green-glow: 0 0 10px rgba(13, 148, 136, 0.2);
+  --neon-red: #ef4444;
+  --neon-blue: #2563eb;
+  --neon-purple: #7c3aed;
+  --neon-amber: #d97706;
+  --neon-cyan: #0891b2;
 
   /* Surfaces */
-  --surface-dark: #0a0a0f;
-  --surface-panel: rgba(15, 15, 25, 0.85);
-  --surface-card: rgba(20, 20, 35, 0.75);
-  --surface-glass: rgba(255, 255, 255, 0.04);
-  --surface-glass-hover: rgba(255, 255, 255, 0.08);
-  --surface-glass-border: rgba(255, 255, 255, 0.08);
-  --surface-input: rgba(0, 0, 0, 0.4);
+  --surface-dark: #f4f5f9;      /* Light gray background matching mock */
+  --surface-panel: #ffffff;     /* White container panels */
+  --surface-card: #ffffff;      /* White card panels */
+  --surface-glass: rgba(255, 255, 255, 0.8);
+  --surface-glass-hover: rgba(255, 255, 255, 0.95);
+  --surface-glass-border: #eef0f6; /* Soft border lines */
+  --surface-input: #f0f2f5;     /* Input surface */
 
   /* Text */
-  --text-primary: #f0f0f5;
-  --text-secondary: #8b8ba0;
-  --text-tertiary: #555570;
+  --text-primary: #131317;      /* Dark slate text */
+  --text-secondary: #86868e;    /* Gray description text */
+  --text-tertiary: #a1a1aa;
   --text-accent: var(--neon-green);
 
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-medium: rgba(255, 255, 255, 0.1);
-  --border-glow: rgba(57, 255, 20, 0.2);
+  --border-subtle: #eef0f6;
+  --border-medium: #e2e8f0;
+  --border-glow: rgba(13, 148, 136, 0.1);
 
   /* Shadows */
-  --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.5);
-  --shadow-glow-green: 0 0 30px rgba(57, 255, 20, 0.15);
-  --shadow-window: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 1px rgba(255, 255, 255, 0.1);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.03);
+  --shadow-glow-green: none;
+  --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.05);
 
   /* Animation */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -500,8 +500,43 @@ body {
   }
   50% {
     transform: scale(1.08);
-    box-shadow: 0 0 35px rgba(57, 255, 20, 0.8), 0 0 8px var(--neon-green), inset 0 1px 1px rgba(255,255,255,0.2);
+    box-shadow: 0 0 35px rgba(57, 255, 20, 0.8), 0 0 8px var(--neon-green), inset 0 1px 1px rgba(255, 255, 255, 0.2);
     border-color: #55ff55;
   }
 }
 
+/* ============================================================
+   Default Light Mode Utility Overrides (Applied when no theme- class exists)
+   ============================================================ */
+html:not([class*="theme-"]) {
+  /* Override text-white to use primary text color, except in buttons, active states, aside sidebar, or specific dark containers */
+  & .text-white:not(button):not(a):not(.bg-zinc-950 *):not(.bg-zinc-900 *):not(.bg-zinc-800 *):not(.bg-blue-600 *):not(.bg-emerald-600 *):not(.bg-rose-600 *):not(aside *):not(.toggle-track *):not(.bg-red-500 *):not(.bg-yellow-500 *):not(.bg-green-500 *) {
+    color: var(--text-primary) !important;
+  }
+  
+  & .text-white\/40 { color: rgba(19, 19, 23, 0.4) !important; }
+  & .text-white\/50 { color: rgba(19, 19, 23, 0.5) !important; }
+  & .text-white\/60 { color: rgba(19, 19, 23, 0.6) !important; }
+  & .text-white\/75 { color: rgba(19, 19, 23, 0.75) !important; }
+  
+  /* Override borders to use theme borders */
+  & .border-white\/5 { border-color: var(--border-subtle) !important; }
+  & .border-white\/10 { border-color: var(--border-medium) !important; }
+  & .border-white\/20 { border-color: var(--border-medium) !important; }
+  
+  /* Override white transparent backgrounds to soft gray/solid colors */
+  & .bg-white\/5 { background-color: var(--surface-input) !important; }
+  & .bg-white\/10 { background-color: rgba(0, 0, 0, 0.04) !important; }
+  & .bg-white\/20 { background-color: rgba(0, 0, 0, 0.08) !important; }
+  
+  /* Override hardcoded dark theme backgrounds to use light theme variables */
+  & .bg-\[\#111113\] { background-color: var(--surface-card) !important; }
+  & .bg-\[\#1a1a1c\] { background-color: var(--surface-card) !important; }
+  & .bg-\[\#1c1c1e\] { background-color: var(--surface-card) !important; }
+  & .bg-\[\#0a0a0f\] { background-color: var(--surface-dark) !important; }
+  & .bg-black\/40 { background-color: #f4f5f9 !important; }
+  & .bg-black\/50 { background-color: #f4f5f9 !important; }
+  
+  /* Inputs placeholder colors */
+  & ::placeholder { color: var(--text-tertiary) !important; }
+}
