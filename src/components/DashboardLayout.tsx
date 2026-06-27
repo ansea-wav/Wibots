@@ -109,7 +109,7 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
   }
 
   return (
-    <div className="flex h-screen w-full bg-[var(--surface-dark)] text-[var(--text-primary)] overflow-hidden font-sans">
+    <div className="flex h-full w-full bg-[var(--surface-dark)] text-[var(--text-primary)] overflow-hidden font-sans">
       
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (

@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { motion } from 'framer-motion';
 import { apiMe, type UserMasterData } from '@/lib/api';
 import { getSharedCookie, setSharedCookie, eraseSharedCookie } from '@/lib/cookies';
 
@@ -112,7 +113,28 @@ export default function Home() {
       {phase === 'login' && <LoginGate onLoginSuccess={handleLoginSuccess} isMobile={isMobile} />}
 
       {phase === 'dashboard' && userData && (
-        <DashboardLayout userData={userData} userId={userId} />
+        <div className="absolute inset-0 z-10 w-full h-full bg-[#0d0d11] text-zinc-100 flex items-center justify-center p-3 sm:p-6 md:p-8 relative">
+          {/* Background Ambience / Blur */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40">
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-zinc-800/30 rounded-full blur-[120px]"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-zinc-700/20 rounded-full blur-[120px]"></div>
+          </div>
+
+          {/* Floating Dashboard Card with Spring Entry */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 180,
+              damping: 15,
+              mass: 0.8
+            }}
+            className="relative z-10 w-full h-full max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] max-w-7xl rounded-[2.5rem] bg-[#131317] border border-white/10 shadow-2xl flex overflow-hidden"
+          >
+            <DashboardLayout userData={userData} userId={userId} />
+          </motion.div>
+        </div>
       )}
     </main>
   );
