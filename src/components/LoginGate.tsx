@@ -406,7 +406,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
               Hubungi Wazle Support Service
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Local style overrides to protect colors from global theme variables */}
