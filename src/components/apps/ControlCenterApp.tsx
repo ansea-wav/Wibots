@@ -77,65 +77,9 @@ export default function ControlCenterApp({
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto text-left">
+    <div className="space-y-6 max-w-4xl mx-auto">
       
-      {/* Bot Power Section - Admin Only */}
-      {client.Package_Tier === 'God' ? (
-        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-5 shadow-[4px_4px_0px_#09090b] space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl bg-zinc-100 border border-zinc-200/50">
-                {botStatus === 'ONLINE' ? '⚡' : '🔌'}
-              </div>
-              <div>
-                <div className="text-sm font-black text-zinc-950">Master Bot Engine</div>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <div className={`w-1.5 h-1.5 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
-                  <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{botStatus}</span>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={botStatus === 'ONLINE' ? onStopBot : onStartBot}
-              className={`px-4 py-2 rounded-full text-xs font-bold border transition-all cursor-pointer ${
-                botStatus === 'ONLINE' 
-                  ? 'bg-rose-50 hover:bg-rose-100 text-rose-600 border-rose-200' 
-                  : 'bg-zinc-950 hover:bg-zinc-900 text-white border-zinc-800'
-              }`}
-            >
-              {botStatus === 'ONLINE' ? '■ Stop' : '▶ Start'}
-            </button>
-          </div>
-          
-          {/* Master QR Code Scanner */}
-          {botStatus === 'SCAN_QR' && qrCode && (
-            <div className="flex flex-col items-center justify-center py-4 border-t border-zinc-200/40">
-              <div className="bg-white p-4 rounded-2xl border border-zinc-200/50 shadow-sm mb-3">
-                <QRCodeSVG value={qrCode} size={180} />
-              </div>
-              <p className="text-xs text-zinc-800 font-bold">Scan QR Code dengan WhatsApp Anda</p>
-              <p className="text-[10px] text-zinc-500 font-semibold mt-0.5">Bot akan terhubung secara otomatis setelah di-scan.</p>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-5 shadow-[4px_4px_0px_#09090b]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl bg-zinc-100 border border-zinc-200/50">
-              {botStatus === 'ONLINE' ? '⚡' : '🔌'}
-            </div>
-            <div>
-              <div className="text-sm font-black text-zinc-950">Bot Induk (Server)</div>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <div className={`w-1.5 h-1.5 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
-                <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
-                  {botStatus === 'ONLINE' ? 'ACTIVE & RUNNING' : 'SYSTEM OFFLINE'}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+
 
       {/* Feature Toggles Card */}
       <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
