@@ -35,10 +35,11 @@ export default function Home() {
       }, 700);
     };
 
-    // 1. Block right click context menu
+    // 1. Block right click context menu on desktop, but allow on mobile touch hold-press
     const preventRightClick = (e: MouseEvent) => {
-      e.preventDefault();
-      handleLock();
+      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      if (isTouch) return;
+      e.preventDefault(); // Prevent native right-click menu on desktop, but do NOT lock yet
     };
     window.addEventListener('contextmenu', preventRightClick);
 
