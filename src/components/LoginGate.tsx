@@ -179,7 +179,6 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
 
         {/* Floating Black Login Card - height is animated smoothly via CSS height property */}
         <motion.div 
-          animate={{ height: cardHeight }}
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0, height: cardHeight }}
           transition={{ 
