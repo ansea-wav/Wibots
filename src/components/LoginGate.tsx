@@ -148,9 +148,13 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
 
         {/* Floating Black Login Card with Spring Entry */}
         <motion.div 
+          layout
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 180, damping: 15 }}
+          transition={{ 
+            default: { type: "spring", stiffness: 180, damping: 15 },
+            layout: { type: "spring", stiffness: 180, damping: 10, mass: 0.8 }
+          }}
           className={`relative z-10 w-full max-w-sm auth-card backdrop-blur-2xl rounded-3xl p-6 border shadow-2xl ${shake ? 'animate-shake' : ''}`}
         >
           {isMobile && <div className="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>}
