@@ -38,6 +38,21 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
   const [botStatus, setBotStatus] = useState<'ONLINE' | 'OFFLINE' | 'CONNECTING' | 'SCAN_QR'>('OFFLINE');
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [uptime, setUptime] = useState(0);
+  const [tvState, setTvState] = useState<'on' | 'off' | 'idle'>('on');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTvState('idle');
+    }, 750);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleTvTurnOff = (callback: () => void) => {
+    setTvState('off');
+    setTimeout(() => {
+      callback();
+    }, 750);
+  };
 
   // Uptime ticker
   useEffect(() => {
@@ -114,8 +129,86 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
     return <OnboardingScreen userId={userId} onComplete={handleOnboardingComplete} />;
   }
 
+  const wrapperClass = tvState === 'on' ? 'crt-screen-on' : tvState === 'off' ? 'crt-screen-off' : '';
+
   return (
-    <div className="flex h-full w-full bg-[var(--surface-dark)] text-[var(--text-primary)] overflow-hidden font-sans">
+    <div className={`relative flex h-full w-full bg-[var(--surface-dark)] text-[var(--text-primary)] overflow-hidden font-sans ${wrapperClass}`}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        body {
+          background-color: #000000 !important;
+        }
+        @keyframes crt-turn-on {
+          0% {
+            transform: scaleY(0.005) scaleX(0);
+            background-color: #ffffff;
+            filter: brightness(3);
+          }
+          40% {
+            transform: scaleY(0.005) scaleX(1.1);
+            background-color: #ffffff;
+            filter: brightness(2);
+          }
+          70% {
+            transform: scaleY(1.05) scaleX(1);
+            background-color: #09090b;
+            filter: brightness(1.2);
+          }
+          100% {
+            transform: scaleY(1) scaleX(1);
+            background-color: transparent;
+            filter: brightness(1);
+          }
+        }
+
+        @keyframes crt-turn-off {
+          0% {
+            transform: scaleY(1) scaleX(1);
+            background-color: transparent;
+            filter: brightness(1);
+          }
+          30% {
+            transform: scaleY(1.05) scaleX(1);
+            background-color: #09090b;
+            filter: brightness(1.2);
+          }
+          60% {
+            transform: scaleY(0.005) scaleX(1.1);
+            background-color: #ffffff;
+            filter: brightness(2);
+          }
+          100% {
+            transform: scaleY(0) scaleX(0);
+            background-color: #ffffff;
+            filter: brightness(5);
+          }
+        }
+
+        .crt-screen-on {
+          animation: crt-turn-on 0.75s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+          transform-origin: center;
+        }
+
+        .crt-screen-off {
+          animation: crt-turn-off 0.75s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+          transform-origin: center;
+        }
+
+        .crt-scanlines::after {
+          content: " ";
+          display: block;
+          position: absolute;
+          top: 0; left: 0; bottom: 0; right: 0;
+          background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+          background-size: 100% 4px;
+          z-index: 999999;
+          pointer-events: none;
+        }
+      `}} />
+
+      {/* TV Scanlines Overlay during transition */}
+      {(tvState === 'on' || tvState === 'off') && (
+        <div className="absolute inset-0 z-[999999] pointer-events-none crt-scanlines bg-black/10" />
+      )}
       
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
@@ -163,7 +256,16 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
 
         {/* User Info Bottom */}
         <div className="p-4 border-t border-zinc-800/80 flex flex-col gap-3 shrink-0">
-          <a href="https://wazle.my.id" className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 rounded-xl text-xs font-bold transition-all border border-zinc-850">
+          <a 
+            href="https://wazle.my.id" 
+            onClick={(e) => {
+              e.preventDefault();
+              handleTvTurnOff(() => {
+                window.location.href = "https://wazle.my.id";
+              });
+            }}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 rounded-xl text-xs font-bold transition-all border border-zinc-850"
+          >
             <span className="material-symbols-outlined text-[16px]">public</span>
             Wazle Home
           </a>
@@ -201,11 +303,17 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
               <span className="w-1.5 h-1.5 rounded-full bg-zinc-950"></span>
               API Connected
             </div>
-            <button className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer" onClick={() => {
-              localStorage.removeItem('yay_user_phone');
-              eraseSharedCookie('yay_user_phone');
-              window.location.reload();
-            }} title="Logout">
+            <button 
+              className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer" 
+              onClick={() => {
+                handleTvTurnOff(() => {
+                  localStorage.removeItem('yay_user_phone');
+                  eraseSharedCookie('yay_user_phone');
+                  window.location.reload();
+                });
+              }} 
+              title="Logout"
+            >
               <span className="material-symbols-outlined text-[20px]">logout</span>
             </button>
           </div>
