@@ -138,17 +138,17 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
     <div className="fixed inset-0 bg-[#050505] flex items-center justify-center z-[9999]">
       {/* Background Ambience */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[80%] bg-blue-600/10 rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[80%] bg-emerald-500/10 rounded-full blur-[100px]"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[80%] bg-zinc-800/10 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[80%] bg-zinc-700/10 rounded-full blur-[100px]"></div>
       </div>
 
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ type: "spring", stiffness: 180, damping: 15 }}
         className={`relative z-10 w-full max-w-md ${isMobile ? 'h-full flex flex-col justify-end' : ''}`}
       >
-        <div className={`${isMobile ? 'bg-[#111113] min-h-[75vh] rounded-t-[2.5rem] p-8 pb-12 flex flex-col border-t border-white/5' : 'bg-white/[0.03] backdrop-blur-3xl rounded-[2rem] p-8 border border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'} overflow-hidden`}>
+        <div className={`${isMobile ? 'bg-[#111113] min-h-[75vh] rounded-t-[2.5rem] p-8 pb-12 flex flex-col border-t border-white/5' : 'bg-[#111113]/80 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl'} overflow-hidden`}>
           
           {isMobile && <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-8"></div>}
 
@@ -158,23 +158,22 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
           </div>
 
           {/* Mode Slider */}
-          <div className="relative flex w-full bg-white/5 p-1 rounded-2xl mb-8">
+          <div className="relative flex w-full bg-white/5 p-1 rounded-2xl mb-8 border border-white/5">
             <div 
-              className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-blue-600 rounded-xl transition-all duration-300 ease-in-out shadow-[0_2px_10px_rgba(37,99,235,0.3)]"
+              className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-zinc-950 rounded-xl transition-all duration-300 ease-in-out shadow-md border border-white/10"
               style={{ left: mode === 'login' ? '4px' : 'calc(50%)' }}
             />
             <button 
               onClick={() => switchMode('login')}
               className={`relative z-10 flex-1 py-2.5 text-sm font-semibold transition-colors duration-300 ${mode === 'login' ? 'text-white' : 'text-white/50 hover:text-white/80'}`}
-            >
-              Login
-            </button>
+            />
             <button 
               onClick={() => switchMode('register')}
               className={`relative z-10 flex-1 py-2.5 text-sm font-semibold transition-colors duration-300 ${mode === 'register' ? 'text-white' : 'text-white/50 hover:text-white/80'}`}
-            >
-              Register
-            </button>
+            />
+            {/* Overlay texts so they look aligned and correct */}
+            <span className={`absolute left-0 w-1/2 text-center py-3.5 text-sm font-semibold pointer-events-none transition-colors duration-300 ${mode === 'login' ? 'text-white' : 'text-white/50'}`}>Login</span>
+            <span className={`absolute right-0 w-1/2 text-center py-3.5 text-sm font-semibold pointer-events-none transition-colors duration-300 ${mode === 'register' ? 'text-white' : 'text-white/50'}`}>Register</span>
           </div>
 
           <div className={`flex flex-col gap-5 flex-1 ${shake ? 'animate-shake' : ''}`}>
@@ -197,7 +196,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                       value={croissant}
                       onChange={e => setCroissant(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && bakeCroissant()}
-                      className="w-full bg-white/[0.05] border border-white/[0.05] rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all placeholder:text-white/20"
+                      className="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-zinc-700/50 focus:ring-1 focus:ring-zinc-700/50 transition-all placeholder:text-white/20"
                     />
                   </div>
                   <div>
@@ -209,7 +208,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                         value={baguette}
                         onChange={e => setBaguette(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && bakeCroissant()}
-                        className="w-full bg-white/[0.05] border border-white/[0.05] rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all placeholder:text-white/20"
+                        className="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-zinc-700/50 focus:ring-1 focus:ring-zinc-700/50 transition-all placeholder:text-white/20"
                       />
                       <button 
                         type="button"
@@ -232,7 +231,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   <button
                     onClick={bakeCroissant}
                     disabled={!croissant || !baguette || loading}
-                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-base py-4 rounded-2xl mt-2 active:scale-[0.98] transition-transform disabled:opacity-50 disabled:active:scale-100 shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)]"
+                    className="w-full bg-white hover:bg-zinc-100 text-zinc-950 font-bold text-base py-4 rounded-full mt-2 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                   >
                     {loading ? 'Authenticating...' : 'Login'}
                   </button>
@@ -256,7 +255,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                       value={brioche}
                       onChange={e => setBrioche(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleNextStep1()}
-                      className="w-full bg-white/[0.05] border border-white/[0.05] rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all placeholder:text-white/20"
+                      className="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-zinc-700/50 focus:ring-1 focus:ring-zinc-700/50 transition-all placeholder:text-white/20"
                     />
                   </div>
                   
@@ -269,7 +268,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   <button
                     onClick={handleNextStep1}
                     disabled={!brioche}
-                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-base py-4 rounded-2xl mt-2 active:scale-[0.98] transition-transform disabled:opacity-50 disabled:active:scale-100 shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)]"
+                    className="w-full bg-white hover:bg-zinc-100 text-zinc-950 font-bold text-base py-4 rounded-full mt-2 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                   >
                     Next Step
                   </button>
@@ -292,7 +291,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                       value={sourdough}
                       onChange={e => setSourdough(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleNextStep2()}
-                      className="w-full bg-white/[0.05] border border-white/[0.05] rounded-2xl px-5 py-4 text-white text-center text-lg tracking-widest font-mono outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all placeholder:text-white/10"
+                      className="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 text-white text-center text-lg tracking-widest font-mono outline-none focus:border-zinc-700/50 focus:ring-1 focus:ring-zinc-700/50 transition-all placeholder:text-white/10"
                     />
                   </div>
 
@@ -305,14 +304,14 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   <div className="flex gap-3 mt-2">
                     <button
                       onClick={() => { setStep(1); setError(''); }}
-                      className="px-6 py-4 rounded-2xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors"
+                      className="px-6 py-4 rounded-full border border-white/10 text-white font-medium hover:bg-white/5 transition-colors"
                     >
                       Back
                     </button>
                     <button
                       onClick={handleNextStep2}
                       disabled={!sourdough}
-                      className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold text-base py-4 rounded-2xl active:scale-[0.98] transition-transform disabled:opacity-50 disabled:active:scale-100 shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)]"
+                      className="flex-1 bg-white hover:bg-zinc-100 text-zinc-950 font-bold text-base py-4 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                     >
                       Next Step
                     </button>
@@ -337,7 +336,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                         value={croissant}
                         onChange={e => setCroissant(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && prepareDough()}
-                        className="w-full bg-white/[0.05] border border-white/[0.05] rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all placeholder:text-white/20"
+                        className="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-zinc-700/50 focus:ring-1 focus:ring-zinc-700/50 transition-all placeholder:text-white/20"
                       />
                     </div>
                     <div className="flex-1">
@@ -349,7 +348,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                           value={baguette}
                           onChange={e => setBaguette(e.target.value)}
                           onKeyDown={e => e.key === 'Enter' && prepareDough()}
-                          className="w-full bg-white/[0.05] border border-white/[0.05] rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all placeholder:text-white/20"
+                          className="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 text-white text-base outline-none focus:border-zinc-700/50 focus:ring-1 focus:ring-zinc-700/50 transition-all placeholder:text-white/20"
                         />
                         <button 
                           type="button"
@@ -374,16 +373,16 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                     <button
                       onClick={() => { setStep(2); setError(''); }}
                       disabled={loading}
-                      className="px-6 py-4 rounded-2xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors disabled:opacity-50"
+                      className="px-6 py-4 rounded-full border border-white/10 text-white font-medium hover:bg-white/5 transition-colors disabled:opacity-50"
                     >
                       Back
                     </button>
                     <button
                       onClick={prepareDough}
                       disabled={loading || !croissant || !baguette}
-                      className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold text-base py-4 rounded-2xl active:scale-[0.98] transition-transform disabled:opacity-50 disabled:active:scale-100 shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)]"
+                      className="flex-1 bg-white hover:bg-zinc-100 text-zinc-950 font-bold text-base py-4 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                     >
-                      {loading ? 'Processing...' : 'Register Account'}
+                      {loading ? 'Processing...' : 'Register'}
                     </button>
                   </div>
                 </motion.div>
@@ -398,7 +397,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
               href="https://wa.me/62882008677172" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-blue-400 hover:text-blue-300 text-xs text-center mt-2 font-medium flex items-center justify-center gap-1 transition-colors"
+              className="text-zinc-400 hover:text-white text-xs text-center mt-2 font-medium flex items-center justify-center gap-1 transition-colors"
             >
               <span className="material-symbols-outlined text-[14px]">support_agent</span>
               Hubungi Wazle Support Service
