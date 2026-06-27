@@ -172,15 +172,14 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
         >
           {isMobile && <div className="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>}
 
-          <motion.div layout="position" className="text-center mb-5">
+          <div className="text-center mb-5">
             <h1 className="text-2xl font-black auth-title tracking-tight mb-1.5 drop-shadow-lg">Wazle Dash</h1>
             <p className="auth-subtitle text-xs font-medium">Register & Control Panel</p>
-          </motion.div>
+          </div>
 
           {/* Mode Slider */}
-          <motion.div layout="position" className="relative flex w-full auth-slider p-1 rounded-2xl mb-6 border">
-            <motion.div 
-              layout
+          <div className="relative flex w-full auth-slider p-1 rounded-2xl mb-6 border">
+            <div 
               className="absolute top-1 bottom-1 w-[calc(50%-4px)] auth-slider-indicator rounded-xl transition-all duration-300 ease-in-out shadow-md border"
               style={{ left: mode === 'login' ? '4px' : 'calc(50%)' }}
             />
@@ -196,10 +195,10 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
             >
               Register
             </button>
-          </motion.div>
+          </div>
 
           {/* Form Container with relative positioning to host absolute exiting slides */}
-          <motion.div layout className="relative flex flex-col overflow-hidden">
+          <div className="relative flex flex-col overflow-hidden">
             <AnimatePresence initial={false}>
               {/* LOGIN MODE */}
               {mode === 'login' && (
@@ -250,7 +249,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
                   
                   {error && (
-                    <motion.div layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -293,7 +292,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
                   
                   {error && (
-                    <motion.div layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -336,7 +335,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
 
                   {error && (
-                    <motion.div layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -411,7 +410,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   </div>
 
                   {error && (
-                    <motion.div layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-xs text-center font-medium">
                       {error}
                     </motion.div>
                   )}
@@ -435,9 +434,9 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+          </div>
 
-          <motion.div layout="position" className="mt-4">
+          <div className="mt-4">
             <p className="text-white/30 text-[10px] text-center leading-relaxed px-4">
               Protected by Wazle Secure Auth.<br/>By continuing you agree to our Terms.
             </p>
@@ -451,7 +450,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
               <span className="material-symbols-outlined text-[12px]">support_agent</span>
               Hubungi Wazle Support Service
             </a>
-          </motion.div>
+          </div>
         </motion.div>
       </div>
 
