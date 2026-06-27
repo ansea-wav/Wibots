@@ -134,10 +134,6 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
           <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-black mb-1">Server Node</div>
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-zinc-300">{clientRegistry.Group_1 ? 'Premium Node' : 'Basic Node'}</span>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-zinc-500 capitalize">{botStatus.toLowerCase()}</span>
-              <span className={`w-2 h-2 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-400 shadow-[0_0_8px_#34d399]' : 'bg-rose-500 shadow-[0_0_8px_#f43f5e]'}`}></span>
-            </div>
           </div>
         </div>
 

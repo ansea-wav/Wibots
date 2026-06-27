@@ -127,7 +127,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
             <tbody>
               {systemProcesses.map((proc, i) => (
                 <tr key={i} className="border-b border-zinc-200/30 hover:bg-zinc-50/50 transition-colors">
-                  <td className="py-3 px-3 text-zinc-900 font-mono font-bold">{proc.name}</td>
+                  <td className="py-3 px-3 text-zinc-950 font-bold text-xs">{proc.name}</td>
                   <td className="py-3 px-3 text-right text-zinc-500 font-semibold">{proc.cpu}</td>
                   <td className="py-3 px-3 text-right text-zinc-500 font-semibold">{proc.mem}</td>
                   <td className="py-3 px-3 text-right">
