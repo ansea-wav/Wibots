@@ -212,6 +212,16 @@ function router(action, payload) {
       return addBlacklist(payload);
     case "get_blacklist":
       return getBlacklist();
+    case "delete_blacklist":
+      return deleteBlacklist(payload);
+
+    // === Mute ===
+    case "add_mute":
+      return addMute(payload);
+    case "get_mute_list":
+      return getMuteList();
+    case "delete_mute":
+      return deleteMute(payload);
 
     // === Tickets ===
     case "create_ticket":
@@ -759,12 +769,14 @@ function fetchAllMaster() {
   var responderSheet = getSheet("Auto_Responder_Dictionary");
   var macrosSheet = getSheet("Macros_Dictionary");
   var blacklistSheet = getSheet("Blacklist");
+  var muteSheet = getSheet("Mute");
   
   var clientsData = sheetToObjects(clientsSheet);
   var configsData = sheetToObjects(configsSheet);
   var responderData = sheetToObjects(responderSheet);
   var macrosData = sheetToObjects(macrosSheet);
   var blacklistData = sheetToObjects(blacklistSheet).map(function(r) { return String(r.Phone_Number); });
+  var muteData = sheetToObjects(muteSheet);
   
   return jsonResponse({
     status: "success",
@@ -773,7 +785,8 @@ function fetchAllMaster() {
       configs: configsData,
       responders: responderData,
       macros: macrosData,
-      blacklist: blacklistData
+      blacklist: blacklistData,
+      mutes: muteData
     }
   });
 }
@@ -1125,6 +1138,63 @@ function getBlacklist() {
   var rows = sheetToObjects(sheet);
   var list = rows.map(function(r) { return String(r.Phone_Number); });
   return jsonResponse({ status: "success", data: list });
+}
+
+function deleteBlacklist(p) {
+  var sheet = getSheet("Blacklist");
+  var rowIdx = findRowIndex(sheet, 0, p.phone_number);
+  if (rowIdx !== -1) {
+    sheet.deleteRow(rowIdx);
+    return jsonResponse({ status: "success", message: "User removed from blacklist." });
+  }
+  return jsonResponse({ status: "error", message: "User not found in blacklist." });
+}
+
+// ============================================================
+// Mute System
+// ============================================================
+
+function addMute(p) {
+  var sheet = getSheet("Mute");
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Phone_Number", "Date_Muted", "Expiry_Time", "Reason", "Muted_By", "Chat_Jid"]);
+  }
+  
+  var data = sheet.getDataRange().getValues();
+  var foundIdx = -1;
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === String(p.phone_number)) {
+      foundIdx = i + 1; // 1-based index
+      break;
+    }
+  }
+  
+  if (foundIdx !== -1) {
+    sheet.getRange(foundIdx, 2).setValue(new Date().toISOString());
+    sheet.getRange(foundIdx, 3).setValue(p.expiry_time);
+    sheet.getRange(foundIdx, 4).setValue(p.reason || "");
+    sheet.getRange(foundIdx, 5).setValue(p.muted_by || "");
+    sheet.getRange(foundIdx, 6).setValue(p.chat_jid || "");
+  } else {
+    sheet.appendRow([p.phone_number, new Date().toISOString(), p.expiry_time, p.reason || "", p.muted_by || "", p.chat_jid || ""]);
+  }
+  return jsonResponse({ status: "success", message: "User muted." });
+}
+
+function getMuteList() {
+  var sheet = getSheet("Mute");
+  var rows = sheetToObjects(sheet);
+  return jsonResponse({ status: "success", data: rows });
+}
+
+function deleteMute(p) {
+  var sheet = getSheet("Mute");
+  var rowIdx = findRowIndex(sheet, 0, p.phone_number);
+  if (rowIdx !== -1) {
+    sheet.deleteRow(rowIdx);
+    return jsonResponse({ status: "success", message: "User unmuted." });
+  }
+  return jsonResponse({ status: "error", message: "Mute record not found." });
 }
 
 // ============================================================

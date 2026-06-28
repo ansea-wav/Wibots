@@ -191,6 +191,22 @@ async function getBlacklist() {
   return gasRequest('get_blacklist');
 }
 
+async function deleteFromBlacklist(phoneNumber) {
+  return gasRequest('delete_blacklist', { phone_number: phoneNumber });
+}
+
+async function addMute(phoneNumber, expiryTime, reason, mutedBy, chatJid) {
+  return gasRequest('add_mute', { phone_number: phoneNumber, expiry_time: expiryTime, reason, muted_by: mutedBy, chat_id: chatJid, chat_jid: chatJid });
+}
+
+async function getMuteList() {
+  return gasRequest('get_mute_list');
+}
+
+async function deleteMute(phoneNumber) {
+  return gasRequest('delete_mute', { phone_number: phoneNumber });
+}
+
 async function fetchSpammerTasks() {
   return gasRequest('get_spammer_tasks');
 }
@@ -268,6 +284,10 @@ module.exports = {
   incrementAiLimit,
   addToBlacklist,
   getBlacklist,
+  deleteFromBlacklist,
+  addMute,
+  getMuteList,
+  deleteMute,
   fetchSpammerTasks,
   getProfile,
   updateProfile,

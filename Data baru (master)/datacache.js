@@ -14,6 +14,7 @@ class DataCache {
     this.responders = new Map(); // User_ID → [ responder rows ]
     this.macros    = new Map(); // User_ID → [ macro rows ]
     this.blacklist = new Set(); // Phone numbers in blacklist
+    this.mutes     = new Map(); // Phone_Number → mute row data
     this.ready = false;
   }
 
@@ -31,8 +32,9 @@ class DataCache {
     this.responders.clear();
     this.macros.clear();
     this.blacklist.clear();
+    this.mutes.clear();
 
-    const { clients, configs, responders, macros, blacklist } = result.data;
+    const { clients, configs, responders, macros, blacklist, mutes } = result.data;
 
     // Index clients
     for (const c of clients) {
@@ -69,18 +71,26 @@ class DataCache {
       }
     }
 
+    // Index mutes
+    if (mutes) {
+      for (const m of mutes) {
+        this.mutes.set(String(m.Phone_Number), m);
+      }
+    }
+
     this.ready = true;
-    console.log(`[Cache] Loaded: ${this.clients.size} clients, ${this.configs.size} configs, ${responders.length} responders, ${macros ? macros.length : 0} macros`);
+    console.log(`[Cache] Loaded: ${this.clients.size} clients, ${this.configs.size} configs, ${responders.length} responders, ${macros ? macros.length : 0} macros, ${this.mutes.size} mutes`);
     return true;
   }
 
   setAllMasterData(data) {
-    const { clients, configs, responders, macros, blacklist } = data;
+    const { clients, configs, responders, macros, blacklist, mutes } = data;
     this.clients.clear();
     this.configs.clear();
     this.responders.clear();
     this.macros.clear();
     this.blacklist.clear();
+    this.mutes.clear();
 
     for (const c of clients) this.clients.set(c.User_ID, c);
     for (const cfg of configs) this.configs.set(cfg.User_ID, cfg);
@@ -97,6 +107,9 @@ class DataCache {
     if (blacklist) {
       for (const num of blacklist) this.blacklist.add(num);
     }
+    if (mutes) {
+      for (const m of mutes) this.mutes.set(String(m.Phone_Number), m);
+    }
   }
 
   isBlacklisted(phoneNumber) {
@@ -104,7 +117,40 @@ class DataCache {
   }
 
   addBlacklistedLocal(phoneNumber) {
-    this.blacklist.add(phoneNumber);
+    this.blacklist.add(String(phoneNumber));
+  }
+
+  removeBlacklistedLocal(phoneNumber) {
+    this.blacklist.delete(String(phoneNumber));
+  }
+
+  isMuted(phoneNumber) {
+    const cleanNum = String(phoneNumber);
+    if (!this.mutes.has(cleanNum)) return false;
+    const muteData = this.mutes.get(cleanNum);
+    if (!muteData.Expiry_Time || muteData.Expiry_Time === 'infinity') return true;
+    const expiry = new Date(muteData.Expiry_Time).getTime();
+    if (isNaN(expiry)) return true; // fallback
+    if (Date.now() > expiry) {
+      this.mutes.delete(cleanNum);
+      return false;
+    }
+    return true;
+  }
+
+  addMuteLocal(phoneNumber, expiryTime, reason, mutedBy, chatJid) {
+    this.mutes.set(String(phoneNumber), {
+      Phone_Number: phoneNumber,
+      Date_Muted: new Date().toISOString(),
+      Expiry_Time: expiryTime,
+      Reason: reason || "",
+      Muted_By: mutedBy || "",
+      Chat_Jid: chatJid || ""
+    });
+  }
+
+  removeMuteLocal(phoneNumber) {
+    this.mutes.delete(String(phoneNumber));
   }
 
   // --- Read ---

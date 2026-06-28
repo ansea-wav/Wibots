@@ -34,6 +34,57 @@ const tebakKataSedang = tebakKataDict.filter(d => d.word.length > 8 && d.word.le
 const tebakKataSusah = require('./tebak_kata_majemuk.json');
 const tebakKataGames = new Map();
 const tebakBoomGames = new Map();
+const muteTimeouts = new Map();
+
+function scheduleUnmute(socket, remoteJid, targetPhone, delayMs) {
+  if (muteTimeouts.has(targetPhone)) {
+    clearTimeout(muteTimeouts.get(targetPhone));
+  }
+
+  const timeoutId = setTimeout(async () => {
+    try {
+      console.log(`[Mute] Auto-unmuting user ${targetPhone}`);
+      const gasbridge = require('./gasbridge');
+      await gasbridge.deleteMute(targetPhone).catch(() => {});
+      datacache.removeMuteLocal(targetPhone);
+      muteTimeouts.delete(targetPhone);
+
+      const targetJid = targetPhone.includes('@') ? targetPhone : `${targetPhone}@s.whatsapp.net`;
+      await socket.sendMessage(remoteJid, {
+        text: `🔊 *[Moderasi]* Periode mute untuk @${targetPhone} telah berakhir. Pengguna sekarang dapat mengirim pesan kembali.`,
+        mentions: [targetJid]
+      });
+    } catch (err) {
+      console.error(`[Mute] Error in auto-unmute for ${targetPhone}:`, err);
+    }
+  }, delayMs);
+
+  muteTimeouts.set(targetPhone, timeoutId);
+}
+
+function restoreMutes(socket) {
+  console.log('[Mute] Restoring muted users schedules...');
+  const now = Date.now();
+  for (const [phone, mute] of datacache.mutes.entries()) {
+    if (!mute.Expiry_Time || mute.Expiry_Time === 'infinity') continue;
+    const expiry = new Date(mute.Expiry_Time).getTime();
+    if (isNaN(expiry)) continue;
+
+    const delay = expiry - now;
+    const targetChat = mute.Chat_Jid || (socket.user.id.split(':')[0] + '@s.whatsapp.net'); // fallback to self/owner
+
+    if (delay <= 0) {
+      // Already expired while bot was offline
+      console.log(`[Mute] Expired mute found for ${phone}, cleaning up...`);
+      const gasbridge = require('./gasbridge');
+      gasbridge.deleteMute(phone).catch(() => {});
+      datacache.removeMuteLocal(phone);
+    } else {
+      console.log(`[Mute] Scheduling unmute for ${phone} in ${Math.round(delay/1000)}s`);
+      scheduleUnmute(socket, targetChat, phone, delay);
+    }
+  }
+}
 
 // ============================================================
 // Helper JID Formatting
@@ -833,6 +884,9 @@ async function startMasterSession(io) {
 
       // Sync grup yang belum punya JID — hanya sekali saat connect
       syncMissingGroupJids(socket).catch(e => console.error('[WA] Sync error:', e));
+
+      // Restore active mutes scheduling
+      restoreMutes(socket);
     }
 
     if (connection === 'close') {
@@ -1082,6 +1136,17 @@ async function startMasterSession(io) {
     // --- WEREMAFIA INTERCEPTOR ---
     // (WM support removed)
     // -----------------------------
+
+    // Mute Interceptor
+    if (datacache.isMuted(senderNumber) && !msg.key.fromMe) {
+      try {
+        console.log(`[WA] Deleting message from muted user ${senderNumber}`);
+        await socket.sendMessage(remoteJid, { delete: msg.key });
+      } catch (err) {
+        console.error('[WA] Gagal menghapus pesan user termute:', err.message);
+      }
+      return;
+    }
 
     // Anti-link
     if (config.Anti_Link_Group === true || config.Anti_Link_Group === 'TRUE') {
@@ -2974,7 +3039,7 @@ Ketik: !menu <kategori> | Contoh: !menu play
       }
 
       // Moderation & Utilities (!hidetag, !setcmd, !delcmd, !stiker, !kick, !gcclose, !gcopen, !s, !yt_dl, !cekpengumuman, !whatanime, !gambar, !jernihkan, !hapusbg, !primbon, !cerpen, !stiker_api, !suara)
-      if (['add', 'hidetag', 'setcmd', 'delcmd', 'stiker', 'sticker', 'stikers', 'stickers', 'stickrs', 'kick', 'gcclose', 'gclose', 'gcopen', 's', 'yt_dl', 'tiktok_dl', 'insta_dl', 'x_dl', 'cekpengumuman', 'whatanime', 'gambar', 'jernihkan', 'hapusbg', 'primbon', 'cerpen', 'stiker_api', 'suara'].includes(command)) {
+      if (['add', 'hidetag', 'setcmd', 'delcmd', 'stiker', 'sticker', 'stikers', 'stickers', 'stickrs', 'kick', 'gcclose', 'gclose', 'gcopen', 's', 'yt_dl', 'tiktok_dl', 'insta_dl', 'x_dl', 'cekpengumuman', 'whatanime', 'gambar', 'jernihkan', 'hapusbg', 'primbon', 'cerpen', 'stiker_api', 'suara', 'mute', 'unmute', 'ban', 'blacklist', 'unblacklist'].includes(command)) {
         let isAdmin = false;
         if (isGroup) {
           try {
@@ -2988,7 +3053,7 @@ Ketik: !menu <kategori> | Contoh: !menu play
           }
         }
         
-        if (!isAdmin && ['setcmd', 'delcmd', 'kick', 'gcclose', 'gclose', 'gcopen'].includes(command)) {
+        if (!isAdmin && ['setcmd', 'delcmd', 'kick', 'gcclose', 'gclose', 'gcopen', 'mute', 'unmute', 'ban', 'blacklist', 'unblacklist'].includes(command)) {
           await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\nPerintah ini hanya dapat digunakan oleh Admin Grup.' }, { quoted: msg });
           return;
         }
@@ -3028,6 +3093,200 @@ Ketik: !menu <kategori> | Contoh: !menu play
             await socket.sendMessage(remoteJid, { text: `━━━━━━━ ⟡ ━━━━━━━\nSelamat jalan @${targetUser.split('@')[0]} 👋`, mentions: [targetUser] });
           } catch (e) {
             await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\nTerjadi kesalahan saat mencoba kick.' }, { quoted: msg });
+          }
+          return;
+        }
+
+        if (command === 'mute') {
+          function parseDuration(str) {
+            if (!str) return null;
+            const match = str.match(/^(\d+)([smhd]?)$/i);
+            if (!match) return null;
+            const val = parseInt(match[1]);
+            const unit = match[2].toLowerCase();
+            switch (unit) {
+              case 's': return val * 1000;
+              case 'h': return val * 60 * 60 * 1000;
+              case 'd': return val * 24 * 60 * 60 * 1000;
+              case 'm':
+              default: return val * 60 * 1000;
+            }
+          }
+
+          let durationMs = null;
+          let rawDuration = '';
+          if (args.length > 0) {
+            durationMs = parseDuration(args[0]);
+            if (durationMs) {
+              rawDuration = args[0];
+              args.shift();
+            }
+          }
+
+          let targetNum = '';
+          let reason = 'Melanggar aturan';
+
+          const mentionedJid = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
+          const quotedParticipant = msg.message?.extendedTextMessage?.contextInfo?.participant;
+
+          if (mentionedJid) {
+            targetNum = mentionedJid.split('@')[0];
+            reason = args.join(' ') || reason;
+          } else if (quotedParticipant) {
+            targetNum = quotedParticipant.split('@')[0];
+            reason = args.join(' ') || reason;
+          } else if (args.length > 0) {
+            const lastArg = args[args.length - 1].replace(/[^0-9]/g, '');
+            if (lastArg.length >= 9) {
+              targetNum = lastArg;
+              args.pop();
+              reason = args.join(' ') || reason;
+            }
+          }
+
+          if (!targetNum) {
+            await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\nHarap tag (@) orang yang ingin di-mute, balas pesannya, atau tulis nomornya.\nFormat: *!mute {waktu} {alasan} {nomer}*\nContoh: !mute 10m Spamming @user' }, { quoted: msg });
+            return;
+          }
+
+          const expiryDate = durationMs ? new Date(Date.now() + durationMs).toISOString() : 'infinity';
+
+          try {
+            const gasbridge = require('./gasbridge');
+            await gasbridge.addMute(targetNum, expiryDate, reason, senderNumber.split('@')[0], remoteJid);
+            datacache.addMuteLocal(targetNum, expiryDate, reason, senderNumber.split('@')[0], remoteJid);
+            
+            if (durationMs) {
+              scheduleUnmute(socket, remoteJid, targetNum, durationMs);
+            }
+
+            const targetJid = `${targetNum}@s.whatsapp.net`;
+            const durationText = durationMs ? rawDuration : 'permanen';
+            await socket.sendMessage(remoteJid, {
+              text: `🤐 *[Moderasi]* Pengguna @${targetNum} telah di-mute selama *${durationText}*.\n*Alasan:* ${reason}`,
+              mentions: [targetJid]
+            });
+          } catch (e) {
+            console.error('Error muting user:', e);
+            await socket.sendMessage(remoteJid, { text: '❌ Terjadi kesalahan saat mencoba mute.' }, { quoted: msg });
+          }
+          return;
+        }
+
+        if (command === 'unmute') {
+          let targetNum = '';
+          const mentionedJid = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
+          const quotedParticipant = msg.message?.extendedTextMessage?.contextInfo?.participant;
+
+          if (mentionedJid) {
+            targetNum = mentionedJid.split('@')[0];
+          } else if (quotedParticipant) {
+            targetNum = quotedParticipant.split('@')[0];
+          } else if (args.length > 0) {
+            targetNum = args[0].replace(/[^0-9]/g, '');
+          }
+
+          if (!targetNum) {
+            await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\nHarap tag (@) orang yang ingin di-unmute, balas pesannya, atau tulis nomornya.\nContoh: !unmute @user' }, { quoted: msg });
+            return;
+          }
+
+          try {
+            const gasbridge = require('./gasbridge');
+            await gasbridge.deleteMute(targetNum);
+            datacache.removeMuteLocal(targetNum);
+            if (muteTimeouts.has(targetNum)) {
+              clearTimeout(muteTimeouts.get(targetNum));
+              muteTimeouts.delete(targetNum);
+            }
+
+            const targetJid = `${targetNum}@s.whatsapp.net`;
+            await socket.sendMessage(remoteJid, {
+              text: `🔊 *[Moderasi]* Pengguna @${targetNum} telah di-unmute. Sekarang dapat mengirim pesan kembali.`,
+              mentions: [targetJid]
+            });
+          } catch (e) {
+            console.error('Error unmuting user:', e);
+            await socket.sendMessage(remoteJid, { text: '❌ Terjadi kesalahan saat mencoba unmute.' }, { quoted: msg });
+          }
+          return;
+        }
+
+        if (command === 'ban' || command === 'blacklist') {
+          let targetNum = '';
+          let reason = 'Melanggar aturan';
+
+          const mentionedJid = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
+          const quotedParticipant = msg.message?.extendedTextMessage?.contextInfo?.participant;
+
+          if (mentionedJid) {
+            targetNum = mentionedJid.split('@')[0];
+            reason = args.join(' ') || reason;
+          } else if (quotedParticipant) {
+            targetNum = quotedParticipant.split('@')[0];
+            reason = args.join(' ') || reason;
+          } else if (args.length > 0) {
+            const lastArg = args[args.length - 1].replace(/[^0-9]/g, '');
+            if (lastArg.length >= 9) {
+              targetNum = lastArg;
+              args.pop();
+              reason = args.join(' ') || reason;
+            }
+          }
+
+          if (!targetNum) {
+            await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\nHarap tag (@) orang yang ingin di-ban, balas pesannya, atau tulis nomornya.\nFormat: *!ban {alasan} {nomer}*\nContoh: !ban Spamming @user' }, { quoted: msg });
+            return;
+          }
+
+          try {
+            const gasbridge = require('./gasbridge');
+            await gasbridge.addToBlacklist(targetNum, reason);
+            datacache.addBlacklistedLocal(targetNum);
+
+            const targetJid = `${targetNum}@s.whatsapp.net`;
+            await socket.sendMessage(remoteJid, {
+              text: `🚫 *[Moderasi]* Pengguna @${targetNum} telah diblokir/ban permanen dari seluruh sistem.\n*Alasan:* ${reason}`,
+              mentions: [targetJid]
+            });
+          } catch (e) {
+            console.error('Error banning user:', e);
+            await socket.sendMessage(remoteJid, { text: '❌ Terjadi kesalahan saat mencoba ban.' }, { quoted: msg });
+          }
+          return;
+        }
+
+        if (command === 'unban' || command === 'unblacklist') {
+          let targetNum = '';
+          const mentionedJid = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
+          const quotedParticipant = msg.message?.extendedTextMessage?.contextInfo?.participant;
+
+          if (mentionedJid) {
+            targetNum = mentionedJid.split('@')[0];
+          } else if (quotedParticipant) {
+            targetNum = quotedParticipant.split('@')[0];
+          } else if (args.length > 0) {
+            targetNum = args[0].replace(/[^0-9]/g, '');
+          }
+
+          if (!targetNum) {
+            await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\nHarap tag (@) orang yang ingin di-unban, balas pesannya, atau tulis nomornya.\nContoh: !unban @user' }, { quoted: msg });
+            return;
+          }
+
+          try {
+            const gasbridge = require('./gasbridge');
+            await gasbridge.deleteFromBlacklist(targetNum);
+            datacache.removeBlacklistedLocal(targetNum);
+
+            const targetJid = `${targetNum}@s.whatsapp.net`;
+            await socket.sendMessage(remoteJid, {
+              text: `✅ *[Moderasi]* Pengguna @${targetNum} telah di-unban/unblacklist. Sekarang dapat menggunakan fitur bot kembali.`,
+              mentions: [targetJid]
+            });
+          } catch (e) {
+            console.error('Error unbanning user:', e);
+            await socket.sendMessage(remoteJid, { text: '❌ Terjadi kesalahan saat mencoba unban.' }, { quoted: msg });
           }
           return;
         }
