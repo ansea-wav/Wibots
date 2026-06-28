@@ -105,7 +105,7 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
     { id: 'group', label: 'Group Manager', icon: 'group' },
     { id: 'task', label: 'Task Manager', icon: 'analytics' },
     { id: 'files', label: 'File Explorer', icon: 'folder' },
-    { id: 'apikey', label: 'API Key', icon: 'vpn_key' },
+    { id: 'apikey', label: 'Installation', icon: 'vpn_key' },
     { id: 'accounting', label: 'Accounting', icon: 'manage_accounts' },
     { id: 'pricing', label: 'Pricing', icon: 'payments' },
   ];
