@@ -39,6 +39,7 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [uptime, setUptime] = useState(0);
   const [tvState, setTvState] = useState<'on' | 'off' | 'idle'>('on');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -298,7 +299,19 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
               API Connected
             </div>
             <button 
-              className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer" 
+              className={`text-zinc-400 hover:text-zinc-900 transition-all cursor-pointer flex items-center justify-center p-1.5 rounded-full hover:bg-zinc-100/50 active:scale-90 ${isRefreshing ? 'animate-spin' : ''}`}
+              onClick={() => {
+                setIsRefreshing(true);
+                handleTvTurnOff(() => {
+                  window.location.reload();
+                });
+              }}
+              title="Refresh"
+            >
+              <span className="material-symbols-outlined text-[20px]">refresh</span>
+            </button>
+            <button 
+              className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer flex items-center justify-center p-1.5" 
               onClick={() => {
                 handleTvTurnOff(() => {
                   localStorage.removeItem('yay_user_phone');

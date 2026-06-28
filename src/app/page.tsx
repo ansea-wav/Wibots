@@ -313,7 +313,7 @@ export default function Home() {
               damping: 15,
               mass: 0.8
             }}
-            className="relative z-10 w-full h-full max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] max-w-7xl rounded-[2.5rem] bg-[#131317] border border-white/10 shadow-2xl flex overflow-hidden"
+            className="relative z-10 w-full h-full max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] max-w-7xl rounded-[2.5rem] bg-[#131317] border-2 border-zinc-950 shadow-[8px_8px_0px_#000000] flex overflow-hidden"
           >
             <DashboardLayout userData={userData} userId={userId} />
           </motion.div>

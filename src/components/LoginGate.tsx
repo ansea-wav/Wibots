@@ -169,7 +169,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
     <div className="fixed inset-0 z-[9999] bg-[#0d0d11] flex items-center justify-center p-3 sm:p-6 md:p-8 overflow-hidden font-sans">
       
       {/* Viewport inner white panel matching landing page sheet shape */}
-      <div className="w-full h-full max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] max-w-7xl rounded-[2.5rem] bg-[#fdfcf7] border border-white/20 shadow-2xl flex items-center justify-center overflow-hidden relative">
+      <div className="w-full h-full max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] max-w-7xl rounded-[2.5rem] bg-[#fdfcf7] border-2 border-zinc-950 shadow-[8px_8px_0px_#000000] flex items-center justify-center overflow-hidden relative">
         
         {/* Background Ambience / Blur (subtle soft gray glow) */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40">
