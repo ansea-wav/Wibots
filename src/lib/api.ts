@@ -378,3 +378,28 @@ export async function apiUpdateGroupLink(userId: string, groupLink: string) {
   });
   return res.json();
 }
+
+export interface GroupSettings {
+  Group_JID: string;
+  User_ID: string;
+  Enable_Default_Filter: boolean;
+  Custom_Keywords: string;
+  Matching_Mode: 'fuzzy' | 'exact';
+  Max_Warn: number;
+  Punishment_Action: 'kick' | 'ban' | 'mute';
+  Warn_Decay_Hours: number;
+}
+
+export async function apiGetGroupSettings(userId: string) {
+  const res = await customFetch(`${API_BASE}/api/group-settings/${userId}`);
+  return res.json();
+}
+
+export async function apiUpdateGroupSettings(userId: string, groupJid: string, fields: Partial<GroupSettings>) {
+  const res = await customFetch(`${API_BASE}/api/group-settings/${userId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ group_jid: groupJid, fields }),
+  });
+  return res.json();
+}
