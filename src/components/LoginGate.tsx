@@ -264,7 +264,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   width: '100%',
                   top: 0
                 }}
-                className="flex flex-col gap-3.5"
+                className="flex flex-col gap-3.5 px-1.5 pb-1.5"
               >
                 <div>
                   <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">Username</label>
@@ -343,7 +343,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                     width: '100%',
                     top: 0
                   }}
-                  className="flex flex-col gap-3.5"
+                  className="flex flex-col gap-3.5 px-1.5 pb-1.5"
                 >
                   <div>
                     <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">WhatsApp Number</label>
@@ -385,7 +385,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                     width: '100%',
                     top: 0
                   }}
-                  className="flex flex-col gap-3.5"
+                  className="flex flex-col gap-3.5 px-1.5 pb-1.5"
                 >
                   <div>
                     <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">Registration Token</label>
@@ -435,7 +435,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                     width: '100%',
                     top: 0
                   }}
-                  className="flex flex-col gap-3.5"
+                  className="flex flex-col gap-3.5 px-1.5 pb-1.5"
                 >
                   <div className="flex gap-2.5 flex-col sm:flex-row">
                     <div className="flex-1">
