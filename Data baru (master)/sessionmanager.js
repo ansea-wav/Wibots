@@ -1149,7 +1149,7 @@ async function startMasterSession(io) {
     }
 
     // --- Group Toxic & Custom Keyword Moderation Filter ---
-    if (isGroup && !msg.key.fromMe) {
+    if (isGroup && !msg.key.fromMe && (config.Moderation_Status === true || config.Moderation_Status === 'TRUE' || config.Moderation_Status === undefined || config.Moderation_Status === 'true')) {
       const groupSettings = datacache.getGroupSettings(remoteJid);
       if (groupSettings) {
         const enableDefault = groupSettings.Enable_Default_Filter === true || groupSettings.Enable_Default_Filter === 'TRUE' || groupSettings.Enable_Default_Filter === 'true';
