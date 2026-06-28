@@ -39,7 +39,8 @@ export default function ControlCenterApp({
       desc: t('anti_link_desc'),
       icon: 'shield',
       accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
-      iconClass: 'bg-zinc-950 text-white rounded-xl',
+      iconClass: 'bg-zinc-950 rounded-xl',
+      iconColor: 'text-[#fdfcf7]',
     },
     {
       key: 'Welcome_Message_Status',
@@ -47,7 +48,8 @@ export default function ControlCenterApp({
       desc: t('welcome_msg_desc'),
       icon: 'chat_bubble',
       accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
-      iconClass: 'bg-zinc-950 text-white rounded-xl',
+      iconClass: 'bg-zinc-950 rounded-xl',
+      iconColor: 'text-[#fdfcf7]',
     },
     {
       key: 'Cmd_SetDel_Status',
@@ -55,7 +57,8 @@ export default function ControlCenterApp({
       desc: t('cmd_setdel_desc'),
       icon: 'tune',
       accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
-      iconClass: 'bg-zinc-950 text-white rounded-xl',
+      iconClass: 'bg-zinc-950 rounded-xl',
+      iconColor: 'text-[#fdfcf7]',
     },
     {
       key: 'Cmd_Hidetag_Status',
@@ -63,7 +66,8 @@ export default function ControlCenterApp({
       desc: t('cmd_hidetag_desc'),
       icon: 'campaign',
       accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
-      iconClass: 'bg-zinc-950 text-white rounded-xl',
+      iconClass: 'bg-zinc-950 rounded-xl',
+      iconColor: 'text-[#fdfcf7]',
     },
     {
       key: 'Cmd_Stiker_Status',
@@ -71,7 +75,8 @@ export default function ControlCenterApp({
       desc: t('cmd_stiker_desc'),
       icon: 'image',
       accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
-      iconClass: 'bg-zinc-950 text-white rounded-xl',
+      iconClass: 'bg-zinc-950 rounded-xl',
+      iconColor: 'text-[#fdfcf7]',
     },
   ];
 
@@ -82,39 +87,44 @@ export default function ControlCenterApp({
       desc: 'Tebak kata rahasia berdasarkan petunjuk kata.',
       icon: 'extension',
       accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
-      iconClass: 'bg-zinc-950 text-white rounded-xl',
+      iconClass: 'bg-zinc-950 rounded-xl',
+      iconColor: 'text-[#fdfcf7]',
     },
     {
       key: 'Game_Tebak_Boom_Status',
       label: 'Tebak Boom',
       desc: 'Game tebak posisi bom koordinat rahasia.',
       icon: 'target',
-      accentColor: 'border-2 border-dashed border-zinc-950 shadow-[6px_6px_0px_#000000]',
-      iconClass: 'bg-zinc-100 border border-zinc-950 text-zinc-900 rounded-full',
+      accentColor: 'border-2 border-dashed border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-950 rounded-full',
+      iconColor: 'text-[#fdfcf7]',
     },
     {
       key: 'Game_Tebak_Bendera_Status',
       label: 'Tebak Bendera',
       desc: 'Tebak nama negara dari gambar bendera.',
       icon: 'flag',
-      accentColor: 'border-2 border-double border-zinc-950 shadow-[5px_5px_0px_#000000]',
-      iconClass: 'bg-transparent border-2 border-zinc-950 text-zinc-900 rounded-xl',
+      accentColor: 'border-2 border-double border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-transparent border-2 border-zinc-950 rounded-xl',
+      iconColor: 'text-zinc-950',
     },
     {
       key: 'Game_Tebak_Negara_Status',
       label: 'Tebak Negara',
       desc: 'Tebak nama ibu kota atau letak negara.',
       icon: 'map',
-      accentColor: 'border border-zinc-950 shadow-[3px_3px_0px_#000000]',
-      iconClass: 'bg-zinc-200 text-zinc-800 rounded-lg',
+      accentColor: 'border border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-200 rounded-lg',
+      iconColor: 'text-zinc-800',
     },
     {
       key: 'Game_Tebak_Landmark_Status',
       label: 'Tebak Landmark',
       desc: 'Tebak nama tempat bersejarah atau ikon dunia.',
       icon: 'account_balance',
-      accentColor: 'border-2 border-zinc-950 shadow-[8px_8px_0px_#000000]',
-      iconClass: 'bg-zinc-950 text-white rounded-full',
+      accentColor: 'border-2 border-zinc-950 shadow-[6px_6px_0px_#000000]',
+      iconClass: 'bg-zinc-950 rounded-full',
+      iconColor: 'text-[#fdfcf7]',
     },
     {
       key: 'Game_Tebak_Kucing_Status',
@@ -122,23 +132,26 @@ export default function ControlCenterApp({
       desc: 'Tebak nama ras kucing dari gambar yang muncul.',
       icon: 'pets',
       accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
-      iconClass: 'bg-zinc-50 border border-dashed border-zinc-400 text-zinc-700 rounded-2xl',
+      iconClass: 'bg-zinc-100 border border-zinc-300 rounded-2xl',
+      iconColor: 'text-zinc-800',
     },
     {
       key: 'Game_Tebak_Anjing_Status',
       label: 'Tebak Anjing',
       desc: 'Tebak nama ras anjing berdasarkan foto.',
       icon: 'yard',
-      accentColor: 'border-2 border-zinc-950 shadow-[5px_5px_0px_#000000]',
-      iconClass: 'bg-zinc-100 border border-zinc-300 text-zinc-800 rounded-xl',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-100 border border-zinc-300 rounded-xl',
+      iconColor: 'text-zinc-800',
     },
     {
       key: 'Game_Tebak_Game_Status',
       label: 'Tebak Game',
       desc: 'Tebak judul game populer dari potongan gambar.',
       icon: 'sports_esports',
-      accentColor: 'border-2 border-zinc-950 shadow-[6px_6px_0px_#000000]',
-      iconClass: 'bg-zinc-900 text-white rounded-2xl',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-900 rounded-2xl',
+      iconColor: 'text-white',
     },
     {
       key: 'Game_Tebak_Logo_Status',
@@ -146,7 +159,8 @@ export default function ControlCenterApp({
       desc: 'Tebak merek atau instansi dari logo gambar.',
       icon: 'branding_watermark',
       accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
-      iconClass: 'bg-transparent border border-zinc-950 text-zinc-950 rounded-lg',
+      iconClass: 'bg-transparent border border-zinc-950 rounded-lg',
+      iconColor: 'text-zinc-950',
     },
   ];
 
@@ -176,11 +190,11 @@ export default function ControlCenterApp({
           return (
             <div
               key={item.key}
-              className={`bg-[#fdfcf7] rounded-[1.8rem] p-5 flex flex-col justify-between h-40 ${item.accentColor}`}
+              className={`bg-[#fdfcf7] rounded-2xl p-5 flex flex-col justify-between min-h-[9rem] ${item.accentColor}`}
             >
               <div className="flex items-center justify-between">
                 <div className={`w-9 h-9 flex items-center justify-center ${item.iconClass}`}>
-                  <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
+                  <span className={`material-symbols-outlined text-[18px] ${item.iconColor}`}>{item.icon}</span>
                 </div>
                 
                 <div
@@ -205,7 +219,7 @@ export default function ControlCenterApp({
 
       {/* Custom Welcome Text Card */}
       {safeConfig.Welcome_Message_Status && (
-        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
+        <div className="bg-[#fdfcf7] border-2 border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#000000] space-y-4">
           <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
             Welcome Message Template
           </div>
@@ -240,11 +254,11 @@ export default function ControlCenterApp({
             return (
               <div
                 key={item.key}
-                className={`bg-[#fdfcf7] rounded-[1.8rem] p-5 flex flex-col justify-between h-40 ${item.accentColor}`}
+                className={`bg-[#fdfcf7] rounded-2xl p-5 flex flex-col justify-between min-h-[9rem] ${item.accentColor}`}
               >
                 <div className="flex items-center justify-between">
                   <div className={`w-9 h-9 flex items-center justify-center ${item.iconClass}`}>
-                    <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
+                    <span className={`material-symbols-outlined text-[18px] ${item.iconColor}`}>{item.icon}</span>
                   </div>
                   
                   <div
@@ -271,28 +285,30 @@ export default function ControlCenterApp({
       {/* Local style overrides for monochrome switches */}
       <style dangerouslySetInnerHTML={{__html: `
         .custom-toggle-track {
-          width: 44px;
-          height: 24px;
+          width: 40px;
+          height: 22px;
           background-color: #e4e4e7;
           border-radius: 9999px;
           padding: 2px;
           cursor: pointer;
           transition: background-color 0.2s;
           position: relative;
+          border: 1.5px solid #09090b;
         }
         .custom-toggle-track.active {
           background-color: #09090b;
         }
         .custom-toggle-thumb {
-          width: 20px;
-          height: 20px;
+          width: 15px;
+          height: 15px;
           background-color: #ffffff;
           border-radius: 9999px;
           transition: transform 0.2s;
           box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .custom-toggle-track.active .custom-toggle-thumb {
-          transform: translateX(20px);
+          transform: translateX(18px);
+          background-color: #ffffff;
         }
       `}} />
     </div>
