@@ -73,7 +73,7 @@ export default function DashboardHome({ client, config, responders, botStatus }:
       label: 'Status', 
       value: isBotOnline ? 'Active' : 'Offline', 
       icon: isBotOnline ? 'check_circle' : 'power_settings_new', 
-      cardBg: 'bg-[#fdfcf7] border border-zinc-955 shadow-[3px_3px_0px_#09090b]',
+      cardBg: 'bg-[#fdfcf7] border border-zinc-950 shadow-[3px_3px_0px_#09090b]',
       iconBg: isBotOnline ? 'bg-emerald-100/80 border border-emerald-200/50' : 'bg-rose-100/80 border border-rose-200/50',
       iconColor: isBotOnline ? 'text-emerald-600' : 'text-rose-600', 
       textColor: isBotOnline ? 'text-emerald-700' : 'text-rose-600' 
@@ -160,7 +160,7 @@ export default function DashboardHome({ client, config, responders, botStatus }:
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
         
         {/* System Information Card */}
-        <div className="bg-[#fdfcf7] border border-zinc-955 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] text-left flex flex-col justify-between">
+        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] text-left flex flex-col justify-between">
           <div>
             <h2 className="text-sm font-black text-zinc-950 flex items-center gap-2 mb-5">
               <span className="material-symbols-outlined text-zinc-900 text-[18px]">info</span>
@@ -169,15 +169,15 @@ export default function DashboardHome({ client, config, responders, botStatus }:
             <div className="space-y-3.5">
               <div className="flex justify-between items-center pb-3 border-b border-zinc-200/50">
                 <span className="text-zinc-500 text-[11px] font-bold uppercase tracking-wider">Package Tier</span>
-                <span className="text-zinc-55 font-bold bg-zinc-955 border border-zinc-800 px-3 py-0.5 rounded-full text-[9px]">{client.Package_Tier}</span>
+                <span className="text-zinc-50 font-bold bg-zinc-950 border border-zinc-800 px-3 py-0.5 rounded-full text-[9px]">{client.Package_Tier}</span>
               </div>
               <div className="flex justify-between items-center pb-3 border-b border-zinc-200/50">
                 <span className="text-zinc-500 text-[11px] font-bold uppercase tracking-wider">Account Status</span>
-                <span className="text-zinc-55 font-bold bg-zinc-955 border border-zinc-800 px-3 py-0.5 rounded-full text-[9px]">{client.Account_Status}</span>
+                <span className="text-zinc-50 font-bold bg-zinc-950 border border-zinc-800 px-3 py-0.5 rounded-full text-[9px]">{client.Account_Status}</span>
               </div>
               <div className="flex justify-between items-center pb-1">
                 <span className="text-zinc-500 text-[11px] font-bold uppercase tracking-wider">Join Date</span>
-                <span className="text-zinc-55 font-bold bg-zinc-955 border border-zinc-800 px-3 py-0.5 rounded-full text-[9px]">
+                <span className="text-zinc-50 font-bold bg-zinc-950 border border-zinc-800 px-3 py-0.5 rounded-full text-[9px]">
                   {new Date(client.Registration_Date || Date.now()).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </span>
               </div>
@@ -186,7 +186,7 @@ export default function DashboardHome({ client, config, responders, botStatus }:
         </div>
 
         {/* Activity Tracker Heatmap Card (GitHub-like) */}
-        <div className="bg-[#fdfcf7] border border-zinc-955 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] text-left flex flex-col justify-between">
+        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] text-left flex flex-col justify-between">
           <div>
             <h2 className="text-sm font-black text-zinc-950 flex items-center gap-2 mb-2">
               <span className="material-symbols-outlined text-zinc-900 text-[18px]">calendar_view_month</span>

@@ -80,7 +80,7 @@ export default function AccountingApp({ client }: AccountingProps) {
                   type="password"
                   value={newPassword}
                   onChange={e => setNewPassword(e.target.value)}
-                  className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2 text-xs text-zinc-955 outline-none focus:border-zinc-950 transition-all"
+                  className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2 text-xs text-zinc-900 outline-none focus:border-zinc-950 transition-all"
                   placeholder="••••••••"
                 />
               </div>
@@ -90,7 +90,7 @@ export default function AccountingApp({ client }: AccountingProps) {
                   type="password"
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
-                  className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2 text-xs text-zinc-955 outline-none focus:border-zinc-950 transition-all"
+                  className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2 text-xs text-zinc-900 outline-none focus:border-zinc-950 transition-all"
                   placeholder="••••••••"
                 />
               </div>
@@ -98,7 +98,7 @@ export default function AccountingApp({ client }: AccountingProps) {
 
             <button
               type="submit"
-              className="w-full py-2.5 mt-2 rounded-full text-xs font-bold bg-zinc-955 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer"
+              className="w-full py-2.5 mt-2 rounded-full text-xs font-bold bg-zinc-950 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer border border-zinc-950"
             >
               Update Password
             </button>
@@ -121,7 +121,7 @@ export default function AccountingApp({ client }: AccountingProps) {
                     type="email"
                     value={currentEmail}
                     onChange={e => setCurrentEmail(e.target.value)}
-                    className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2.5 text-xs text-zinc-955 outline-none focus:border-zinc-950 transition-all"
+                    className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2.5 text-xs text-zinc-900 outline-none focus:border-zinc-950 transition-all"
                     placeholder="user@example.com"
                   />
                 </div>
@@ -131,7 +131,7 @@ export default function AccountingApp({ client }: AccountingProps) {
                     type="email"
                     value={newEmail}
                     onChange={e => setNewEmail(e.target.value)}
-                    className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2.5 text-xs text-zinc-955 outline-none focus:border-zinc-950 transition-all"
+                    className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2.5 text-xs text-zinc-900 outline-none focus:border-zinc-950 transition-all"
                     placeholder="newemail@example.com"
                   />
                 </div>
@@ -140,7 +140,7 @@ export default function AccountingApp({ client }: AccountingProps) {
 
             <button
               type="submit"
-              className="w-full py-2.5 rounded-full text-xs font-bold bg-zinc-955 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer"
+              className="w-full py-2.5 rounded-full text-xs font-bold bg-zinc-950 hover:bg-zinc-900 text-white transition-all shadow-sm cursor-pointer border border-zinc-950"
             >
               Update Email
             </button>
@@ -161,7 +161,7 @@ export default function AccountingApp({ client }: AccountingProps) {
                   {msg.unread && (
                     <span className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-zinc-950"></span>
                   )}
-                  <div className="text-[11px] font-black text-zinc-950">{msg.title}</div>
+                  <div className="text-[11px] font-black text-zinc-900">{msg.title}</div>
                   <div className="text-[9px] text-zinc-500 font-semibold mt-0.5 line-clamp-2 leading-relaxed">{msg.body}</div>
                   <div className="text-[8px] text-zinc-400 font-bold uppercase tracking-wider mt-2">{msg.time}</div>
                 </div>

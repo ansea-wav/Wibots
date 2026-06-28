@@ -167,8 +167,8 @@ export default function FileExplorerApp({ client, files, onUpload, onDelete, onC
                   key={f.filename}
                   className={`group p-2.5 rounded-2xl border transition-all cursor-pointer ${
                     selectedFile?.filename === f.filename
-                      ? 'border-zinc-955 bg-zinc-100 shadow-[2px_2px_0px_#000000]'
-                      : 'border-zinc-955 bg-white hover:bg-zinc-50/50 shadow-[3px_3px_0px_#09090b]'
+                      ? 'border-zinc-950 bg-zinc-100 shadow-[2px_2px_0px_#000000]'
+                      : 'border-zinc-950 bg-white hover:bg-zinc-50/50 shadow-[3px_3px_0px_#09090b]'
                   }`}
                   onClick={() => setSelectedFile(f)}
                 >

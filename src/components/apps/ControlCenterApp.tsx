@@ -120,7 +120,7 @@ export default function ControlCenterApp({
 
       {/* Custom Welcome Text Card */}
       {safeConfig.Welcome_Message_Status && (
-        <div className="bg-[#fdfcf7] border border-zinc-955 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
+        <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
           <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
             Welcome Message Template
           </div>

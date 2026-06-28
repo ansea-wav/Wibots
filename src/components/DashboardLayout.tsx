@@ -228,13 +228,7 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
           <span className="font-black text-white text-lg tracking-tight">Wazle Dash</span>
         </div>
 
-        {/* Server Selection / Profile placeholder */}
-        <div className="mx-4 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.04] mb-4">
-          <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-black mb-1">Server Node</div>
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-300">{clientRegistry.Group_1 ? 'Premium Node' : 'Basic Node'}</span>
-          </div>
-        </div>
+
 
         {/* Navigation Links */}
         <nav className="flex-1 overflow-y-auto py-2 px-3 space-y-1">

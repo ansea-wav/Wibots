@@ -83,17 +83,17 @@ export default function ApiKeyApp({ client }: ApiKeyProps) {
                   <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-black">{key.label}</span>
                   <span className="material-symbols-outlined text-zinc-800 text-[18px]">vpn_key</span>
                 </div>
-                <p className="text-[10px] text-zinc-500 font-semibold leading-relaxed">{key.desc}</p>
+                <p className="text-[10px] text-zinc-505 font-semibold leading-relaxed">{key.desc}</p>
               </div>
 
               <div className="space-y-3 mt-4">
-                <div className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-[11px] text-zinc-955 font-mono truncate select-all">
+                <div className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-[11px] text-zinc-950 font-mono truncate select-all">
                   {key.value}
                 </div>
                 
                 <button
                   onClick={() => handleCopy(key.label, key.value)}
-                  className="w-full py-2 rounded-full text-xs font-black bg-zinc-955 hover:bg-zinc-900 text-white transition-all shadow-[2px_2px_0px_#000000] border border-zinc-950 cursor-pointer"
+                  className="w-full py-2 rounded-full text-xs font-black bg-zinc-950 hover:bg-zinc-900 text-white transition-all shadow-[2px_2px_0px_#000000] border border-zinc-950 cursor-pointer"
                 >
                   {copiedField === key.label ? '✓ Copied' : 'Copy Key'}
                 </button>
@@ -190,15 +190,15 @@ export default function ApiKeyApp({ client }: ApiKeyProps) {
                 </div>
                 <div>
                   <div className="text-[8px] text-zinc-400 uppercase tracking-widest font-black">Response Latency</div>
-                  <div className="text-zinc-955 font-black text-xs mt-0.5">{modelSpecs[selectedModel].latency}</div>
+                  <div className="text-zinc-950 font-black text-xs mt-0.5">{modelSpecs[selectedModel].latency}</div>
                 </div>
                 <div>
                   <div className="text-[8px] text-zinc-400 uppercase tracking-widest font-black">Modal Type</div>
-                  <div className="text-zinc-955 font-black text-xs mt-0.5">{modelSpecs[selectedModel].mode}</div>
+                  <div className="text-zinc-950 font-black text-xs mt-0.5">{modelSpecs[selectedModel].mode}</div>
                 </div>
               </div>
 
-              <div className="text-[10px] text-zinc-650 leading-relaxed font-semibold">
+              <div className="text-[10px] text-zinc-600 leading-relaxed font-semibold">
                 {modelSpecs[selectedModel].desc}
               </div>
             </div>
@@ -224,7 +224,7 @@ export default function ApiKeyApp({ client }: ApiKeyProps) {
             </div>
 
             <div className="space-y-3 mt-2">
-              <div className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-[11px] text-zinc-955 font-mono truncate select-all">
+              <div className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-[11px] text-zinc-950 font-mono truncate select-all">
                 {generatedToken}
               </div>
               <div className="flex gap-2">
@@ -254,7 +254,7 @@ export default function ApiKeyApp({ client }: ApiKeyProps) {
             </div>
 
             <div className="space-y-3 mt-2">
-              <div className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-[11px] text-zinc-955 font-mono truncate select-all">
+              <div className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-[11px] text-zinc-950 font-mono truncate select-all">
                 {zidToken}
               </div>
               <button

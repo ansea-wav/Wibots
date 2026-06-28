@@ -39,7 +39,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
     <div className="max-w-6xl mx-auto space-y-6 text-left">
       
       {/* Header Stats Card */}
-      <div className="bg-[#fdfcf7] border border-zinc-955 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
+      <div className="bg-[#fdfcf7] border border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#09090b] space-y-4">
         <div className="text-xs text-zinc-400 uppercase tracking-widest font-black">
           Engine Overview
         </div>
@@ -49,7 +49,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
             <div className="text-xl font-black text-zinc-950 mt-0.5">{tasks.length}</div>
           </div>
           
-          <div className="p-4 rounded-2xl border border-zinc-955 bg-white shadow-[2px_2px_0px_#09090b]">
+          <div className="p-4 rounded-2xl border border-zinc-950 bg-white shadow-[2px_2px_0px_#09090b]">
             <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Bot Engine</div>
             <div className="flex items-center gap-1.5 mt-1.5">
               <div className={`w-1.5 h-1.5 rounded-full ${botStatus === 'ONLINE' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
@@ -57,7 +57,7 @@ export default function TaskManagerApp({ tasks, onFocusTask, onCloseTask, botSta
             </div>
           </div>
           
-          <div className="p-4 rounded-2xl border border-zinc-955 bg-white shadow-[2px_2px_0px_#09090b]">
+          <div className="p-4 rounded-2xl border border-zinc-950 bg-white shadow-[2px_2px_0px_#09090b]">
             <div className="text-[9px] text-zinc-400 uppercase tracking-widest font-black">Uptime</div>
             <div className="text-sm font-mono font-black text-zinc-950 mt-1">{formatUptime(uptime)}</div>
           </div>
