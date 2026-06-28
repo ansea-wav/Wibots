@@ -185,7 +185,8 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
           ) : (
             <div className="space-y-6">
               {activeGroups.map((g) => {
-                if (!g.jid) {
+                const groupJid = g.jid;
+                if (!groupJid) {
                   return (
                     <div key={g.index} className="bg-[#fdfcf7] border-2 border-dashed border-zinc-400 rounded-3xl p-5 text-center text-zinc-400 text-xs font-semibold">
                       ⚙️ Group {g.index} belum disinkronisasikan. Bot harus membaca chat grup terlebih dahulu agar JID terdeteksi.
@@ -194,8 +195,8 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                 }
 
                 // Retrieve JID settings or prepare defaults
-                const currentSettings = modSettings.find(item => item.Group_JID === g.jid) || {
-                  Group_JID: g.jid,
+                const currentSettings = modSettings.find(item => item.Group_JID === groupJid) || {
+                  Group_JID: groupJid,
                   User_ID: client.User_ID,
                   Enable_Default_Filter: false,
                   Custom_Keywords: '',
@@ -203,18 +204,18 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                   Max_Warn: 3,
                   Punishment_Action: 'kick',
                   Warn_Decay_Hours: 24
-                };
+                } as GroupSettings;
 
-                const isSavingThis = savingModId === g.jid;
+                const isSavingThis = savingModId === groupJid;
 
                 return (
-                  <div key={g.jid} className="bg-[#fdfcf7] border-2 border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#000000] space-y-5">
+                  <div key={groupJid} className="bg-[#fdfcf7] border-2 border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#000000] space-y-5">
                     
                     {/* Header */}
                     <div className="flex justify-between items-start border-b border-zinc-200 pb-3">
                       <div>
                         <div className="text-sm font-black text-zinc-950">Group {g.index} Moderation</div>
-                        <div className="text-[9px] text-zinc-400 font-mono mt-0.5">{g.jid}</div>
+                        <div className="text-[9px] text-zinc-400 font-mono mt-0.5">{groupJid}</div>
                       </div>
                       <span className="bg-zinc-100 border border-zinc-200 text-zinc-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
                         Active
@@ -234,7 +235,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                         className={`custom-toggle-track ${currentSettings.Enable_Default_Filter ? 'active' : ''} shrink-0`}
                         onClick={() => {
                           const val = !currentSettings.Enable_Default_Filter;
-                          handleSaveModSettings(g.jid, { Enable_Default_Filter: val });
+                          handleSaveModSettings(groupJid, { Enable_Default_Filter: val });
                         }}
                       >
                         <div className="custom-toggle-thumb" />
@@ -252,7 +253,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                         value={currentSettings.Custom_Keywords}
                         onChange={(e) => {
                           const val = e.target.value;
-                          setModSettings(prev => prev.map(item => item.Group_JID === g.jid ? { ...item, Custom_Keywords: val } : item));
+                          setModSettings(prev => prev.map(item => item.Group_JID === groupJid ? { ...item, Custom_Keywords: val } : item));
                         }}
                         className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 transition-all placeholder:text-zinc-400"
                       />
@@ -271,7 +272,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                           value={currentSettings.Matching_Mode}
                           onChange={(e) => {
                             const val = e.target.value as 'fuzzy' | 'exact';
-                            handleSaveModSettings(g.jid, { Matching_Mode: val });
+                            handleSaveModSettings(groupJid, { Matching_Mode: val });
                           }}
                           className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-950 outline-none focus:border-zinc-950"
                         >
@@ -287,7 +288,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                           value={currentSettings.Max_Warn}
                           onChange={(e) => {
                             const val = parseInt(e.target.value);
-                            handleSaveModSettings(g.jid, { Max_Warn: val });
+                            handleSaveModSettings(groupJid, { Max_Warn: val });
                           }}
                           className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-950 outline-none focus:border-zinc-950"
                         >
@@ -304,7 +305,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                           value={currentSettings.Punishment_Action}
                           onChange={(e) => {
                             const val = e.target.value as 'kick' | 'ban' | 'mute';
-                            handleSaveModSettings(g.jid, { Punishment_Action: val });
+                            handleSaveModSettings(groupJid, { Punishment_Action: val });
                           }}
                           className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-950 outline-none focus:border-zinc-950"
                         >
@@ -321,7 +322,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                           value={currentSettings.Warn_Decay_Hours}
                           onChange={(e) => {
                             const val = parseInt(e.target.value);
-                            handleSaveModSettings(g.jid, { Warn_Decay_Hours: val });
+                            handleSaveModSettings(groupJid, { Warn_Decay_Hours: val });
                           }}
                           className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-950 outline-none focus:border-zinc-950"
                         >
@@ -337,7 +338,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                     {/* Manual Custom Keyword Save Trigger */}
                     <div className="flex justify-end pt-3 border-t border-zinc-200/40">
                       <button
-                        onClick={() => handleSaveModSettings(g.jid, { Custom_Keywords: currentSettings.Custom_Keywords })}
+                        onClick={() => handleSaveModSettings(groupJid, { Custom_Keywords: currentSettings.Custom_Keywords })}
                         disabled={isSavingThis}
                         className="px-5 py-2 bg-zinc-950 hover:bg-zinc-900 text-white font-bold rounded-full text-[11px] shadow-sm transition-all cursor-pointer"
                       >
