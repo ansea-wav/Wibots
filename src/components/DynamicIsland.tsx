@@ -2,9 +2,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const toast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+export const toast = (message: string, type: 'success' | 'error' | 'info' = 'info', duration?: number) => {
   if (typeof window !== 'undefined') {
-    const event = new CustomEvent('yay-toast', { detail: { message, type } });
+    const event = new CustomEvent('yay-toast', { detail: { message, type, duration } });
     window.dispatchEvent(event);
   }
 };
@@ -120,10 +120,11 @@ export default function DynamicIsland() {
         setPhase(2);
       }, 600);
       
-      // Auto-hide after 4 seconds
+      // Auto-hide after duration
+      const duration = customEvent.detail.duration || 4000;
       hideTimeout = setTimeout(() => {
         setToasts([]);
-      }, 4000);
+      }, duration);
     };
 
     window.addEventListener('yay-toast', handleToast);

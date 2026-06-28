@@ -209,8 +209,13 @@ export default function ControlCenterApp({
                 <div
                   className={`custom-toggle-track ${isActive ? 'active' : ''} shrink-0`}
                   onClick={() => {
-                    onToggle(item.key as keyof BotConfig, !isActive);
-                    toast(t('toast_settings_updated').replace('{label}', t(item.label) || item.label), 'success');
+                    const nextVal = !isActive;
+                    onToggle(item.key as keyof BotConfig, nextVal);
+                    if (item.key === 'Moderation_Status' && nextVal) {
+                      toast('Sistem Moderasi Aktif! Atur aksi penindakan & batas warn di tab "Group Manager".', 'success', 10000);
+                    } else {
+                      toast(t('toast_settings_updated').replace('{label}', t(item.label) || item.label), 'success');
+                    }
                   }}
                 >
                   <div className="custom-toggle-thumb" />
