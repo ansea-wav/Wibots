@@ -20,6 +20,17 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [curtainOpacity, setCurtainOpacity] = useState(1);
   const [curtainRendered, setCurtainRendered] = useState(true);
+  const [globalTvState, setGlobalTvState] = useState<'on' | 'off' | 'idle'>('on');
+
+  useEffect(() => {
+    if (phase === 'login' || phase === 'dashboard') {
+      setGlobalTvState('on');
+      const timer = setTimeout(() => {
+        setGlobalTvState('idle');
+      }, 1250);
+      return () => clearTimeout(timer);
+    }
+  }, [phase]);
 
   // DevTools / Security Lock States
   const [isLocked, setIsLocked] = useState(false);
@@ -168,15 +179,20 @@ export default function Home() {
   };
 
   const handleLoginSuccess = (data: UserMasterData, uid: string) => {
-    setUserData(data);
-    setUserId(uid);
-    setPhase('dashboard');
+    setGlobalTvState('off');
+    setTimeout(() => {
+      setUserData(data);
+      setUserId(uid);
+      setPhase('dashboard');
+    }, 1250);
   };
 
   // Completely empty DOM if cleared by security lock
   if (isDOMCleared) {
     return <div className="h-screen w-screen bg-[#0d0d11]" />;
   }
+
+  const wrapperClass = globalTvState === 'on' ? 'crt-screen-on' : globalTvState === 'off' ? 'crt-screen-off' : '';
 
   return (
     <motion.main 
@@ -190,8 +206,84 @@ export default function Home() {
         mass: 0.8
       }}
       style={{ transformOrigin: 'center' }}
-      className="h-screen w-screen overflow-hidden bg-[var(--surface-dark)] relative"
+      className={`h-screen w-screen overflow-hidden bg-[var(--surface-dark)] relative ${wrapperClass}`}
     >
+      <style dangerouslySetInnerHTML={{ __html: `
+        body {
+          background-color: #000000 !important;
+        }
+        @keyframes crt-turn-on {
+          0% {
+            transform: scaleY(0.005) scaleX(0);
+            background-color: #ffffff;
+            filter: brightness(3);
+          }
+          40% {
+            transform: scaleY(0.005) scaleX(1.1);
+            background-color: #ffffff;
+            filter: brightness(2);
+          }
+          70% {
+            transform: scaleY(1.05) scaleX(1);
+            background-color: #09090b;
+            filter: brightness(1.2);
+          }
+          100% {
+            transform: scaleY(1) scaleX(1);
+            background-color: transparent;
+            filter: brightness(1);
+          }
+        }
+
+        @keyframes crt-turn-off {
+          0% {
+            transform: scaleY(1) scaleX(1);
+            background-color: transparent;
+            filter: brightness(1);
+          }
+          30% {
+            transform: scaleY(1.05) scaleX(1);
+            background-color: #09090b;
+            filter: brightness(1.2);
+          }
+          60% {
+            transform: scaleY(0.005) scaleX(1.1);
+            background-color: #ffffff;
+            filter: brightness(2);
+          }
+          100% {
+            transform: scaleY(0) scaleX(0);
+            background-color: #ffffff;
+            filter: brightness(5);
+          }
+        }
+
+        .crt-screen-on {
+          animation: crt-turn-on 1.25s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+          transform-origin: center;
+        }
+
+        .crt-screen-off {
+          animation: crt-turn-off 1.25s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+          transform-origin: center;
+        }
+
+        .crt-scanlines::after {
+          content: " ";
+          display: block;
+          position: absolute;
+          top: 0; left: 0; bottom: 0; right: 0;
+          background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+          background-size: 100% 4px;
+          z-index: 999999;
+          pointer-events: none;
+        }
+      `}} />
+
+      {/* TV Scanlines Overlay during transition */}
+      {(globalTvState === 'on' || globalTvState === 'off') && (
+        <div className="absolute inset-0 z-[999999] pointer-events-none crt-scanlines bg-black/10" />
+      )}
       {curtainRendered && (
         <div 
           className="absolute inset-0 z-[9999] bg-[#000000] transition-opacity duration-1000 pointer-events-none"
