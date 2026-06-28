@@ -72,6 +72,7 @@ export interface BotConfig {
   Game_Tebak_Anjing_Status?: boolean;
   Game_Tebak_Game_Status?: boolean;
   Game_Tebak_Logo_Status?: boolean;
+  Moderation_Status?: boolean;
 }
 
 export interface AutoResponder {

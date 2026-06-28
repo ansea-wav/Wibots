@@ -78,6 +78,15 @@ export default function ControlCenterApp({
       iconClass: 'bg-zinc-950 rounded-xl',
       iconColor: 'text-[#fdfcf7]',
     },
+    {
+      key: 'Moderation_Status',
+      label: 'Sistem Moderasi',
+      desc: 'Aktifkan filter kata kasar otomatis, peringatan warn, dan penindakan otomatis di semua grup.',
+      icon: 'gavel',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-950 rounded-xl',
+      iconColor: 'text-[#fdfcf7]',
+    },
   ];
 
   const gameToggleItems = [
