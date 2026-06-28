@@ -291,7 +291,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                     <button 
                       type="button"
                       onClick={() => setShowBaguette(!showBaguette)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-800 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-[16px]">
                         {showBaguette ? 'visibility_off' : 'visibility'}
@@ -468,7 +468,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                         <button 
                           type="button"
                           onClick={() => setShowBaguette(!showBaguette)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-800 cursor-pointer"
                         >
                           <span className="material-symbols-outlined text-[16px]">
                             {showBaguette ? 'visibility_off' : 'visibility'}
@@ -540,12 +540,20 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
           color: rgba(255, 255, 255, 0.5) !important;
         }
         .auth-input {
-          background-color: rgba(0, 0, 0, 0.4) !important;
-          border-color: rgba(255, 255, 255, 0.05) !important;
-          color: #ffffff !important;
+          background-color: #ffffff !important;
+          border: 2px solid #000000 !important;
+          color: #000000 !important;
+          font-weight: bold !important;
+          box-shadow: 2px 2px 0px #000000 !important;
+          transition: all 0.1s ease-in-out !important;
+        }
+        .auth-input::placeholder {
+          color: #71717a !important;
+          font-weight: 500 !important;
         }
         .auth-input:focus {
-          border-color: rgba(255, 255, 255, 0.2) !important;
+          border-color: #000000 !important;
+          box-shadow: 3px 3px 0px #000000 !important;
         }
         .auth-btn-primary {
           background-color: #ffffff !important;
