@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { apiGetGroupSettings, apiUpdateGroupSettings, type ClientRegistry, type GroupSettings } from '@/lib/api';
 import { useToast } from '@/hooks/useToast';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -8,6 +8,73 @@ import { toast } from '@/components/DynamicIsland';
 interface GroupManagerProps {
   client: ClientRegistry;
   onUpdate: (data: Partial<ClientRegistry>) => Promise<void>;
+}
+
+interface SelectOption {
+  value: string | number;
+  label: string;
+}
+
+function CustomSelect({
+  value,
+  options,
+  onChange
+}: {
+  value: string | number;
+  options: SelectOption[];
+  onChange: (val: any) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectedOption = options.find(opt => opt.value === value) || options[0];
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full bg-[#fdfcf7] border-2 border-zinc-950 rounded-2xl px-4 py-2.5 text-xs font-bold text-zinc-950 flex justify-between items-center transition-all shadow-sm outline-none cursor-pointer"
+      >
+        <span>{selectedOption?.label}</span>
+        <span className={`material-symbols-outlined text-[18px] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+          expand_more
+        </span>
+      </button>
+
+      {isOpen && (
+        <div className="absolute left-0 right-0 z-50 mt-1.5 bg-[#fdfcf7] border-2 border-zinc-950 rounded-2xl shadow-[4px_4px_0px_#000000] overflow-hidden py-1 max-h-60 overflow-y-auto">
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                onChange(opt.value);
+                setIsOpen(false);
+              }}
+              className={`w-full text-left px-4 py-2.5 text-xs font-bold transition-colors block cursor-pointer ${
+                opt.value === value
+                  ? 'bg-zinc-950 text-white font-black'
+                  : 'text-zinc-800 hover:bg-zinc-100'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps) {
@@ -139,13 +206,13 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                     value={groups[groupKey]}
                     disabled={isLocked}
                     onChange={(e) => setGroups({ ...groups, [groupKey]: e.target.value })}
-                    className="flex-1 bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-[#fdfcf7] border-2 border-zinc-950 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   
                   {tier !== 'Basic' && (
                     <button
                       onClick={() => setGroups({ ...groups, [groupKey]: '' })}
-                      className="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold rounded-full text-xs transition-colors border border-zinc-200"
+                      className="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold rounded-full text-xs transition-colors border-2 border-zinc-950"
                     >
                       Clear
                     </button>
@@ -209,7 +276,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                 const isSavingThis = savingModId === groupJid;
 
                 return (
-                  <div key={groupJid} className="bg-[#fdfcf7] border-2 border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#000000] space-y-5">
+                  <div key={groupJid} className="bg-[#fdfcf7] border-2 border-zinc-950 rounded-[2.2rem] p-6 shadow-[4px_4px_0px_#000000] space-y-6">
                     
                     {/* Header */}
                     <div className="flex justify-between items-start border-b border-zinc-200 pb-3">
@@ -217,14 +284,14 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                         <div className="text-sm font-black text-zinc-950">Group {g.index} Moderation</div>
                         <div className="text-[9px] text-zinc-400 font-mono mt-0.5">{groupJid}</div>
                       </div>
-                      <span className="bg-zinc-100 border border-zinc-200 text-zinc-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      <span className="bg-zinc-100 border-2 border-zinc-950 text-zinc-950 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                         Active
                       </span>
                     </div>
 
                     {/* Filter Option 1: Default Filter Toggle */}
-                    <div className="flex items-center justify-between bg-zinc-50 border border-zinc-200 rounded-2xl p-4">
-                      <div className="space-y-0.5">
+                    <div className="flex items-center justify-between bg-zinc-50 border-2 border-zinc-950 rounded-2xl p-4">
+                      <div className="space-y-0.5 pr-2">
                         <div className="text-xs font-black text-zinc-950">Default Toxic Filter</div>
                         <div className="text-[10px] text-zinc-500 font-semibold leading-relaxed">
                           Deteksi kata kasar bahasa Indonesia/Inggris standar secara otomatis.
@@ -255,82 +322,100 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                           const val = e.target.value;
                           setModSettings(prev => prev.map(item => item.Group_JID === groupJid ? { ...item, Custom_Keywords: val } : item));
                         }}
-                        className="w-full bg-zinc-50 border border-zinc-300 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 transition-all placeholder:text-zinc-400"
+                        className="w-full bg-[#fdfcf7] border-2 border-zinc-950 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 transition-all placeholder:text-zinc-400"
                       />
                       <p className="text-[9px] text-zinc-400 font-semibold ml-1 leading-relaxed">
                         Ketik kata yang dilarang dipisahkan dengan tanda koma (`,`).
                       </p>
                     </div>
 
-                    {/* Settings parameters */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    {/* Settings List Section */}
+                    <div className="space-y-4 pt-2">
                       
-                      {/* Matching Mode */}
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold ml-1">Matching Mode</label>
-                        <select
-                          value={currentSettings.Matching_Mode}
-                          onChange={(e) => {
-                            const val = e.target.value as 'fuzzy' | 'exact';
-                            handleSaveModSettings(groupJid, { Matching_Mode: val });
-                          }}
-                          className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-950 outline-none focus:border-zinc-950"
-                        >
-                          <option value="fuzzy">Fuzzy (Anti-Bypass)</option>
-                          <option value="exact">Exact (Sama Persis)</option>
-                        </select>
+                      {/* Row 1: Matching Mode */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-zinc-50/50 border-2 border-zinc-950 rounded-2xl">
+                        <div className="space-y-0.5">
+                          <div className="text-xs font-black text-zinc-950">Matching Mode</div>
+                          <div className="text-[10px] text-zinc-500 font-semibold leading-relaxed">
+                            Fuzzy mencegah bypass kata kotor (misal: 4nj1ng). Exact mencocokkan kata mentah.
+                          </div>
+                        </div>
+                        <div className="w-full sm:w-56 shrink-0">
+                          <CustomSelect
+                            value={currentSettings.Matching_Mode}
+                            options={[
+                              { value: 'fuzzy', label: 'Fuzzy (Anti-Bypass)' },
+                              { value: 'exact', label: 'Exact (Sama Persis)' }
+                            ]}
+                            onChange={(val) => handleSaveModSettings(groupJid, { Matching_Mode: val })}
+                          />
+                        </div>
                       </div>
 
-                      {/* Max Warning */}
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold ml-1">Max Warnings</label>
-                        <select
-                          value={currentSettings.Max_Warn}
-                          onChange={(e) => {
-                            const val = parseInt(e.target.value);
-                            handleSaveModSettings(groupJid, { Max_Warn: val });
-                          }}
-                          className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-950 outline-none focus:border-zinc-950"
-                        >
-                          {[1, 2, 3, 5, 10].map(wNum => (
-                            <option key={wNum} value={wNum}>{wNum} Warns</option>
-                          ))}
-                        </select>
+                      {/* Row 2: Max Warnings */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-zinc-50/50 border-2 border-zinc-950 rounded-2xl">
+                        <div className="space-y-0.5">
+                          <div className="text-xs font-black text-zinc-950">Max Warnings</div>
+                          <div className="text-[10px] text-zinc-500 font-semibold leading-relaxed">
+                            Batas akumulasi peringatan pelanggaran sebelum hukuman dieksekusi.
+                          </div>
+                        </div>
+                        <div className="w-full sm:w-56 shrink-0">
+                          <CustomSelect
+                            value={currentSettings.Max_Warn}
+                            options={[
+                              { value: 1, label: '1 Warn' },
+                              { value: 2, label: '2 Warns' },
+                              { value: 3, label: '3 Warns' },
+                              { value: 5, label: '5 Warns' },
+                              { value: 10, label: '10 Warns' }
+                            ]}
+                            onChange={(val) => handleSaveModSettings(groupJid, { Max_Warn: val })}
+                          />
+                        </div>
                       </div>
 
-                      {/* Punishment */}
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold ml-1">Punishment</label>
-                        <select
-                          value={currentSettings.Punishment_Action}
-                          onChange={(e) => {
-                            const val = e.target.value as 'kick' | 'ban' | 'mute';
-                            handleSaveModSettings(groupJid, { Punishment_Action: val });
-                          }}
-                          className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-950 outline-none focus:border-zinc-950"
-                        >
-                          <option value="kick">Kick from Group</option>
-                          <option value="ban">Ban & Blacklist</option>
-                          <option value="mute">Mute (24 Hours)</option>
-                        </select>
+                      {/* Row 3: Punishment */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-zinc-50/50 border-2 border-zinc-950 rounded-2xl">
+                        <div className="space-y-0.5">
+                          <div className="text-xs font-black text-zinc-950">Punishment Action</div>
+                          <div className="text-[10px] text-zinc-500 font-semibold leading-relaxed">
+                            Tindakan otomatis yang diambil setelah melewati batas peringatan.
+                          </div>
+                        </div>
+                        <div className="w-full sm:w-56 shrink-0">
+                          <CustomSelect
+                            value={currentSettings.Punishment_Action}
+                            options={[
+                              { value: 'kick', label: 'Kick from Group' },
+                              { value: 'ban', label: 'Ban & Blacklist' },
+                              { value: 'mute', label: 'Mute (24 Hours)' }
+                            ]}
+                            onChange={(val) => handleSaveModSettings(groupJid, { Punishment_Action: val })}
+                          />
+                        </div>
                       </div>
 
-                      {/* Decay Hours */}
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold ml-1">Warn Decay Time</label>
-                        <select
-                          value={currentSettings.Warn_Decay_Hours}
-                          onChange={(e) => {
-                            const val = parseInt(e.target.value);
-                            handleSaveModSettings(groupJid, { Warn_Decay_Hours: val });
-                          }}
-                          className="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-950 outline-none focus:border-zinc-950"
-                        >
-                          <option value="12">12 Hours</option>
-                          <option value="24">24 Hours</option>
-                          <option value="48">48 Hours</option>
-                          <option value="72">72 Hours (3 Days)</option>
-                        </select>
+                      {/* Row 4: Decay Hours */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-zinc-50/50 border-2 border-zinc-950 rounded-2xl">
+                        <div className="space-y-0.5">
+                          <div className="text-xs font-black text-zinc-950">Warn Decay Time</div>
+                          <div className="text-[10px] text-zinc-500 font-semibold leading-relaxed">
+                            Waktu tobat kedaluwarsa. Jumlah warn berkurang 1 jika tidak melanggar lagi.
+                          </div>
+                        </div>
+                        <div className="w-full sm:w-56 shrink-0">
+                          <CustomSelect
+                            value={currentSettings.Warn_Decay_Hours}
+                            options={[
+                              { value: 12, label: '12 Hours' },
+                              { value: 24, label: '24 Hours' },
+                              { value: 48, label: '48 Hours' },
+                              { value: 72, label: '72 Hours (3 Days)' }
+                            ]}
+                            onChange={(val) => handleSaveModSettings(groupJid, { Warn_Decay_Hours: val })}
+                          />
+                        </div>
                       </div>
 
                     </div>
@@ -340,7 +425,7 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                       <button
                         onClick={() => handleSaveModSettings(groupJid, { Custom_Keywords: currentSettings.Custom_Keywords })}
                         disabled={isSavingThis}
-                        className="px-5 py-2 bg-zinc-950 hover:bg-zinc-900 text-white font-bold rounded-full text-[11px] shadow-sm transition-all cursor-pointer"
+                        className="px-5 py-2.5 bg-zinc-950 hover:bg-zinc-900 text-white font-bold rounded-full text-xs shadow-sm transition-all cursor-pointer border-2 border-zinc-950"
                       >
                         {isSavingThis ? 'Saving...' : 'Save Custom Keywords'}
                       </button>
@@ -365,14 +450,14 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
           cursor: pointer;
           transition: background-color 0.2s;
           position: relative;
-          border: 1.5px solid #09090b;
+          border: 2px solid #09090b;
         }
         .custom-toggle-track.active {
           background-color: #09090b;
         }
         .custom-toggle-thumb {
-          width: 15px;
-          height: 15px;
+          width: 14px;
+          height: 14px;
           background-color: #ffffff;
           border-radius: 9999px;
           transition: transform 0.2s;
