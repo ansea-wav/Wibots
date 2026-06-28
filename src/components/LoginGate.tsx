@@ -23,6 +23,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
   const [showBaguette, setShowBaguette] = useState(false);
+  const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'taken' | 'available'>('idle');
 
   const triggerShake = () => {
     setShake(true);
@@ -133,6 +134,32 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
     setCroissant('');
     setBaguette('');
   };
+
+  useEffect(() => {
+    if (mode !== 'register' || step !== 3 || !croissant) {
+      setUsernameStatus('idle');
+      return;
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      setUsernameStatus('checking');
+      try {
+        const { apiCheckUsername } = await import('@/lib/api');
+        const res = await apiCheckUsername(croissant);
+        if (res.status === 'taken') {
+          setUsernameStatus('taken');
+          setError('Username telah digunakan');
+        } else {
+          setUsernameStatus('available');
+          setError('');
+        }
+      } catch (err) {
+        setUsernameStatus('idle');
+      }
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [croissant, mode, step]);
 
   // Height measurement hook to animate height smoothly without scaling/distortion
   const [cardHeight, setCardHeight] = useState<number | 'auto'>('auto');
@@ -407,13 +434,18 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                 >
                   <div className="flex gap-2.5 flex-col sm:flex-row">
                     <div className="flex-1">
-                      <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 block ml-1">Username</label>
+                      <label className="text-[10px] auth-label uppercase tracking-widest font-bold mb-1 flex items-center justify-between ml-1">
+                        <span>Username</span>
+                        {usernameStatus === 'checking' && <span className="text-zinc-500 animate-pulse lowercase font-normal">Checking...</span>}
+                        {usernameStatus === 'taken' && <span className="text-red-400 lowercase font-normal">Taken</span>}
+                        {usernameStatus === 'available' && <span className="text-green-400 lowercase font-normal">Available</span>}
+                      </label>
                       <input 
                         type="text"
                         placeholder="John Doe"
                         value={croissant}
                         onChange={e => setCroissant(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && prepareDough()}
+                        onKeyDown={e => e.key === 'Enter' && usernameStatus !== 'taken' && prepareDough()}
                         className="w-full auth-input border rounded-2xl px-4 py-3 text-sm outline-none transition-all placeholder:text-white/20"
                       />
                     </div>
@@ -425,7 +457,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                           placeholder="••••••••"
                           value={baguette}
                           onChange={e => setBaguette(e.target.value)}
-                          onKeyDown={e => e.key === 'Enter' && prepareDough()}
+                          onKeyDown={e => e.key === 'Enter' && usernameStatus !== 'taken' && prepareDough()}
                           className="w-full auth-input border rounded-2xl px-4 py-3 text-sm outline-none transition-all placeholder:text-white/20"
                         />
                         <button 
@@ -457,7 +489,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                     </button>
                     <button
                       onClick={prepareDough}
-                      disabled={loading || !croissant || !baguette}
+                      disabled={loading || !croissant || !baguette || usernameStatus === 'taken' || usernameStatus === 'checking'}
                       className="flex-1 auth-btn-primary font-bold text-xs py-3 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
                     >
                       {loading ? 'Processing...' : 'Register'}

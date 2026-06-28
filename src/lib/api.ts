@@ -50,6 +50,8 @@ export interface ClientRegistry {
   Group_5?: string;
   Aplikasi_terpasang?: string;
   Tutorial?: string;
+  Username?: string;
+  Password?: string;
 }
 
 export interface BotConfig {
@@ -61,6 +63,15 @@ export interface BotConfig {
   Custom_Welcome_Text: string;
   Cmd_SetDel_Status?: boolean;
   Cmd_Hidetag_Status?: boolean;
+  Game_Tebak_Kata_Status?: boolean;
+  Game_Tebak_Boom_Status?: boolean;
+  Game_Tebak_Bendera_Status?: boolean;
+  Game_Tebak_Negara_Status?: boolean;
+  Game_Tebak_Landmark_Status?: boolean;
+  Game_Tebak_Kucing_Status?: boolean;
+  Game_Tebak_Anjing_Status?: boolean;
+  Game_Tebak_Game_Status?: boolean;
+  Game_Tebak_Logo_Status?: boolean;
 }
 
 export interface AutoResponder {
@@ -154,6 +165,11 @@ export async function tasteBread(croissant: string, baguette: string) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ croissant, baguette }),
   });
+  return res.json();
+}
+
+export async function apiCheckUsername(username: string) {
+  const res = await customFetch(`${API_BASE}/api/auth/checkUsername/${encodeURIComponent(username)}`);
   return res.json();
 }
 
