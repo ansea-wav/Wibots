@@ -225,6 +225,34 @@ app.post('/api/config/:userId', async (req, res) => {
   res.json({ status: 'success', message: 'Config updated in GAS + Cache.' });
 });
 
+// --- Group Settings ---
+app.get('/api/group-settings/:userId', (req, res) => {
+  const { userId } = req.params;
+  const list = [];
+  for (const [jid, gs] of datacache.groupSettings.entries()) {
+    if (String(gs.User_ID) === String(userId)) {
+      list.push(gs);
+    }
+  }
+  res.json({ status: 'success', data: list });
+});
+
+app.post('/api/group-settings/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const { group_jid, fields } = req.body;
+  if (!group_jid) return res.status(400).json({ status: 'error', message: 'Missing group_jid' });
+
+  const gasResult = await gasbridge.updateGroupSettings(group_jid, userId, fields);
+  if (gasResult.status !== 'success') {
+    return res.status(500).json(gasResult);
+  }
+
+  datacache.updateGroupSettingsLocal(group_jid, userId, fields);
+  io.to(userId).emit('group_settings_updated', { userId, group_jid, fields });
+
+  res.json({ status: 'success', message: 'Group settings updated in GAS + Cache.' });
+});
+
 // --- App Store ---
 app.get('/api/appstore', async (req, res) => {
   const result = await gasbridge.getAppStoreList();

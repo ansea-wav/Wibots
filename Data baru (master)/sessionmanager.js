@@ -1148,6 +1148,174 @@ async function startMasterSession(io) {
       return;
     }
 
+    // --- Group Toxic & Custom Keyword Moderation Filter ---
+    if (isGroup && !msg.key.fromMe) {
+      const groupSettings = datacache.getGroupSettings(remoteJid);
+      if (groupSettings) {
+        const enableDefault = groupSettings.Enable_Default_Filter === true || groupSettings.Enable_Default_Filter === 'TRUE' || groupSettings.Enable_Default_Filter === 'true';
+        const customKeywordsStr = groupSettings.Custom_Keywords || '';
+        const matchingMode = groupSettings.Matching_Mode || 'fuzzy';
+        const maxWarn = parseInt(groupSettings.Max_Warn) || 3;
+        const punishment = groupSettings.Punishment_Action || 'kick';
+        const warnDecayHours = parseInt(groupSettings.Warn_Decay_Hours) || 24;
+
+        // Clean incoming text
+        let cleanText = text.toLowerCase();
+        
+        // Define default toxic list
+        const defaultToxicList = ['anjing', 'babi', 'bangsat', 'kontol', 'memek', 'jembut', 'goblok', 'tolol', 'pantek', 'asu', 'bajingan', 'perek', 'lonte', 'ngentot'];
+
+        let isMatch = false;
+        let matchedWord = '';
+
+        if (matchingMode === 'fuzzy') {
+          const cleanFuzzy = (str) => {
+            return str.toLowerCase()
+              .replace(/[^a-z0-9]/gi, '') // remove symbols/spaces/punctuation
+              .replace(/4/g, 'a')
+              .replace(/1/g, 'i')
+              .replace(/3/g, 'e')
+              .replace(/0/g, 'o')
+              .replace(/9/g, 'g')
+              .replace(/5/g, 's');
+          };
+          const fuzzyText = cleanFuzzy(text);
+
+          // Check default filter
+          if (enableDefault) {
+            for (const word of defaultToxicList) {
+              if (fuzzyText.includes(word)) {
+                isMatch = true;
+                matchedWord = word;
+                break;
+              }
+            }
+          }
+
+          // Check custom keywords
+          if (!isMatch && customKeywordsStr) {
+            const keywords = customKeywordsStr.split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
+            for (const kw of keywords) {
+              const cleanedKw = cleanFuzzy(kw);
+              if (fuzzyText.includes(cleanedKw)) {
+                isMatch = true;
+                matchedWord = kw;
+                break;
+              }
+            }
+          }
+        } else {
+          // Exact matching
+          if (enableDefault) {
+            for (const word of defaultToxicList) {
+              const regex = new RegExp(`\\b${word}\\b`, 'i');
+              if (regex.test(text)) {
+                isMatch = true;
+                matchedWord = word;
+                break;
+              }
+            }
+          }
+
+          if (!isMatch && customKeywordsStr) {
+            const keywords = customKeywordsStr.split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
+            for (const kw of keywords) {
+              if (/[^a-z0-9]/i.test(kw)) {
+                if (text.toLowerCase().includes(kw)) {
+                  isMatch = true;
+                  matchedWord = kw;
+                  break;
+                }
+              } else {
+                const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                if (regex.test(text)) {
+                  isMatch = true;
+                  matchedWord = kw;
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        if (isMatch) {
+          try {
+            await socket.sendMessage(remoteJid, { delete: msg.key }).catch(() => {});
+
+            const warnRecord = datacache.getGroupWarningLocal(remoteJid, senderNumber) || {
+              Group_ID: remoteJid,
+              Phone_Number: senderNumber,
+              Warn_Count: 0,
+              Last_Toxic_Time: new Date(0).toISOString()
+            };
+
+            let currentCount = parseInt(warnRecord.Warn_Count) || 0;
+            const lastTime = new Date(warnRecord.Last_Toxic_Time).getTime();
+
+            // Decay logic
+            if (currentCount > 0 && lastTime > 0) {
+              const hoursPassed = (Date.now() - lastTime) / (60 * 60 * 1000);
+              const decayAmount = Math.floor(hoursPassed / warnDecayHours);
+              if (decayAmount > 0) {
+                currentCount = Math.max(0, currentCount - decayAmount);
+              }
+            }
+
+            const newCount = currentCount + 1;
+            const updatedTime = new Date().toISOString();
+
+            await gasbridge.updateGroupWarnings(remoteJid, senderNumber, newCount, updatedTime);
+            datacache.updateGroupWarningLocal(remoteJid, senderNumber, newCount, updatedTime);
+
+            const targetJid = `${senderNumber}@s.whatsapp.net`;
+
+            if (newCount >= maxWarn) {
+              await gasbridge.updateGroupWarnings(remoteJid, senderNumber, 0, updatedTime);
+              datacache.updateGroupWarningLocal(remoteJid, senderNumber, 0, updatedTime);
+
+              if (punishment === 'kick') {
+                await socket.groupParticipantsUpdate(remoteJid, [senderJid], "remove");
+                await socket.sendMessage(remoteJid, {
+                  text: `🚨 *[PENINDAKAN SISTEM]*\n@${senderNumber} telah didepak karena melanggar batas filter kata kasar (${maxWarn}/${maxWarn} Warn).`,
+                  mentions: [targetJid]
+                });
+              } else if (punishment === 'ban') {
+                await socket.groupParticipantsUpdate(remoteJid, [senderJid], "remove");
+                await gasbridge.addToBlacklist(senderNumber, `Melanggar batas warn filter kata di grup: ${remoteJid}`);
+                datacache.addBlacklistedLocal(senderNumber);
+                await socket.sendMessage(remoteJid, {
+                  text: `🚨 *[PENINDAKAN SISTEM]*\n@${senderNumber} telah didepak dan diblacklist permanen karena melanggar batas filter kata kasar (${maxWarn}/${maxWarn} Warn).`,
+                  mentions: [targetJid]
+                });
+              } else if (punishment === 'mute') {
+                const muteExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+                await gasbridge.addMute(senderNumber, muteExpiry, `Melanggar batas warn filter kata di grup: ${remoteJid}`, 'System', remoteJid);
+                datacache.addMuteLocal(senderNumber, muteExpiry, `Melanggar batas warn filter kata di grup: ${remoteJid}`, 'System', remoteJid);
+                scheduleUnmute(socket, remoteJid, senderNumber, 24 * 60 * 60 * 1000);
+                
+                await socket.sendMessage(remoteJid, {
+                  text: `🤐 *[PENINDAKAN SISTEM]*\n@${senderNumber} telah di-mute selama 24 jam karena melanggar batas filter kata kasar (${maxWarn}/${maxWarn} Warn).`,
+                  mentions: [targetJid]
+                });
+              }
+            } else {
+              let blocks = '';
+              for (let i = 0; i < maxWarn; i++) {
+                blocks += (i < newCount) ? '🟥' : '⬜';
+              }
+              await socket.sendMessage(remoteJid, {
+                text: `⚠️ *[PERINGATAN SISTEM]*\n@${senderNumber}, kata-kata/pesan Anda terdeteksi melanggar aturan filter kata.\n\n*Status Pelanggaran:* ${blocks} (${newCount}/${maxWarn} Warn)\n*Pesan:* Terdeteksi mengandung kata dilarang [${matchedWord}].\n_Satu kali lagi melanggar, Anda akan dikenakan tindakan: ${punishment.toUpperCase()}_`,
+                mentions: [targetJid]
+              });
+            }
+            return;
+          } catch (err) {
+            console.error('[Moderator Filter] Error:', err);
+          }
+        }
+      }
+    }
+
     // Anti-link
     if (config.Anti_Link_Group === true || config.Anti_Link_Group === 'TRUE') {
       const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/gi;

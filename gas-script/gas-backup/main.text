@@ -223,6 +223,18 @@ function router(action, payload) {
     case "delete_mute":
       return deleteMute(payload);
 
+    // === Group Settings & Warnings ===
+    case "get_group_settings":
+      return getGroupSettings(payload);
+    case "update_group_settings":
+      return updateGroupSettings(payload);
+    case "get_group_warnings":
+      return getGroupWarnings();
+    case "update_group_warnings":
+      return updateGroupWarnings(payload);
+    case "reset_group_warnings":
+      return resetGroupWarnings(payload);
+
     // === Tickets ===
     case "create_ticket":
       return createTicket(payload);
@@ -770,6 +782,8 @@ function fetchAllMaster() {
   var macrosSheet = getSheet("Macros_Dictionary");
   var blacklistSheet = getSheet("Blacklist");
   var muteSheet = getSheet("Mute");
+  var groupSettingsSheet = getSheet("Group_Settings");
+  var groupWarningsSheet = getSheet("Group_Warnings");
   
   var clientsData = sheetToObjects(clientsSheet);
   var configsData = sheetToObjects(configsSheet);
@@ -777,6 +791,8 @@ function fetchAllMaster() {
   var macrosData = sheetToObjects(macrosSheet);
   var blacklistData = sheetToObjects(blacklistSheet).map(function(r) { return String(r.Phone_Number); });
   var muteData = sheetToObjects(muteSheet);
+  var groupSettingsData = sheetToObjects(groupSettingsSheet);
+  var groupWarningsData = sheetToObjects(groupWarningsSheet);
   
   return jsonResponse({
     status: "success",
@@ -786,7 +802,9 @@ function fetchAllMaster() {
       responders: responderData,
       macros: macrosData,
       blacklist: blacklistData,
-      mutes: muteData
+      mutes: muteData,
+      group_settings: groupSettingsData,
+      group_warnings: groupWarningsData
     }
   });
 }
@@ -1195,6 +1213,110 @@ function deleteMute(p) {
     return jsonResponse({ status: "success", message: "User unmuted." });
   }
   return jsonResponse({ status: "error", message: "Mute record not found." });
+}
+
+// ============================================================
+// Group Settings & Warnings System (Toxic Filter & Moderation)
+// ============================================================
+
+function getGroupSettings(p) {
+  var sheet = getSheet("Group_Settings");
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Group_JID", "User_ID", "Enable_Default_Filter", "Custom_Keywords", "Matching_Mode", "Max_Warn", "Punishment_Action", "Warn_Decay_Hours"]);
+    return jsonResponse({ status: "success", data: [] });
+  }
+  var rows = sheetToObjects(sheet);
+  var filtered = rows.filter(function(r) {
+    return String(r.User_ID) === String(p.user_id);
+  });
+  return jsonResponse({ status: "success", data: filtered });
+}
+
+function updateGroupSettings(p) {
+  var sheet = getSheet("Group_Settings");
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Group_JID", "User_ID", "Enable_Default_Filter", "Custom_Keywords", "Matching_Mode", "Max_Warn", "Punishment_Action", "Warn_Decay_Hours"]);
+  }
+  
+  var data = sheet.getDataRange().getValues();
+  var foundIdx = -1;
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === String(p.group_jid)) {
+      foundIdx = i + 1; // 1-based index
+      break;
+    }
+  }
+  
+  var row = [
+    p.group_jid,
+    p.user_id,
+    p.enable_default_filter,
+    p.custom_keywords || "",
+    p.matching_mode || "fuzzy",
+    p.max_warn || 3,
+    p.punishment_action || "kick",
+    p.warn_decay_hours || 24
+  ];
+  
+  if (foundIdx !== -1) {
+    for (var col = 0; col < row.length; col++) {
+      sheet.getRange(foundIdx, col + 1).setValue(row[col]);
+    }
+  } else {
+    sheet.appendRow(row);
+  }
+  return jsonResponse({ status: "success", message: "Group settings updated." });
+}
+
+function getGroupWarnings() {
+  var sheet = getSheet("Group_Warnings");
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Group_ID", "Phone_Number", "Warn_Count", "Last_Toxic_Time"]);
+    return jsonResponse({ status: "success", data: [] });
+  }
+  var rows = sheetToObjects(sheet);
+  return jsonResponse({ status: "success", data: rows });
+}
+
+function updateGroupWarnings(p) {
+  var sheet = getSheet("Group_Warnings");
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Group_ID", "Phone_Number", "Warn_Count", "Last_Toxic_Time"]);
+  }
+  
+  var data = sheet.getDataRange().getValues();
+  var foundIdx = -1;
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === String(p.group_id) && String(data[i][1]) === String(p.phone_number)) {
+      foundIdx = i + 1; // 1-based index
+      break;
+    }
+  }
+  
+  if (foundIdx !== -1) {
+    sheet.getRange(foundIdx, 3).setValue(p.warn_count);
+    sheet.getRange(foundIdx, 4).setValue(p.last_toxic_time);
+  } else {
+    sheet.appendRow([p.group_id, p.phone_number, p.warn_count, p.last_toxic_time]);
+  }
+  return jsonResponse({ status: "success", message: "Group warnings updated." });
+}
+
+function resetGroupWarnings(p) {
+  var sheet = getSheet("Group_Warnings");
+  var data = sheet.getDataRange().getValues();
+  var rowsToDelete = [];
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === String(p.group_id)) {
+      if (!p.phone_number || String(data[i][1]) === String(p.phone_number)) {
+        rowsToDelete.push(i + 1);
+      }
+    }
+  }
+  for (var j = rowsToDelete.length - 1; j >= 0; j--) {
+    sheet.deleteRow(rowsToDelete[j]);
+  }
+  return jsonResponse({ status: "success", message: "Group warnings reset." });
 }
 
 // ============================================================

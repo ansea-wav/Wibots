@@ -207,6 +207,26 @@ async function deleteMute(phoneNumber) {
   return gasRequest('delete_mute', { phone_number: phoneNumber });
 }
 
+async function getGroupSettings(userId) {
+  return gasRequest('get_group_settings', { user_id: userId });
+}
+
+async function updateGroupSettings(groupJid, userId, fields) {
+  return gasRequest('update_group_settings', { group_jid: groupJid, user_id: userId, ...fields });
+}
+
+async function getGroupWarnings() {
+  return gasRequest('get_group_warnings');
+}
+
+async function updateGroupWarnings(groupId, phoneNumber, warnCount, lastToxicTime) {
+  return gasRequest('update_group_warnings', { group_id: groupId, phone_number: phoneNumber, warn_count: warnCount, last_toxic_time: lastToxicTime });
+}
+
+async function resetGroupWarnings(groupId, phoneNumber) {
+  return gasRequest('reset_group_warnings', { group_id: groupId, phone_number: phoneNumber });
+}
+
 async function fetchSpammerTasks() {
   return gasRequest('get_spammer_tasks');
 }
@@ -288,6 +308,11 @@ module.exports = {
   addMute,
   getMuteList,
   deleteMute,
+  getGroupSettings,
+  updateGroupSettings,
+  getGroupWarnings,
+  updateGroupWarnings,
+  resetGroupWarnings,
   fetchSpammerTasks,
   getProfile,
   updateProfile,

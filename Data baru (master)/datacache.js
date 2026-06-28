@@ -9,12 +9,14 @@ const gasbridge = require('./gasbridge');
 
 class DataCache {
   constructor() {
-    this.clients   = new Map(); // User_ID → client registry row
-    this.configs   = new Map(); // User_ID → bot config row
-    this.responders = new Map(); // User_ID → [ responder rows ]
-    this.macros    = new Map(); // User_ID → [ macro rows ]
-    this.blacklist = new Set(); // Phone numbers in blacklist
-    this.mutes     = new Map(); // Phone_Number → mute row data
+    this.clients       = new Map(); // User_ID → client registry row
+    this.configs       = new Map(); // User_ID → bot config row
+    this.responders    = new Map(); // User_ID → [ responder rows ]
+    this.macros        = new Map(); // User_ID → [ macro rows ]
+    this.blacklist     = new Set(); // Phone numbers in blacklist
+    this.mutes         = new Map(); // Phone_Number → mute row data
+    this.groupSettings = new Map(); // Group_JID → group settings row
+    this.groupWarnings = new Map(); // Group_ID_Phone_Number → warning details
     this.ready = false;
   }
 
@@ -33,8 +35,10 @@ class DataCache {
     this.macros.clear();
     this.blacklist.clear();
     this.mutes.clear();
+    this.groupSettings.clear();
+    this.groupWarnings.clear();
 
-    const { clients, configs, responders, macros, blacklist, mutes } = result.data;
+    const { clients, configs, responders, macros, blacklist, mutes, group_settings, group_warnings } = result.data;
 
     // Index clients
     for (const c of clients) {
@@ -78,19 +82,35 @@ class DataCache {
       }
     }
 
+    // Index group settings
+    if (group_settings) {
+      for (const gs of group_settings) {
+        this.groupSettings.set(String(gs.Group_JID), gs);
+      }
+    }
+
+    // Index group warnings
+    if (group_warnings) {
+      for (const gw of group_warnings) {
+        this.groupWarnings.set(String(gw.Group_ID) + '_' + String(gw.Phone_Number), gw);
+      }
+    }
+
     this.ready = true;
-    console.log(`[Cache] Loaded: ${this.clients.size} clients, ${this.configs.size} configs, ${responders.length} responders, ${macros ? macros.length : 0} macros, ${this.mutes.size} mutes`);
+    console.log(`[Cache] Loaded: ${this.clients.size} clients, ${this.configs.size} configs, ${responders.length} responders, ${macros ? macros.length : 0} macros, ${this.mutes.size} mutes, ${this.groupSettings.size} group settings`);
     return true;
   }
 
   setAllMasterData(data) {
-    const { clients, configs, responders, macros, blacklist, mutes } = data;
+    const { clients, configs, responders, macros, blacklist, mutes, group_settings, group_warnings } = data;
     this.clients.clear();
     this.configs.clear();
     this.responders.clear();
     this.macros.clear();
     this.blacklist.clear();
     this.mutes.clear();
+    this.groupSettings.clear();
+    this.groupWarnings.clear();
 
     for (const c of clients) this.clients.set(c.User_ID, c);
     for (const cfg of configs) this.configs.set(cfg.User_ID, cfg);
@@ -109,6 +129,14 @@ class DataCache {
     }
     if (mutes) {
       for (const m of mutes) this.mutes.set(String(m.Phone_Number), m);
+    }
+    if (group_settings) {
+      for (const gs of group_settings) this.groupSettings.set(String(gs.Group_JID), gs);
+    }
+    if (group_warnings) {
+      for (const gw of group_warnings) {
+        this.groupWarnings.set(String(gw.Group_ID) + '_' + String(gw.Phone_Number), gw);
+      }
     }
   }
 
@@ -213,6 +241,43 @@ class DataCache {
   updateClientField(userId, field, value) {
     const c = this.clients.get(userId);
     if (c) { c[field] = value; }
+  }
+
+  getGroupSettings(groupJid) {
+    return this.groupSettings.get(String(groupJid)) || null;
+  }
+
+  updateGroupSettingsLocal(groupJid, userId, fields) {
+    const key = String(groupJid);
+    const existing = this.groupSettings.get(key) || { Group_JID: groupJid, User_ID: userId };
+    const updated = { ...existing, ...fields };
+    this.groupSettings.set(key, updated);
+  }
+
+  getGroupWarningLocal(groupId, phoneNumber) {
+    return this.groupWarnings.get(String(groupId) + '_' + String(phoneNumber)) || null;
+  }
+
+  updateGroupWarningLocal(groupId, phoneNumber, warnCount, lastToxicTime) {
+    const key = String(groupId) + '_' + String(phoneNumber);
+    this.groupWarnings.set(key, {
+      Group_ID: groupId,
+      Phone_Number: phoneNumber,
+      Warn_Count: warnCount,
+      Last_Toxic_Time: lastToxicTime
+    });
+  }
+
+  resetGroupWarningsLocal(groupId, phoneNumber) {
+    if (phoneNumber) {
+      this.groupWarnings.delete(String(groupId) + '_' + String(phoneNumber));
+    } else {
+      for (const [key, gw] of this.groupWarnings.entries()) {
+        if (String(gw.Group_ID) === String(groupId)) {
+          this.groupWarnings.delete(key);
+        }
+      }
+    }
   }
 }
 
