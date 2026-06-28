@@ -92,6 +92,11 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
       triggerShake();
       return;
     }
+    if (usernameStatus === 'taken') {
+      setError('Username telah digunakan');
+      triggerShake();
+      return;
+    }
 
     setLoading(true);
     setError('');
@@ -304,7 +309,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                 <button
                   onClick={bakeCroissant}
                   disabled={!croissant || !baguette || loading}
-                  className="w-full auth-btn-primary font-bold text-xs py-3 rounded-full mt-1.5 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
+                  className="w-full auth-btn-primary font-bold text-xs py-3 rounded-full mt-1.5 cursor-pointer"
                 >
                   {loading ? 'Authenticating...' : 'Login'}
                 </button>
@@ -361,7 +366,7 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   <button
                     onClick={handleNextStep1}
                     disabled={!brioche}
-                    className="w-full auth-btn-primary font-bold text-xs py-3 rounded-full mt-1.5 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
+                    className="w-full auth-btn-primary font-bold text-xs py-3 rounded-full mt-1.5 cursor-pointer"
                   >
                     Next Step
                   </button>
@@ -403,14 +408,14 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                   <div className="flex gap-2.5 mt-1.5">
                     <button
                       onClick={() => { setStep(1); setError(''); }}
-                      className="px-5 py-3 rounded-full auth-btn-secondary border text-xs font-bold transition-colors"
+                      className="px-5 py-3 rounded-full auth-btn-secondary text-xs font-bold cursor-pointer"
                     >
                       Back
                     </button>
                     <button
                       onClick={handleNextStep2}
                       disabled={!sourdough}
-                      className="flex-1 auth-btn-primary font-bold text-xs py-3 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
+                      className="flex-1 auth-btn-primary font-bold text-xs py-3 rounded-full cursor-pointer"
                     >
                       Next Step
                     </button>
@@ -483,14 +488,14 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
                     <button
                       onClick={() => { setStep(2); setError(''); }}
                       disabled={loading}
-                      className="px-5 py-3 rounded-full auth-btn-secondary border text-xs font-bold transition-colors disabled:opacity-50"
+                      className="px-5 py-3 rounded-full auth-btn-secondary text-xs font-bold cursor-pointer"
                     >
                       Back
                     </button>
                     <button
                       onClick={prepareDough}
                       disabled={loading || !croissant || !baguette || usernameStatus === 'taken' || usernameStatus === 'checking'}
-                      className="flex-1 auth-btn-primary font-bold text-xs py-3 rounded-full active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md"
+                      className="flex-1 auth-btn-primary font-bold text-xs py-3 rounded-full cursor-pointer"
                     >
                       {loading ? 'Processing...' : 'Register'}
                     </button>
@@ -545,20 +550,45 @@ export default function LoginGate({ onLoginSuccess, isMobile }: LoginGateProps) 
         .auth-btn-primary {
           background-color: #ffffff !important;
           color: #0d0d11 !important;
+          border: 2px solid #000000 !important;
+          box-shadow: 4px 4px 0px #000000 !important;
+          transition: all 0.1s ease-in-out !important;
         }
         .auth-btn-primary:hover {
           background-color: #f4f4f5 !important;
+          transform: translate(-1px, -1px);
+          box-shadow: 5px 5px 0px #000000 !important;
+        }
+        .auth-btn-primary:active {
+          transform: translate(2px, 2px);
+          box-shadow: 2px 2px 0px #000000 !important;
         }
         .auth-btn-primary:disabled {
           opacity: 0.5 !important;
+          transform: none !important;
+          box-shadow: none !important;
           background-color: #ffffff !important;
         }
         .auth-btn-secondary {
-          border-color: rgba(255, 255, 255, 0.1) !important;
-          color: #ffffff !important;
+          background-color: #f4f4f5 !important;
+          color: #0d0d11 !important;
+          border: 2px solid #000000 !important;
+          box-shadow: 4px 4px 0px #000000 !important;
+          transition: all 0.1s ease-in-out !important;
         }
         .auth-btn-secondary:hover {
-          background-color: rgba(255, 255, 255, 0.05) !important;
+          background-color: #e4e4e7 !important;
+          transform: translate(-1px, -1px);
+          box-shadow: 5px 5px 0px #000000 !important;
+        }
+        .auth-btn-secondary:active {
+          transform: translate(2px, 2px);
+          box-shadow: 2px 2px 0px #000000 !important;
+        }
+        .auth-btn-secondary:disabled {
+          opacity: 0.5 !important;
+          transform: none !important;
+          box-shadow: none !important;
         }
         .auth-link {
           color: rgba(255, 255, 255, 0.4) !important;
