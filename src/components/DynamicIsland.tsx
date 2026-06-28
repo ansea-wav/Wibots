@@ -18,29 +18,67 @@ const playSound = (type: 'success' | 'error' | 'info') => {
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
     if (!AudioContext) return;
     const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-    osc.connect(gainNode);
-    gainNode.connect(ctx.destination);
     
+    // Premium Double-Chime (iOS / Slack like)
     if (type === 'success' || type === 'info') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
-      gainNode.gain.setValueAtTime(0, ctx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
-      gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.3);
+      // First Note: C5 (523.25 Hz)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(523.25, ctx.currentTime);
+      gain1.gain.setValueAtTime(0, ctx.currentTime);
+      gain1.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.03);
+      gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+      
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.25);
+
+      // Second Note: E5 (659.25 Hz) - slightly delayed
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
+      gain2.gain.setValueAtTime(0, ctx.currentTime + 0.08);
+      gain2.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.11);
+      gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      
+      osc2.start(ctx.currentTime + 0.08);
+      osc2.stop(ctx.currentTime + 0.4);
     } else {
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(150, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.2);
-      gainNode.gain.setValueAtTime(0, ctx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
-      gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.4);
+      // Soft error buzz: two lower notes descending
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      
+      osc1.type = 'triangle';
+      osc1.frequency.setValueAtTime(220, ctx.currentTime);
+      gain1.gain.setValueAtTime(0, ctx.currentTime);
+      gain1.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.05);
+      gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+      
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.25);
+
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(174.61, ctx.currentTime + 0.08); // F3
+      gain2.gain.setValueAtTime(0, ctx.currentTime + 0.08);
+      gain2.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.13);
+      gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      
+      osc2.start(ctx.currentTime + 0.08);
+      osc2.stop(ctx.currentTime + 0.4);
     }
   } catch (e) {
     // Ignore
@@ -80,11 +118,10 @@ export default function DynamicIsland() {
       // Switch to Phase 2 (Actual message content)
       phase2Timeout = setTimeout(() => {
         setPhase(2);
-      }, 700);
+      }, 600);
       
-      // Auto-hide after 4 seconds (increased by 0.5s)
+      // Auto-hide after 4 seconds
       hideTimeout = setTimeout(() => {
-        // Just clear the toasts to trigger the smooth exit animation of the entire container
         setToasts([]);
       }, 4000);
     };
@@ -121,12 +158,12 @@ export default function DynamicIsland() {
             >
               <motion.div
                 animate={{
-                  width: phase === 1 ? 160 : 280,
+                  width: phase === 1 ? 160 : 300,
                   height: phase === 2 ? 46 : 36,
-                  borderRadius: 32
+                  borderRadius: 16
                 }}
                 transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                className="bg-black border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.8),inset_0_1px_2px_rgba(255,255,255,0.15)] overflow-hidden relative flex flex-col justify-center items-center cursor-grab active:cursor-grabbing backdrop-blur-xl"
+                className="bg-[#fdfcf7] border-2 border-zinc-950 shadow-[4px_4px_0px_#09090b] overflow-hidden relative flex flex-col justify-center items-center cursor-grab active:cursor-grabbing"
               >
                 <AnimatePresence mode="wait">
                   {phase === 1 && (
@@ -136,10 +173,10 @@ export default function DynamicIsland() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
                       transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-                      className="absolute flex items-center gap-2 text-white text-[11px] font-semibold tracking-wide uppercase"
+                      className="absolute flex items-center gap-2 text-zinc-950 text-[11px] font-black uppercase tracking-wider"
                     >
-                      <span className="material-symbols-outlined text-[14px] text-blue-400">chat_bubble</span>
-                      1 Notification
+                      <span className="material-symbols-outlined text-[14px] text-zinc-950 font-bold">chat_bubble</span>
+                      Notification
                     </motion.div>
                   )}
                   
@@ -150,13 +187,13 @@ export default function DynamicIsland() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                      className="absolute inset-0 flex items-center px-5 gap-3"
+                      className="absolute inset-0 flex items-center px-4 gap-2.5"
                     >
-                      {currentToast.type === 'success' && <span className="w-2.5 h-2.5 flex-shrink-0 rounded-full bg-[var(--neon-green)] animate-pulse shadow-[0_0_8px_var(--neon-green)]"></span>}
-                      {currentToast.type === 'error' && <span className="w-2.5 h-2.5 flex-shrink-0 rounded-full bg-[var(--neon-red)] animate-pulse shadow-[0_0_8px_var(--neon-red)]"></span>}
-                      {currentToast.type === 'info' && <span className="w-2.5 h-2.5 flex-shrink-0 rounded-full bg-blue-400 animate-pulse shadow-[0_0_8px_#60a5fa]"></span>}
+                      {currentToast.type === 'success' && <span className="w-2 h-2 flex-shrink-0 rounded-full bg-emerald-500 border border-zinc-950"></span>}
+                      {currentToast.type === 'error' && <span className="w-2 h-2 flex-shrink-0 rounded-full bg-rose-500 border border-zinc-950"></span>}
+                      {currentToast.type === 'info' && <span className="w-2 h-2 flex-shrink-0 rounded-full bg-zinc-950"></span>}
                       
-                      <span className="text-white text-[11px] font-medium tracking-wide truncate">
+                      <span className="text-zinc-950 text-[11px] font-bold tracking-wide truncate">
                         {currentToast.message}
                       </span>
                     </motion.div>
