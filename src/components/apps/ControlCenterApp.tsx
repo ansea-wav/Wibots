@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import type { BotConfig, ClientRegistry } from '@/lib/api';
+import { QRCodeSVG } from 'qrcode.react';
 import { toast } from '@/components/DynamicIsland';
 import { useLanguage } from '@/lib/LanguageContext';
 
@@ -37,35 +38,40 @@ export default function ControlCenterApp({
       label: t('anti_link'),
       desc: t('anti_link_desc'),
       icon: 'shield',
-      accentColor: 'border-zinc-950 shadow-[4px_4px_0px_#09090b]',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-950 text-white rounded-xl',
     },
     {
       key: 'Welcome_Message_Status',
       label: t('welcome_msg'),
       desc: t('welcome_msg_desc'),
       icon: 'chat_bubble',
-      accentColor: 'border-zinc-950 shadow-[4px_4px_0px_#09090b]',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-950 text-white rounded-xl',
     },
     {
       key: 'Cmd_SetDel_Status',
       label: t('cmd_setdel'),
       desc: t('cmd_setdel_desc'),
       icon: 'tune',
-      accentColor: 'border-zinc-950 shadow-[4px_4px_0px_#09090b]',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-950 text-white rounded-xl',
     },
     {
       key: 'Cmd_Hidetag_Status',
       label: t('cmd_hidetag'),
       desc: t('cmd_hidetag_desc'),
       icon: 'campaign',
-      accentColor: 'border-zinc-950 shadow-[4px_4px_0px_#09090b]',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-950 text-white rounded-xl',
     },
     {
       key: 'Cmd_Stiker_Status',
       label: t('cmd_stiker'),
       desc: t('cmd_stiker_desc'),
       icon: 'image',
-      accentColor: 'border-zinc-950 shadow-[4px_4px_0px_#09090b]',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-950 text-white rounded-xl',
     },
   ];
 
@@ -75,63 +81,72 @@ export default function ControlCenterApp({
       label: 'Tebak Kata',
       desc: 'Tebak kata rahasia berdasarkan petunjuk kata.',
       icon: 'extension',
-      accentColor: 'border-emerald-600 shadow-[4px_4px_0px_#059669]',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-950 text-white rounded-xl',
     },
     {
       key: 'Game_Tebak_Boom_Status',
       label: 'Tebak Boom',
       desc: 'Game tebak posisi bom koordinat rahasia.',
       icon: 'target',
-      accentColor: 'border-rose-600 shadow-[4px_4px_0px_#e11d48]',
+      accentColor: 'border-2 border-dashed border-zinc-950 shadow-[6px_6px_0px_#000000]',
+      iconClass: 'bg-zinc-100 border border-zinc-950 text-zinc-900 rounded-full',
     },
     {
       key: 'Game_Tebak_Bendera_Status',
       label: 'Tebak Bendera',
       desc: 'Tebak nama negara dari gambar bendera.',
       icon: 'flag',
-      accentColor: 'border-sky-600 shadow-[4px_4px_0px_#0284c7]',
+      accentColor: 'border-2 border-double border-zinc-950 shadow-[5px_5px_0px_#000000]',
+      iconClass: 'bg-transparent border-2 border-zinc-950 text-zinc-900 rounded-xl',
     },
     {
       key: 'Game_Tebak_Negara_Status',
       label: 'Tebak Negara',
       desc: 'Tebak nama ibu kota atau letak negara.',
       icon: 'map',
-      accentColor: 'border-amber-600 shadow-[4px_4px_0px_#d97706]',
+      accentColor: 'border border-zinc-950 shadow-[3px_3px_0px_#000000]',
+      iconClass: 'bg-zinc-200 text-zinc-800 rounded-lg',
     },
     {
       key: 'Game_Tebak_Landmark_Status',
       label: 'Tebak Landmark',
       desc: 'Tebak nama tempat bersejarah atau ikon dunia.',
       icon: 'account_balance',
-      accentColor: 'border-purple-600 shadow-[4px_4px_0px_#9333ea]',
+      accentColor: 'border-2 border-zinc-950 shadow-[8px_8px_0px_#000000]',
+      iconClass: 'bg-zinc-950 text-white rounded-full',
     },
     {
       key: 'Game_Tebak_Kucing_Status',
       label: 'Tebak Kucing',
       desc: 'Tebak nama ras kucing dari gambar yang muncul.',
       icon: 'pets',
-      accentColor: 'border-pink-600 shadow-[4px_4px_0px_#db2777]',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-zinc-50 border border-dashed border-zinc-400 text-zinc-700 rounded-2xl',
     },
     {
       key: 'Game_Tebak_Anjing_Status',
       label: 'Tebak Anjing',
       desc: 'Tebak nama ras anjing berdasarkan foto.',
       icon: 'yard',
-      accentColor: 'border-orange-600 shadow-[4px_4px_0px_#ea580c]',
+      accentColor: 'border-2 border-zinc-950 shadow-[5px_5px_0px_#000000]',
+      iconClass: 'bg-zinc-100 border border-zinc-300 text-zinc-800 rounded-xl',
     },
     {
       key: 'Game_Tebak_Game_Status',
       label: 'Tebak Game',
       desc: 'Tebak judul game populer dari potongan gambar.',
       icon: 'sports_esports',
-      accentColor: 'border-indigo-600 shadow-[4px_4px_0px_#4f46e5]',
+      accentColor: 'border-2 border-zinc-950 shadow-[6px_6px_0px_#000000]',
+      iconClass: 'bg-zinc-900 text-white rounded-2xl',
     },
     {
       key: 'Game_Tebak_Logo_Status',
       label: 'Tebak Logo',
       desc: 'Tebak merek atau instansi dari logo gambar.',
       icon: 'branding_watermark',
-      accentColor: 'border-teal-600 shadow-[4px_4px_0px_#0d9488]',
+      accentColor: 'border-2 border-zinc-950 shadow-[4px_4px_0px_#000000]',
+      iconClass: 'bg-transparent border border-zinc-950 text-zinc-950 rounded-lg',
     },
   ];
 
@@ -161,10 +176,10 @@ export default function ControlCenterApp({
           return (
             <div
               key={item.key}
-              className={`bg-[#fdfcf7] border-2 rounded-[1.8rem] p-5 flex flex-col justify-between h-40 ${item.accentColor}`}
+              className={`bg-[#fdfcf7] rounded-[1.8rem] p-5 flex flex-col justify-between h-40 ${item.accentColor}`}
             >
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-zinc-100 border border-zinc-200/50 text-zinc-800">
+                <div className={`w-9 h-9 flex items-center justify-center ${item.iconClass}`}>
                   <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
                 </div>
                 
@@ -225,10 +240,10 @@ export default function ControlCenterApp({
             return (
               <div
                 key={item.key}
-                className={`bg-[#fdfcf7] border-2 rounded-[1.8rem] p-5 flex flex-col justify-between h-40 ${item.accentColor}`}
+                className={`bg-[#fdfcf7] rounded-[1.8rem] p-5 flex flex-col justify-between h-40 ${item.accentColor}`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-zinc-100 border border-zinc-200/50 text-zinc-800">
+                  <div className={`w-9 h-9 flex items-center justify-center ${item.iconClass}`}>
                     <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
                   </div>
                   
