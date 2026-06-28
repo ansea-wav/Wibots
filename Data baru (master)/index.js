@@ -170,6 +170,18 @@ app.post('/api/auth/tasteBread', async (req, res) => {
   });
 });
 
+app.get('/api/auth/checkUsername/:username', async (req, res) => {
+  const { username } = req.params;
+  if (!username) {
+    return res.status(400).json({ status: 'error', message: 'Username tidak valid.' });
+  }
+  const client = datacache.findClientByUsername(username);
+  if (client) {
+    return res.json({ status: 'taken', message: 'Username telah digunakan' });
+  }
+  return res.json({ status: 'available', message: 'Username tersedia' });
+});
+
 app.post('/api/auth/me', async (req, res) => {
   const { whatsapp } = req.body;
   let formattedPhone = String(whatsapp).replace(/^0/, '62').replace(/\D/g, '');

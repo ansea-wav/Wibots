@@ -2522,6 +2522,14 @@ Ketik: !menu <kategori> | Contoh: !menu play
           }
 
           const category = args[0]?.toLowerCase();
+          if (category) {
+            const configKey = `Game_Tebak_${category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}_Status`;
+            if (config[configKey] === false || config[configKey] === 'FALSE') {
+              await socket.sendMessage(remoteJid, { text: `━━━━━━━ ⟡ ━━━━━━━\n❌ Game Tebak ${category.toUpperCase()} dinonaktifkan oleh owner bot di Pusat Kontrol.` }, { quoted: msg });
+              return;
+            }
+          }
+
           const subcommand = args[1]?.toLowerCase() || '';
           await tebak_games.handleTebakCommand(socket, remoteJid, senderNumber, msg.pushName || senderNumber, msg, category, subcommand, () => {
              startCountdownLobby(socket, remoteJid, `Tebak ${category.toUpperCase()}`, () => {
@@ -2542,6 +2550,11 @@ Ketik: !menu <kategori> | Contoh: !menu play
           
           if (!['mudah', 'sedang', 'susah'].includes(difficulty)) {
             await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\n\nGunakan perintah dengan tingkat kesulitan:\n• *!tebak kata mudah* (4-8 huruf, 60s)\n• *!tebak kata sedang* (8-14 huruf, 30s)\n• *!tebak kata susah* (Kata majemuk, 20s)' }, { quoted: msg });
+            return;
+          }
+
+          if (config.Game_Tebak_Kata_Status === false || config.Game_Tebak_Kata_Status === 'FALSE') {
+            await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\n❌ Fitur game Tebak Kata dinonaktifkan oleh owner bot di Pusat Kontrol.' }, { quoted: msg });
             return;
           }
 
@@ -2589,11 +2602,16 @@ Ketik: !menu <kategori> | Contoh: !menu play
       // Tebak Boom
       const boomCommands = ['tebakboom', 'tebak-boom'];
       if (boomCommands.includes(command) || (command === 'tebak' && args[0]?.toLowerCase() === 'boom')) {
+        if (config.Game_Tebak_Boom_Status === false || config.Game_Tebak_Boom_Status === 'FALSE') {
+          await socket.sendMessage(remoteJid, { text: '━━━━━━━ ⟡ ━━━━━━━\n❌ Fitur game Tebak Boom dinonaktifkan oleh owner bot di Pusat Kontrol.' }, { quoted: msg });
+          return;
+        }
+
         let isZeinaJoin = false;
         let zeinaIndex = args.findIndex(a => a.toLowerCase() === 'zeina');
         if (zeinaIndex !== -1) {
           isZeinaJoin = true;
-          args.splice(zeinaIndex, 1); // Hapus 'zeina' dari args
+          args.splice(zeinaIndex, 1);
         }
 
         let subcommand = '';
