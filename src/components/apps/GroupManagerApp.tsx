@@ -199,20 +199,20 @@ export default function GroupManagerApp({ client, onUpdate }: GroupManagerProps)
                   WhatsApp Group {i + 1}
                 </label>
                 
-                <div className="flex gap-2.5">
+                <div className="flex gap-2">
                   <input
                     type="text"
                     placeholder="https://chat.whatsapp.com/..."
                     value={groups[groupKey]}
                     disabled={isLocked}
                     onChange={(e) => setGroups({ ...groups, [groupKey]: e.target.value })}
-                    className="flex-1 bg-[#fdfcf7] border-2 border-zinc-950 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-[#fdfcf7] border-2 border-zinc-950 rounded-2xl px-4 py-2.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed min-w-0"
                   />
                   
                   {tier !== 'Basic' && (
                     <button
                       onClick={() => setGroups({ ...groups, [groupKey]: '' })}
-                      className="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold rounded-full text-xs transition-colors border-2 border-zinc-950"
+                      className="px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold rounded-2xl text-xs transition-colors border-2 border-zinc-950 shrink-0 cursor-pointer"
                     >
                       Clear
                     </button>

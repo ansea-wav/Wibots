@@ -157,50 +157,51 @@ export default function DynamicIsland() {
               className="pointer-events-auto"
               whileDrag={{ scale: 0.95 }}
             >
-              <motion.div
-                animate={{
-                  width: phase === 1 ? 160 : 300,
-                  height: phase === 2 ? 46 : 36,
-                  borderRadius: 16
-                }}
-                transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                className="bg-[#fdfcf7] border-2 border-zinc-950 shadow-[4px_4px_0px_#09090b] overflow-hidden relative flex flex-col justify-center items-center cursor-grab active:cursor-grabbing"
-              >
-                <AnimatePresence mode="wait">
-                  {phase === 1 && (
-                    <motion.div
-                      key="phase1"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-                      className="absolute flex items-center gap-2 text-zinc-950 text-[11px] font-black uppercase tracking-wider"
-                    >
-                      <span className="material-symbols-outlined text-[14px] text-zinc-950 font-bold">chat_bubble</span>
-                      Notification
-                    </motion.div>
-                  )}
-                  
-                  {phase === 2 && (
-                    <motion.div
-                      key="phase2"
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                      className="absolute inset-0 flex items-center px-4 gap-2.5"
-                    >
-                      {currentToast.type === 'success' && <span className="w-2 h-2 flex-shrink-0 rounded-full bg-emerald-500 border border-zinc-950"></span>}
-                      {currentToast.type === 'error' && <span className="w-2 h-2 flex-shrink-0 rounded-full bg-rose-500 border border-zinc-950"></span>}
-                      {currentToast.type === 'info' && <span className="w-2 h-2 flex-shrink-0 rounded-full bg-zinc-950"></span>}
-                      
-                      <span className="text-zinc-950 text-[11px] font-bold tracking-wide truncate">
-                        {currentToast.message}
-                      </span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+               <motion.div
+                 layout
+                 className={`bg-[#fdfcf7] border-2 border-zinc-950 shadow-[4px_4px_0px_#09090b] overflow-hidden relative flex flex-col justify-center items-center cursor-grab active:cursor-grabbing ${
+                   phase === 1
+                     ? 'w-[160px] h-[36px]'
+                     : 'w-[calc(100vw-32px)] sm:w-[420px] min-h-[50px] sm:min-h-[46px] py-2.5'
+                 }`}
+                 style={{ borderRadius: 16 }}
+                 transition={{ type: "spring", stiffness: 200, damping: 25 }}
+               >
+                 <AnimatePresence mode="wait">
+                   {phase === 1 && (
+                     <motion.div
+                       key="phase1"
+                       initial={{ opacity: 0, scale: 0.8 }}
+                       animate={{ opacity: 1, scale: 1 }}
+                       exit={{ opacity: 0, scale: 0.8 }}
+                       transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+                       className="flex items-center gap-2 text-zinc-950 text-[11px] font-black uppercase tracking-wider"
+                     >
+                       <span className="material-symbols-outlined text-[14px] text-zinc-950 font-bold">chat_bubble</span>
+                       Notification
+                     </motion.div>
+                   )}
+                   
+                   {phase === 2 && (
+                     <motion.div
+                       key="phase2"
+                       initial={{ opacity: 0, scale: 0.95 }}
+                       animate={{ opacity: 1, scale: 1 }}
+                       exit={{ opacity: 0, scale: 0.9 }}
+                       transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                       className="w-full flex items-center px-4 gap-2.5"
+                     >
+                       {currentToast.type === 'success' && <span className="w-2.5 h-2.5 flex-shrink-0 rounded-full bg-emerald-500 border border-zinc-950"></span>}
+                       {currentToast.type === 'error' && <span className="w-2.5 h-2.5 flex-shrink-0 rounded-full bg-rose-500 border border-zinc-950"></span>}
+                       {currentToast.type === 'info' && <span className="w-2.5 h-2.5 flex-shrink-0 rounded-full bg-zinc-950"></span>}
+                       
+                       <span className="text-zinc-950 text-[10px] sm:text-[11px] font-black tracking-wide leading-snug whitespace-normal break-words text-left flex-1">
+                         {currentToast.message}
+                       </span>
+                     </motion.div>
+                   )}
+                 </AnimatePresence>
+               </motion.div>
             </motion.div>
           </motion.div>
         )}
