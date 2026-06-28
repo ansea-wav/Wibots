@@ -43,7 +43,7 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTvState('idle');
-    }, 750);
+    }, 1250);
     return () => clearTimeout(timer);
   }, []);
 
@@ -51,7 +51,7 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
     setTvState('off');
     setTimeout(() => {
       callback();
-    }, 750);
+    }, 1250);
   };
 
   // Uptime ticker
@@ -184,12 +184,12 @@ export default function DashboardLayout({ userData, userId }: DashboardProps) {
         }
 
         .crt-screen-on {
-          animation: crt-turn-on 0.75s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+          animation: crt-turn-on 1.25s cubic-bezier(0.19, 1, 0.22, 1) forwards;
           transform-origin: center;
         }
 
         .crt-screen-off {
-          animation: crt-turn-off 0.75s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+          animation: crt-turn-off 1.25s cubic-bezier(0.19, 1, 0.22, 1) forwards;
           transform-origin: center;
         }
 
