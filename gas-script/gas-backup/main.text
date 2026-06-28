@@ -499,11 +499,17 @@ function updateBotConfig(p) {
   
   // Pastikan header lengkap
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(["User_ID", "Allow_Group_Response", "Allow_Private_Response", "Anti_Link_Group", "Welcome_Message_Status", "Custom_Welcome_Text", "Cmd_SetDel_Status", "Cmd_Hidetag_Status"]);
+    sheet.appendRow(["User_ID", "Allow_Group_Response", "Allow_Private_Response", "Anti_Link_Group", "Welcome_Message_Status", "Custom_Welcome_Text", "Cmd_SetDel_Status", "Cmd_Hidetag_Status", "Game_Tebak_Kata_Status", "Game_Tebak_Boom_Status", "Game_Tebak_Bendera_Status", "Game_Tebak_Negara_Status", "Game_Tebak_Landmark_Status", "Game_Tebak_Kucing_Status", "Game_Tebak_Anjing_Status", "Game_Tebak_Game_Status", "Game_Tebak_Logo_Status"]);
   } else {
     var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     if (headers.indexOf("Cmd_SetDel_Status") === -1) sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Cmd_SetDel_Status");
     if (headers.indexOf("Cmd_Hidetag_Status") === -1) sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Cmd_Hidetag_Status");
+    var gameHeaders = ["Game_Tebak_Kata_Status", "Game_Tebak_Boom_Status", "Game_Tebak_Bendera_Status", "Game_Tebak_Negara_Status", "Game_Tebak_Landmark_Status", "Game_Tebak_Kucing_Status", "Game_Tebak_Anjing_Status", "Game_Tebak_Game_Status", "Game_Tebak_Logo_Status"];
+    for (var i = 0; i < gameHeaders.length; i++) {
+      if (headers.indexOf(gameHeaders[i]) === -1) {
+        sheet.getRange(1, sheet.getLastColumn() + 1).setValue(gameHeaders[i]);
+      }
+    }
   }
 
   var rowIdx = findRowIndex(sheet, 0, p.user_id);
@@ -511,7 +517,7 @@ function updateBotConfig(p) {
   // Jika belum ada row config, buatkan dulu
   if (rowIdx === -1) {
     // Default value saat buat baru
-    sheet.appendRow([p.user_id, true, true, false, true, "Selamat datang {member} di {group}! 🎉", false, false]);
+    sheet.appendRow([p.user_id, true, true, false, true, "Selamat datang {member} di {group}! 🎉", false, false, true, true, true, true, true, true, true, true, true]);
     rowIdx = sheet.getLastRow();
   }
 
